@@ -13,18 +13,18 @@ const SplashScreenComponent = ({ navigation }) => {
       const token = await AsyncStorage.getItem('@token');
       const user = await AsyncStorage.getItem('@user');
       const parsedUser = JSON.parse(user);
-      if( token ) {
+      if (token) {
         if (parsedUser.photo) {
           // rename name of picture to photo
-            const newUser = { ...parsedUser, picture: parsedUser.photo };
-            delete newUser.picture; 
+          const newUser = { ...parsedUser, picture: parsedUser.photo };
+          delete newUser.picture;
 
-            navigation.navigate('Welcome',newUser);
-            }else {
-                navigation.navigate('Welcome',parsedUser.data);
-          }
+          navigation.navigate('Welcome', newUser);
+        } else {
+          navigation.navigate('Welcome', parsedUser.data);
         }
-        else {
+      }
+      else {
         await navigation.navigate('Login');
       }
     };
@@ -33,11 +33,11 @@ const SplashScreenComponent = ({ navigation }) => {
   }, [navigation]);
 
 
-//DELETING TOKEN / SESSION FROM ASYNC STORAGE ===================
+  //DELETING TOKEN / SESSION FROM ASYNC STORAGE ===================
 
-  // useEffect(()=> {
+  // useEffect(() => {
   //   clearAsyncStorage();
-  // },[])
+  // }, [])
 
   // async function clearAsyncStorage() {
   //   try {

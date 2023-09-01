@@ -5,6 +5,8 @@ import axios from 'axios';
 import { validateEmail } from '../assets/utills/MailValidator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
+import { StackActions } from '@react-navigation/native';
 
 //formik
 import { Formik } from 'formik';
@@ -39,7 +41,6 @@ const { brand, darkLight, primary } = Colors;
 // import DateTimePicker from '@react-native-community/datetimepicker';
 
 // Keyboard Avoiding view
-import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 
 const Signup = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
@@ -64,25 +65,49 @@ const Signup = ({ navigation }) => {
   //   setShow(true);
   // };
 
+  //                          ========================= SIGNUP WITHOUT VERIFY TOKEN 4DIDGETS =========================
   // SIGNUP HANDLER
-    const handleSignup = async (credentials, setSubmitting) => {
+  //   const handleSignup = async (credentials, setSubmitting) => {
+  //   setSubmitting(true);
+  //   handleMesage('');
+  //   const url = 'http://192.168.0.13:4000/api/users/register';
+  //     //  POVEZI TELEFON NA WIFI ISTI KAO I KOMP !!!!!!!
+  //   try {
+  //     const response = await axios.post(url, credentials, { withCredentials: true });
+  //     console.log('5555555555555555555 5555555 RESPONSE is zignup', response.data);
+  //     const token = response.data.token
+  //     const user = await response;
+  //     if (response.statusText === 'OK') {
+  //       console.log('User registered successfully');
+  //     }
+  //     navigation.navigate('Welcome', { ...response.data });
+  //     await AsyncStorage.setItem('@token', token);
+  //     await AsyncStorage.setItem('@user', JSON.stringify(user))
+  //     setSubmitting(false);
+  //     // console.log(response.data);
+  //     return response.data;
+  //   } catch (error) {
+  //     const message =
+  //       (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+  //     console.log('MESAGE IS SIGN UP', message);
+  //     setSubmitting(false);
+  //     handleMesage(message);
+  //   }
+  // };
+
+  const handleSignup = async (credentials, setSubmitting) => {
     setSubmitting(true);
     handleMesage('');
     const url = 'http://192.168.0.13:4000/api/users/register';
-      //  POVEZI TELEFON NA WIFI ISTI KAO I KOMP !!!!!!!
+    //  POVEZI TELEFON NA WIFI ISTI KAO I KOMP !!!!!!!
     try {
       const response = await axios.post(url, credentials, { withCredentials: true });
-      console.log('5555555555555555555 5555555 RESPONSE is zignup', response.data);
-      const token = response.data.token
-      const user = await response;
+
       if (response.statusText === 'OK') {
         console.log('User registered successfully');
       }
-      navigation.navigate('Welcome', { ...response.data });
-      await AsyncStorage.setItem('@token', token);
-      await AsyncStorage.setItem('@user', JSON.stringify(user))
+      navigation.dispatch(StackActions.replace('Verification', { profile: response.data }))
       setSubmitting(false);
-      // console.log(response.data);
       return response.data;
     } catch (error) {
       const message =

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 // REACT NAVIGATION
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -11,6 +11,7 @@ import ForgotPassword from '../ForgotPassword';
 import Signup from '../Signup';
 import Welcome from '../Welcome';
 import SplashScreen from '../SplashScreen';
+import Verification from '../Verification';
 
 // COLORS
 import { Colors } from '../../components/styles';
@@ -35,9 +36,11 @@ const RootStack = () => {
           },
         }}
         initialRouteName="SplashScreen"
+      // initialRouteName="Verification"
       >
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Verification" component={Verification} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen options={{ headerTintColor: primary }} name="Welcome" component={Welcome} />
