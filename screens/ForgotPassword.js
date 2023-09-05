@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, Platform } from 'react-native';
 import axios from 'axios';
 import { validateEmail } from '../assets/utills/MailValidator';
+import { SET_EMAIL, selectEmail } from '../redux/features/auth/authSlice';
+import { useDispatch, useSelector } from "react-redux";
+
 
 
 //formik
@@ -40,48 +43,52 @@ const { brand, darkLight, primary } = Colors;
 const ForgotPassword = ({ navigation }) => {
   const [message, setMessage] = useState();
   const [messageType, setMessageType] = useState();
- 
-  const handleResetPassword = async (credentials, setSubmitting) => {
+  // const passEmail = useSelector(selectEmail)
+  const dispatch = useDispatch();
+
+  const handleResetPassword = async (email) => {
     // setSubmitting(true);
     // handleMesage('');
-    // const url = 'http://192.168.0.13:4000/api/users/login';
-    //   //  POVEZI TELEFON NA WIFI ISTI KAO I KOMP !!!!!!!
-    // try {
-    //   const response = await axios.post(url, credentials);
-    //   if (response.status === 200) {
-    //     console.log('Login successfully');
-    //     const user = await response;
-    //     const token = user.data.token
-    //     console.log('ovo je user iz logina =============>', user.data);
-    //     setMyToken(token)
+    const url = 'http://192.168.0.13:4000/api/users/forgot-password';
+    const response = await axios.post(url, email, { withCredentials: true });
 
-    //     try {
-    //       await AsyncStorage.setItem('@token', token);
-    //       await AsyncStorage.setItem('@user', JSON.stringify(user))
-    //     } catch (asyncStorageError) {
-    //       console.log("ERROR SAVING TOKEN TO ASYNC STORAHE", asyncStorageError)
-    //     }
-    //   }
-    //   navigation.navigate('Welcome', { ...response.data });
-      navigation.navigate('Login');
+    await dispatch(SET_EMAIL(email))
+    console.log("EMAILLLLL", email)
+    console.log("response ", response.data)
 
-    
-    //   setSubmitting(false);
-    //   return response.data;
-    // } catch (error) {
+    // navigation.navigate('Login');
+    navigation.navigate('ResetPassword'); // Šaljemo token kao parametar
+
+
+
     //   const message =
     //     (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
     //   setSubmitting(false);
     //   handleMesage(message);
     // }
   };
+  // const handleResetPassword = async (email) => {
+  //   const url = 'http://192.168.0.13:4000/api/users/forgot-password';
+
+  //   try {
+  //     const response = await axios.post(url, email, { withCredentials: true });
+  //     console.log("EMAILLLLL", email);
+  //     console.log("response ", response.data);
+
+  //     // dispatch(SET_EMAIL(email))
+  //     // Ako zahtev za resetovanje lozinke bude uspešan, preusmerite korisnika na ResetPassword ekran
+  //     navigation.navigate('ResetPassword', { token: response.data.token }); // Šaljemo token kao parametar
+  //   } catch (error) {
+  //     // Postupajte sa greškom ako zahtev nije uspeo
+  //     console.error('Greška pri zahtevu za resetovanje lozinke:', error);
+  //   }
+  // };
 
 
-
-  const handleMesage = (message, type = 'FAILED') => {
-    setMessage(message);
-    setMessageType(type);
-  };
+  // const handleMesage = (message, type = 'FAILED') => {
+  //   setMessage(message);
+  //   setMessageType(type);
+  // };
 
   const handleMesage2 = (message, type = 'SUCCESS') => {
     setMessage(message);
@@ -98,7 +105,7 @@ const ForgotPassword = ({ navigation }) => {
           <PageTitle>Avankari</PageTitle>
 
           <Formik
-            initialValues={{ email: ''}}
+            initialValues={{ email: '' }}
             onSubmit={(values, { setSubmitting }) => {
 
               if (values.email == '') {
@@ -108,10 +115,10 @@ const ForgotPassword = ({ navigation }) => {
                 setSubmitting(false);
                 return handleMesage('Please enter a valid email');
               } else {
-                setTimeout(()=> {
-                    handleResetPassword(values, setSubmitting);
-                },3000)
-                  return handleMesage2('CHECK YOUR EMAIL !!!');
+                setTimeout(() => {
+                  handleResetPassword(values, setSubmitting);
+                }, 3000)
+                return handleMesage2('CHECK YOUR EMAIL !!!');
               }
             }}
           >
@@ -128,11 +135,11 @@ const ForgotPassword = ({ navigation }) => {
                   value={values.email}
                   keyboardType="email-address"
                 />
-      
+
                 {/* THREE DOTS  */}
                 {messageType === 'SUCCESS' ? <MsgBox2 type={messageType}>{message}</MsgBox2> : <MsgBox type={messageType}>{message}</MsgBox>}
-                
-               
+
+
                 {/* SEPARATOR BETWEEN LOGIN AND REGISTER */}
                 <Line />
 

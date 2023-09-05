@@ -1,10 +1,9 @@
 import { StyleSheet, Text, View, KeyboardAvoidingView, Dimensions, TouchableOpacity, Keyboard } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
-// import { KeyboardAvoidingView } from 'react-native-web'
 
 import {
-    Colors,
+    Colors, MsgBox,
 } from '../components/styles';
 import { TextInput } from 'react-native-gesture-handler';
 import { verifyEmail } from '../utils/auth';
@@ -13,6 +12,7 @@ import { StackActions } from '@react-navigation/native';
 
 
 const inputs = Array(4).fill('')
+// create array with 4 empty strings ['' , '', '', '']
 let newInputIndex = 0
 
 // CONVERT OBJECT TO ARRAY AND CHECK IF EVERY KEY HAVE VALUE 
@@ -20,11 +20,17 @@ let newInputIndex = 0
 // { 0: '3',    1: '3',    2: '3',    3: '3' } = true
 const isObjValid = (obj) => {
     return Object.values(obj).every(val => val.trim())
+    //['3', '3', '3', '3']
 }
 
 const { brand, darkLight, primary } = Colors;
 
 const Verification = ({ route, navigation }) => {
+
+    const [message, setMessage] = useState();
+    const [messageType, setMessageType] = useState();
+    const [verificationStatus, setVerificationStatus] = useState(null);
+
     const { profile } = route.params
 
     const input = useRef()
@@ -36,38 +42,54 @@ const Verification = ({ route, navigation }) => {
         newOTP[index] = text;
         setOTP(newOTP)
 
-        const lastInputIndex = inputs.length - 1
+        const lastInputIndex = inputs.length - 1 // 4-1 = 3
         if (!text) newInputIndex = index === 0 ? 0 : index - 1;
         else newInputIndex = index === lastInputIndex ? lastInputIndex : index + 1;
         setNextInputIndex(newInputIndex)
     }
 
-    const submitOTP = async () => {
-        Keyboard.dismiss()
+    const handleMesage = (message, type = 'FAILED') => {
+        setMessage(message);
+        setMessageType(type);
+    };
 
-        if (isObjValid(OTP)) { // OTP =  {0: '5',    1: '4',    2: '2',    3: '7'}
+    const submitOTP = async () => {
+        Keyboard.dismiss();
+
+        if (isObjValid(OTP)) {
             let val = '';
 
             Object.values(OTP).forEach(v => {
-                val += v       //  '5427
+                val += v;
             })
 
-            const res = await verifyEmail(val, profile._id)
-            if (!res.success) return console.log(res.error)
+            try {
+                const res = await verifyEmail(val, profile._id);
 
-            const token = profile.token
+                if (res && res.success) {
+                    const token = profile.token;
 
-            console.log("RES", res)
-            if (profile && profile.token) {
-                await AsyncStorage.setItem('@token', token)
-                await AsyncStorage.setItem('@user', JSON.stringify(profile))
-            } else {
-                console.log("Profile objekat nije ispravno definisan ili nema vrednost za 'token'.")
+                    if (profile && profile.token) {
+                        await AsyncStorage.setItem('@token', token);
+                        await AsyncStorage.setItem('@user', JSON.stringify(profile));
+                    } else {
+                        console.log("Profile objekat nije ispravno definisan ili nema vrednost za 'token'.");
+                    }
+
+                    handleMesage(res.message, 'SUCCESS');
+                    setTimeout(() => {
+                        navigation.dispatch(StackActions.replace('Welcome', { ...profile }));
+                    }, 1500);
+                } else {
+                    // If res is not defined or res.success is not true
+                    handleMesage(res ? res.message : "An error occurred while verifying the email. Please try again.", 'FAILED');
+                }
+            } catch (error) {
+                console.error("Error in submitOTP:", error);
+                handleMesage("An error occurred while verifying the email. Please try again.", 'FAILED');
             }
-
-            // STACK NAVIGATION IS REPLACING SCREEN VERIFICATION WITH WELCOME NOT STACKING
-            navigation.dispatch(StackActions.replace('Welcome', { ...profile }))
-            // navigation.navigate('Welcome', { ...profile })
+        } else {
+            handleMesage("Invalid OTP. Please enter a valid OTP.", 'FAILED');
         }
     }
 
@@ -95,12 +117,22 @@ const Verification = ({ route, navigation }) => {
                     </View>)
             })}
         </View>
+        {/* {res?.success ? <MsgBox type="SUCCESS">{message}</MsgBox> : <MsgBox type="FAILED">{message}</MsgBox>} */}
+        {/* <MsgBox type={messageType}>{message}</MsgBox> */}
+        {/* Poruka o grešci za status "fail" */}
+        {verificationStatus === 'fail' && (
+            <MsgBox type="FAILED">Verification code is incorrect. Please try again.</MsgBox>
+        )}
+
+        {/* Poruka o grešci za ostale slučajeve */}
+        {verificationStatus !== 'fail' && (
+            <MsgBox type={messageType}>{message}</MsgBox>
+        )}
+
         <TouchableOpacity style={styles.submitIcon} onPress={submitOTP}>
             <Icon name="checkmark-outline" size={24} color="#fff" />
         </TouchableOpacity>
     </KeyboardAvoidingView>
-
-
 }
 
 export default Verification
@@ -143,6 +175,4 @@ const styles = StyleSheet.create({
         marginTop: 15,
 
     }
-
-
 })

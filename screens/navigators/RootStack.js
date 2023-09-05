@@ -8,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 // SCREENS
 import Login from '../Login';
 import ForgotPassword from '../ForgotPassword';
+import ResetPassword from '../ResetPassword';
 import Signup from '../Signup';
 import Welcome from '../Welcome';
 import SplashScreen from '../SplashScreen';
@@ -36,12 +37,13 @@ const RootStack = () => {
           },
         }}
         initialRouteName="SplashScreen"
-      // initialRouteName="Verification"
+      // initialRouteName="ResetPassword"
       >
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Verification" component={Verification} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen options={{ headerTintColor: primary }} name="Welcome" component={Welcome} />
       </Stack.Navigator>

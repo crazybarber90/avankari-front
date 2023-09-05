@@ -2,8 +2,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export const handleSignup = async (data) => {
-  
+export const handleGoogleSignup = async (data) => {
+
   const { authentication, userInfo } = data;
   const { accessToken } = authentication;
   const { name, email, photo } = userInfo;
@@ -19,7 +19,7 @@ export const handleSignup = async (data) => {
   try {
     const response = await axios.post(url, credentials, { withCredentials: true });
 
-    await AsyncStorage.setItem('@token',  response.data.token);
+    await AsyncStorage.setItem('@token', response.data.token);
     await AsyncStorage.setItem('@user', JSON.stringify(userInfo))
 
     return response.data;

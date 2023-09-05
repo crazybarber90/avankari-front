@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect,useLayoutEffect} from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { View, ActivityIndicator, Platform } from 'react-native';
 import axios from 'axios';
 import { validateEmail } from '../assets/utills/MailValidator';
-import { handleSignup } from '../assets/utills/handleSignup';
+import { handleGoogleSignup } from '../assets/utills/handleSignup';
 import * as Google from 'expo-auth-session/providers/google';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BackHandler } from 'react-native';
@@ -13,7 +13,6 @@ import { BackHandler } from 'react-native';
 import { Formik } from 'formik';
 //icons
 import { Octicons, Ionicons, Fontisto } from '@expo/vector-icons';
-
 import {
   Colors,
   StyledContainer,
@@ -47,6 +46,8 @@ const Login = ({ navigation }) => {
   const [message, setMessage] = useState();
   const [messageType, setMessageType] = useState();
   const [myToken, setMyToken] = useState(null);
+  const [disabled, setDisabled] = useState(false);
+
 
   const [backPressCount, setBackPressCount] = useState(0);
 
@@ -58,14 +59,14 @@ const Login = ({ navigation }) => {
   });
 
 
-// Whenever response changed, run this function
-// Response will triger useEffect, useEffect will try to get the user info if "success" , getrUserInfo, save localy to state
+  // Whenever response changed, run this function
+  // Response will triger useEffect, useEffect will try to get the user info if "success" , getrUserInfo, save localy to state
   useEffect(() => {
     handleSignInWithGoogle();
   }, [response]);
-  
 
-//===================================>>> REMOVING BACK ARROW TO LOGIN PAGE
+
+  //===================================>>> REMOVING BACK ARROW TO LOGIN PAGE
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: null, // This will remove the back arrow
@@ -73,7 +74,7 @@ const Login = ({ navigation }) => {
   }, [navigation]);
 
 
-//===================================>>> DEVICE'S BACK DOESN'T WORK, IF PRESS X2, EXIT FROM APP
+  //===================================>>> DEVICE'S BACK DOESN'T WORK, IF PRESS X2, EXIT FROM APP
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -93,53 +94,60 @@ const Login = ({ navigation }) => {
     return () => backHandler.remove();
   }, [navigation, backPressCount]);
 
+  // Preventing triggering handleSignupWithGoogle 2 times//// first in useEffect and second when response changed from useEffect on line 149
+  let isSigningUp = false;
+
   const handleSignInWithGoogle = async () => {
-    if(response?.type === 'success'){  
+    if (response?.type === 'success' && !isSigningUp) {
+      isSigningUp = true;
       // await AsyncStorage.removeItem('@token');
       const user = await AsyncStorage.getItem('@user');
       const token = await AsyncStorage.getItem('@token');
 
-    try {
-    // const idToken = response.authentication.idToken;
+      console.log("LOGIRANJEEEEEEEEEEEEEEEE IZ HANDLESIGNUP Response type: success");
+
+      try {
+        // const idToken = response.authentication.idToken;
         const userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
           headers: {
             Authorization: `Bearer ${response.authentication.accessToken}`,
           },
         });
 
-        if(userInfoResponse.ok) {
-        const userInfo = await userInfoResponse.json();
+        if (userInfoResponse.ok) {
+          const userInfo = await userInfoResponse.json();
 
- 
-    // Call the handleSignup function to register or login the user with the obtained userInfo
-        await handleSignup({
-          authentication: response.authentication,
-          userInfo: {
-            email: userInfo.email,
-            name: userInfo.name,
-            photo: userInfo.picture,
-          },
-        });
 
-      // Navigate to the Welcome screen or handle it as needed
-           if(userInfo ){
-             await navigation.navigate('Welcome', userInfo);
-            }
+          // Call the handleSignup function to register or login the user with the obtained userInfo
+          await handleGoogleSignup({
+            authentication: response.authentication,
+            userInfo: {
+              email: userInfo.email,
+              name: userInfo.name,
+              photo: userInfo.picture,
+            },
+          });
 
-      }else {
-        console.error('...........................................................Error fetching user info:', userInfoResponse.status);
-      } 
+          // Navigate to the Welcome screen or handle it as needed
+          if (userInfo) {
+            await navigation.navigate('Welcome', userInfo);
+          }
+
+        } else {
+          console.error('...........................................................Error fetching user info:', userInfoResponse.status);
+        }
 
       } catch (error) {
-          console.error('Error fetching user info:', error);
-          }} else {
-            console.log("NEMA LOGINAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-          }
+        console.error('Error fetching user info:', error);
+      }
+    } else {
+      console.log("NEMA LOGINAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    }
   };
 
 
-// // USEEFFECT FOR TRIGGERING HANDLE GOOGLE LOGIN BASED ON RESPONSE
-useEffect(() => {
+  // // USEEFFECT FOR TRIGGERING HANDLE GOOGLE LOGIN BASED ON RESPONSE
+  useEffect(() => {
     // Trigger handleSignInWithGoogle when response changes
     if (response?.type === 'success') {
       handleSignInWithGoogle();
@@ -147,18 +155,18 @@ useEffect(() => {
   }, [response]);
 
 
-// USEEFFECT FOR GETTING TOKEN FROM ASYNC STORAGE AND BACK USER LOGED IN
+  // USEEFFECT FOR GETTING TOKEN FROM ASYNC STORAGE AND BACK USER LOGED IN
   useEffect(() => {
     // Retrieve the token from AsyncStorage
     const getToken = async () => {
       const token = await AsyncStorage.getItem('@token');
       const user = await AsyncStorage.getItem('@user');
       if (token) {
-        if(user) {
+        if (user) {
           const parsedUser = JSON.parse(user)
           const data = parsedUser?.data
           console.log(" useEffect, useEffect, useEffect, useEffect, useEffect, useEffect,  LOGIN ======== >", data)
-          await navigation.navigate('Welcome',data);
+          await navigation.navigate('Welcome', data);
         }
         // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
@@ -169,34 +177,11 @@ useEffect(() => {
   }, [navigation]);
 
 
-  //pass token as parameter
-  // if no token return nothin
-  //otherwise we fetch get req to response url and pass token to headers
-  //if token is corect , we will get back response with infos of user
-
-  // const getUserInfo = async (token) => {
-  //   if (!token) return;
-  //   try {
-  //     const response = await fetch('https:/googleapis.com/userinfo/v2/me', {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     //we grab user and save user localy so next time we reload app, we will have informations of user
-  //     const user = await response.json();
-  //     await AsyncStorage.setItem('@user', JSON.stringify(user));
-  //     setUserInfo(user);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   const handleLogin = async (credentials, setSubmitting) => {
     setSubmitting(true);
     handleMesage('');
     const url = 'http://192.168.0.13:4000/api/users/login';
-      //  POVEZI TELEFON NA WIFI ISTI KAO I KOMP !!!!!!!
+    //  POVEZI TELEFON NA WIFI ISTI KAO I KOMP !!!!!!!
     try {
       const response = await axios.post(url, credentials);
       if (response.status === 200) {
@@ -215,7 +200,6 @@ useEffect(() => {
       }
       navigation.navigate('Welcome', { ...response.data });
 
-    
       setSubmitting(false);
       return response.data;
     } catch (error) {
@@ -246,6 +230,7 @@ useEffect(() => {
 
               if (values.email == '' || values.password == '') {
                 handleMesage('Please fill all the fields');
+                // setDisabled(true)
                 setSubmitting(false);
               } else if (!validateEmail(values.email)) {
                 setSubmitting(false);
@@ -288,6 +273,7 @@ useEffect(() => {
                 {/* LOGIN BUTTON */}
                 {!isSubmitting && (
                   <StyledButton onPress={handleSubmit}>
+                    {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
                     <ButtonText>Login</ButtonText>
                   </StyledButton>
                 )}
@@ -297,7 +283,7 @@ useEffect(() => {
                     <ActivityIndicator size="large" color={primary} />
                   </StyledButton>
                 )}
-                
+
 
                 <ExtraView>
                   <TextLink onPress={() => navigation.navigate('ForgotPassword')}>
@@ -308,29 +294,11 @@ useEffect(() => {
                 {/* SEPARATOR BETWEEN LOGIN AND REGISTER */}
                 <Line />
 
-                {/* GOOGLE BUTTON */}
-                {/* {!googleSubmitting && (
-                  <StyledButton google={true} onPress={promptAsync({ useProxy: true, showInRecents: true })}>
-                    <Fontisto name="google" color={primary} size={25} />
-                    <ButtonText google={true}>Sign in with Google</ButtonText>
-                  </StyledButton>
-                )} */}
-
                 <StyledButton google={true} onPress={() => promptAsync({ showInRecents: true })}>
                   <Fontisto name="google" color={primary} size={25} />
                   <ButtonText google={true}>Sign in with Google</ButtonText>
                 </StyledButton>
 
-                {/* <StyledButton google={true} onPress={() => AsyncStorage.removeItem('@user')}>
-                  <Fontisto name="google" color={primary} size={25} />
-                  <ButtonText google={true}>Logout</ButtonText>
-                </StyledButton> */}
-
-                {/* {googleSubmitting && (
-                  <StyledButton google={true} disabled={true}>
-                    <ActivityIndicator size="large" color={primary} />
-                  </StyledButton>
-                )} */}
 
                 {/* DON'T HAVE AN ACCOUNT ALLREADY ?????? */}
                 <ExtraView>
