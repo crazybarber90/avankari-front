@@ -99,7 +99,7 @@
 //                             }
 //                         }}
 //                     >
-//                         {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
+//                         {({ handleChange, handleBlur, handleSubmitReset, values, isSubmitting }) => (
 //                             <StyledFormArea>
 //                                 {/* EMAIL INPUT */}
 //                                 <MyTextInput
@@ -123,7 +123,7 @@
 
 //                                 {/* LOGIN BUTTON */}
 //                                 {!isSubmitting && (
-//                                     <StyledButton onPress={handleSubmit}>
+//                                     <StyledButton onPress={handleSubmitReset}>
 //                                         <ButtonText>Reset Password</ButtonText>
 //                                     </StyledButton>
 //                                 )}
@@ -170,7 +170,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, TextInput, Button, TouchableOpacity, Keyboard } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator, TextInput, Button, TouchableOpacity, Keyboard } from 'react-native';
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions } from '@react-navigation/native';
@@ -204,6 +204,7 @@ import {
     TextLink,
     Line,
 } from '../components/styles';
+import axios from 'axios';
 
 
 const { brand, darkLight, primary } = Colors;
@@ -211,18 +212,83 @@ const { brand, darkLight, primary } = Colors;
 
 function ResetPasswordScreen({ navigation, route }) {
     // const { token } = route.params; // Dobijanje tokena iz URL-a ili navigacije
-    const passEmail = useSelector(selectEmail)
+    const resendEmail = useSelector(selectEmail)
     const [hidePassword, setHidePassword] = useState(true);
     const [message, setMessage] = useState();
     const [messageType, setMessageType] = useState();
     const [verificationStatus, setVerificationStatus] = useState(null);
 
-    console.log("EMAIL IS REDUXA==================================", passEmail)
+    console.log("EMAIL IS REDUXA==================================", resendEmail)
 
     const handleMesage = (message, type = 'FAILED') => {
         setMessage(message);
         setMessageType(type);
     };
+
+    const handleMesage2 = (message, type = 'SUCCESS') => {
+        setMessage(message);
+        setMessageType(type);
+    };
+
+    const handleSubmitReset = async (credentials, setSubmitting) => {
+        // console.log("KREDENCIJALI", credentials)
+        // console.log("resendEmail IZ REDUX STEJTA", resendEmail)
+        console.log("HANDLE SUBMIT RESET ++++++++++++++++")
+        setSubmitting(true);
+        handleMesage('');
+        const url = 'http://192.168.0.13:4000/api/users/resetPasswordConfirm';
+        const data = credentials;
+        const newData = { ...credentials, email: resendEmail }
+        //  POVEZI TELEFON NA WIFI ISTI KAO I KOMP !!!!!!!
+        try {
+            const response = await axios.post(url, newData, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            console.log("++++++++++++++++++++++++++RESPONSE PRE SVEGA ", response)
+            if (response.data.success) {
+                console.log('PASSWORD RESET successfully');
+                handleMesage2('Password Reset succesfully');
+                setTimeout(() => {
+                    navigation.navigate('Login');
+                }, 1500)
+            } else {
+                console.log("RESPONSE DATA ERROR", response)
+                handleMesage(response.data.message)
+                setSubmitting(false);
+
+            }
+        } catch (error) {
+            console.error(error)
+            handleMesage("error");
+            setSubmitting(false);
+        }
+    }
+
+    const handleResendCode = async () => {
+        const url = 'http://192.168.0.13:4000/api/users/resetPassword';
+        const data = resendEmail
+
+        try {
+            await axios.post(url, data, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then((response) => {
+                if (response.data.success) {
+                    handleMesage('Verification code has been resent succesfully');
+                } else {
+                    handleMesage('Failed to resend verification code, try again');
+                }
+            })
+        } catch (error) {
+            console.error(error)
+            handleMesage('Failed to resend verification code, try again');
+        }
+    };
+
 
     return (
         <View style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
@@ -238,11 +304,16 @@ function ResetPasswordScreen({ navigation, route }) {
                             onSubmit={(values, { setSubmitting }) => {
 
                                 if (values.newPassword == '' || values.confirmPassword == '' || values.code == '') {
-                                    handleMesage('Please fill all the fields');
-                                    // setDisabled(true)
                                     setSubmitting(false);
+                                    return handleMesage('Please fill all the fields');
+
+                                } else if (values.newPassword !== values.confirmPassword) {
+                                    setSubmitting(false);
+                                    return handleMesage('Password do not match');
                                 } else {
-                                    handleLogin(values, setSubmitting);
+                                    handleSubmitReset(values, setSubmitting);
+                                    console.log("HANDLE SUBMIT RESET IZ FORMIKA")
+
                                 }
                             }}
                         >
@@ -257,7 +328,7 @@ function ResetPasswordScreen({ navigation, route }) {
                                         placeholderTextColor={darkLight}
                                         onChangeText={handleChange('code')}
                                         onBlur={handleBlur('code')}
-                                        value={values.email}
+                                        value={values.code}
                                         isPassword={false}
                                         keyboardType="email-address"
 
@@ -295,8 +366,8 @@ function ResetPasswordScreen({ navigation, route }) {
 
                                     {/* LOGIN BUTTON */}
                                     {!isSubmitting && (
-                                        // <StyledButton onPress={handleSubmit}>
-                                        <StyledButton onPress={() => console.log("SUBMIT")}>
+                                        // <StyledButton onPress={handleSubmitReset}>
+                                        <StyledButton onPress={handleSubmit}>
                                             <ButtonText>Submit</ButtonText>
                                         </StyledButton>
                                     )}
@@ -311,7 +382,7 @@ function ResetPasswordScreen({ navigation, route }) {
                         </Formik>
                         <ExtraView>
                             <TextLink onPress={() => console.log("lol")}>
-                                <TextLinkContent style={{ margin: 20 }}>Resend Code</TextLinkContent>
+                                <TextLinkContent style={{ margin: 20 }} onPress={handleResendCode}>Resend Code</TextLinkContent>
                                 <TextLinkContent onPress={() => navigation.navigate('Login')}>Back to Login</TextLinkContent>
                             </TextLink>
                         </ExtraView>
