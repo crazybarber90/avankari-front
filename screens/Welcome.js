@@ -1,24 +1,83 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState , useEffect, useLayoutEffect} from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BackHandler } from 'react-native';
+import { BackHandler, View, Text, Platform, KeyboardAvoidingView, Keyboard } from 'react-native';
+// import { useSelector } from 'react-redux';
+// import { selectUser } from '../redux/features/auth/authSlice';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+// EXPO ICONS 
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+//BOTTOM TAB COMPONENTS
+import {
+  Home,
+  UserProfile,
+  Search,
+  Settings,
+  AboutApp
+} from './BottomNavigation';
+const Tab = createBottomTabNavigator()
 
 import {
-  InnerContainer,
-  PageTitle,
-  SubTitle,
-  StyledFormArea,
-  StyledButton,
-  ButtonText,
-  Line,
-  WelcomeContainer,
-  WelcomeImage,
+  Colors,
 } from '../components/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from '../redux/features/auth/authSlice';
 
+const { brand, darkLight, primary, tertiary } = Colors;
+const screenOptions = {
+  tabBarShowLabel: false,
+  headerShown: false,
+  tabBarStyle: {
+    // display: "flex",
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    left: 0,
+    elevation: 0,
+    height: 60,
+    background: "#fff"
+  }
+}
 
 const Welcome = ({ navigation, route }) => {
   const [backPressCount, setBackPressCount] = useState(0);
-  const { name, email, picture, photo } = route.params;
+  const dispatch = useDispatch()
+  const KURCINA = useSelector(selectUser)
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+  // const [backPressCount, setBackPressCount] = useState(0);
+  // const { name, email, picture, photo } = route.params;
+  // const user = useSelector(selectUser)
+  // const { name, email, picture, photo } = user;
+
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const userString = await AsyncStorage.getItem('@user');
+  //       if (userString) {
+  //         const user = JSON.parse(userString);
+  //         // await (setCurrentUser(user));
+  //       }
+  //     } catch (error) {
+  //       console.error('Error loading user from AsyncStorage:', error);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, []);
+
+  // Ova funkcija će se pozvati kada tastatura bude vidljiva
+  const keyboardDidShow = () => {
+    setIsKeyboardVisible(true);
+  };
+
+  // Ova funkcija će se pozvati kada tastatura bude sakrivena
+  const keyboardDidHide = () => {
+    setIsKeyboardVisible(false);
+  };
 
   //=================================== REMOVING BACK ARROW FROM WELCOME PAGE
   useLayoutEffect(() => {
@@ -26,6 +85,7 @@ const Welcome = ({ navigation, route }) => {
       headerLeft: null, // This will remove the back arrow
     });
   }, [navigation]);
+
 
   //=================================== DEVICE'S BACK DOESN'T WORK, IF PRESS X2, EXIT FROM APP
   useEffect(() => {
@@ -43,44 +103,113 @@ const Welcome = ({ navigation, route }) => {
       return false;
     });
 
-    return () => backHandler.remove();
-  }, [navigation, backPressCount]);
-  
-const logoutUser = async () => {
-   AsyncStorage.removeItem('@token');
-  navigation.navigate('Login')
-}
+    // Dodajemo event listenere za tastaturu
+    Keyboard.addListener('keyboardDidShow', keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', keyboardDidHide)
 
-const avatarSource = photo ? { uri: photo } : picture ? { uri: picture } : { uri: 'https://i.ibb.co/4pDNDk1/avatar.png' }
+    // Čistimo event listenere kada se komponenta unmount-uje
+    return () => {
+      Keyboard.removeAllListeners('keyboardDidShow');
+      Keyboard.removeAllListeners('keyboardDidHide');
+
+    };
+  }, [navigation, backPressCount]);
+
+  // console.log("OVO JE USER IZ REDUXA", userIzReduxa)
+
 
   return (
     <>
-      <StatusBar style="dark" />
-      <InnerContainer>
-        <WelcomeImage
-          resizeMode="cover"
+      <StatusBar style="dark" hidden={isKeyboardVisible} />
+      {/*---------------------- BOTTTOM TABS NAVIGATION -------------------- */}
+      <KeyboardAvoidingView
+        // behavior={Platform.OS === 'ios' ? 'padding' : null}
+        style={{ flex: 1 }}
 
-          source={avatarSource}
-          // source={picture ? { uri: picture } : { uri: 'https://i.ibb.co/4pDNDk1/avatar.png' }}
-          // source={route?.params?.photo ? { uri: route?.params?.photo } : { uri: 'https://i.ibb.co/4pDNDk1/avatar.png' }}
-        />
+      >
+        <Tab.Navigator screenOptions={screenOptions}>
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            initialParams={route.params}
+            options={{
+              tabBarIcon: ({ focused }) => {
+                return (
+                  <View style={{ alignItems: "center", justifyContent: "center" }}>
+                    <Ionicons name="home" size={24} color={focused ? tertiary : darkLight} />
+                    <Text style={{ fontSize: 12, color: brand }}>HOME</Text>
+                  </View>
+                )
+              }
+            }
+            } />
+          <Tab.Screen
+            name="UserProfile"
+            component={UserProfile}
+            options={{
+              tabBarIcon: ({ focused }) => {
+                return (
+                  <View style={{ alignItems: "center", justifyContent: "center" }}>
+                    <FontAwesome5 name="user-edit" size={24} color={focused ? brand : darkLight} />
+                    <Text style={{ fontSize: 12, color: brand }} >PROFILE</Text>
+                  </View>
+                )
+              }
+            }
+            } />
+          <Tab.Screen
+            name="Search"
+            component={Search}
+            options={{
+              tabBarIcon: ({ focused }) => {
+                return (
+                  <View style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: brand,
+                    width: Platform.OS == "ios" ? 50 : 60,
+                    height: Platform.OS == "ios" ? 50 : 60,
+                    top: Platform.OS == "ios" ? -10 : -30,
+                    borderRadius: Platform.OS == "ios" ? 25 : 30,
+                  }}>
+                    <FontAwesome name="search" size={24} color={focused ? primary : darkLight} style={{ transform: [{ translateY: 6 }] }} />
+                    <Text style={{ fontSize: 12, color: "red" }} />
+                  </View>
+                )
+              }
+            }
+            } />
 
-        <WelcomeContainer>
-          <PageTitle welcome={true}>WELCOME TO AVANKARI</PageTitle>
-          <SubTitle welcome={true}>{name || 'Nikola Petrovic'}</SubTitle>
-          <SubTitle welcome={true}>{email || 'pepy90aa@gmail.com'}</SubTitle>
-
-          <StyledFormArea>
-            {/* SEPARATOR */}
-            <Line />
-
-            {/* LOGOUT BUTTON */}
-            <StyledButton onPress={logoutUser}>
-              <ButtonText>Logout</ButtonText>
-            </StyledButton>
-          </StyledFormArea>
-        </WelcomeContainer>
-      </InnerContainer>
+          <Tab.Screen
+            name="Settings"
+            component={Settings}
+            options={{
+              tabBarIcon: ({ focused }) => {
+                return (
+                  <View style={{ alignItems: "center", justifyContent: "center" }}>
+                    <Ionicons name="ios-settings" size={24} color={focused ? brand : darkLight} />
+                    <Text style={{ fontSize: 12, color: brand }} >SETINGS</Text>
+                  </View>
+                )
+              }
+            }
+            } />
+          <Tab.Screen
+            name="AboutApp"
+            component={AboutApp}
+            options={{
+              tabBarIcon: ({ focused }) => {
+                return (
+                  <View style={{ alignItems: "center", justifyContent: "center" }}>
+                    <Ionicons name="book-sharp" size={24} color={focused ? brand : darkLight} />
+                    <Text style={{ fontSize: 12, color: brand }} >ABOUT</Text>
+                  </View>
+                )
+              }
+            }
+            } />
+        </Tab.Navigator>
+      </KeyboardAvoidingView>
     </>
   );
 };

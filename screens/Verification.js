@@ -9,7 +9,8 @@ import { TextInput } from 'react-native-gesture-handler';
 import { verifyEmail } from '../utils/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions } from '@react-navigation/native';
-
+// import { useDispatch } from "react-redux";
+// import { SET_USER } from '../redux/features/auth/authSlice';
 
 const inputs = Array(4).fill('')
 // create array with 4 empty strings ['' , '', '', '']
@@ -27,6 +28,7 @@ const { brand, darkLight, primary } = Colors;
 
 const Verification = ({ route, navigation }) => {
 
+    // const dispatch = useDispatch()
     const [message, setMessage] = useState();
     const [messageType, setMessageType] = useState();
     const [verificationStatus, setVerificationStatus] = useState(null);
@@ -76,6 +78,7 @@ const Verification = ({ route, navigation }) => {
                         console.log("Profile objekat nije ispravno definisan ili nema vrednost za 'token'.");
                     }
 
+                    // await dispatch(SET_USER(profile))
                     handleMesage(res.message, 'SUCCESS');
                     setTimeout(() => {
                         navigation.dispatch(StackActions.replace('Welcome', { ...profile }));

@@ -13,14 +13,35 @@ import Signup from '../Signup';
 import Welcome from '../Welcome';
 import SplashScreen from '../SplashScreen';
 import Verification from '../Verification';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // COLORS
 import { Colors } from '../../components/styles';
+import { useDispatch } from 'react-redux';
+import { SET_USER } from '../../redux/features/auth/authSlice';
 const { primary, tertiary } = Colors;
 
 const Stack = createStackNavigator();
 
 const RootStack = () => {
+  const dispatch = useDispatch()
+
+  // useEffect(() => {
+  //   console.log("OKINUTOOOOOOOO IZ ROOTSTACk")
+  //   const fetchUserFromStorage = async () => {
+  //     try {
+  //       const userString = await AsyncStorage.getItem('@user');
+  //       if (userString) {
+  //         const user = await JSON.parse(userString);
+  //         await dispatch(SET_USER(user));
+  //       }
+  //     } catch (error) {
+  //       console.error('Error loading user from AsyncStorage:', error);
+  //     }
+  //   };
+
+  //   fetchUserFromStorage();
+  // }, [dispatch]);
 
   return (
     <NavigationContainer>

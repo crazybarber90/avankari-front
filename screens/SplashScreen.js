@@ -2,8 +2,11 @@ import React, { useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 // import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { selectUser } from '../redux/features/auth/authSlice';
+import { useSelector } from 'react-redux';
 const SplashScreenComponent = ({ navigation }) => {
+
+  // const user = useSelector(selectUser)
   useEffect(() => {
     // Prevent the native splash screen from auto-hiding
     // SplashScreen.preventAutoHideAsync();
@@ -18,15 +21,19 @@ const SplashScreenComponent = ({ navigation }) => {
           // rename name of picture to photo
           const newUser = { ...parsedUser, picture: parsedUser.photo };
           delete newUser.picture;
-
+          console.log("-----------ulazi u splash newUser", newUser)
           navigation.navigate('Welcome', newUser);
         } else {
+          console.log(" -----------ulazi u splash parsed user data", parsedUser.data)
           navigation.navigate('Welcome', parsedUser.data);
         }
       }
       else {
+        console.log("----------ne ulazi u splash")
         await navigation.navigate('Login');
       }
+      console.log("U-S-E-R is splasha", user)
+      // console.log("T-O-K-E-N is splasha", token)
     };
 
     checkTokenAndNavigate();

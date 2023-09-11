@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -7,8 +8,8 @@ const initialState = {
         name: "",
         email: "",
         bio: "",
-        bbio: "",
         photo: "",
+        picture: "",
     },
     userID: "",
 };
@@ -21,9 +22,7 @@ const authSlice = createSlice({
         SET_LOGIN(state, action) {
             state.isLogedIn = action.payload;
         },
-        // stay logged in if refresh page
         SET_NAME(state, action) {
-            localStorage.setItem("name", JSON.stringify(action.payload));
             state.name = action.payload;
         },
         SET_EMAIL(state, action) {
@@ -37,11 +36,34 @@ const authSlice = createSlice({
             state.user.phone = profile.phone;
             state.user.bio = profile.bio;
             state.user.photo = profile.photo;
+            state.user.picture = profile.picture;
         },
+        LOGOUT_USER(state, action) {
+            state.user = initialState.user;
+        },
+        // Akcija za učitavanje korisnika iz AsyncStorage-a
+        LOAD_USER(state) {
+            AsyncStorage.getItem('@user')
+                .then((userJSON) => {
+                    if (userJSON) {
+                        const profile = JSON.parse(userJSON);
+                        state.user.name = profile.name;
+                        state.user.email = profile.email;
+                        state.user.phone = profile.phone;
+                        state.user.bio = profile.bio;
+                        state.user.photo = profile.photo;
+                        state.user.picture = profile.picture;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading user from AsyncStorage:', error);
+                });
+        },
+
     },
 });
 
-export const { SET_LOGIN, SET_NAME, SET_USER, SET_EMAIL } = authSlice.actions;
+export const { SET_LOGIN, SET_NAME, SET_USER, SET_EMAIL, LOAD_USER, LOGOUT_USER } = authSlice.actions;
 
 export const selectIsLoggedIn = (state) => state.auth.isLogedIn;
 export const selectName = (state) => state.auth.name;

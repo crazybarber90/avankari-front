@@ -9,7 +9,8 @@ export const Colors = {
   secondary: '#e5e7eb',
   tertiary: '#1F2937',
   darkLight: '#9ca3af',
-  brand: '#6d28d9',
+  // brand: '#6d28d9',
+  brand: "#008080",
   green: '#10b981',
   red: '#ef4444',
 };
@@ -20,6 +21,7 @@ export const StyledContainer = styled.View`
   flex: 1;
   padding: 25px;
   padding-top: ${StatusBarHeight + 30}px;
+  padding-bottom: 100px;
   background-color: ${primary};
 `;
 
@@ -100,6 +102,25 @@ export const StyledTextInput = styled.TextInput`
   margin-vertical: 3px;
   margin-bottom: 10px;
   color: ${tertiary};
+`;
+
+export const SyledSelectPicker = styled.View`
+  padding: 15px;
+  padding-left: 55px;
+  padding-right: 55px;
+  border-radius: 5px;
+  font-size: 16px;
+  height: 60px;
+  margin-vertical: 3px;
+  margin-bottom: 10px;
+  color: ${tertiary};
+  display: flex;
+`
+
+export const StyledPickerLabel = styled.Text`
+  color: ${tertiary};
+  font-size: 13px;
+  text-align: left;
 `;
 
 export const StyledInputLabel = styled.Text`

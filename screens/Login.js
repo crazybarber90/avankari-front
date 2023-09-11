@@ -36,6 +36,8 @@ import {
 } from '../components/styles';
 
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
+import { SET_USER } from '../redux/features/auth/authSlice';
+import { useDispatch } from 'react-redux';
 // Destructured colors from 1st prop Colors from style
 const { brand, darkLight, primary } = Colors;
 
@@ -47,6 +49,7 @@ const Login = ({ navigation }) => {
   const [messageType, setMessageType] = useState();
   const [myToken, setMyToken] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const dispatch = useDispatch()
 
 
   const [backPressCount, setBackPressCount] = useState(0);
@@ -101,8 +104,8 @@ const Login = ({ navigation }) => {
     if (response?.type === 'success' && !isSigningUp) {
       isSigningUp = true;
       // await AsyncStorage.removeItem('@token');
-      const user = await AsyncStorage.getItem('@user');
-      const token = await AsyncStorage.getItem('@token');
+      // const user = await AsyncStorage.getItem('@user');
+      // const token = await AsyncStorage.getItem('@token');
 
       console.log("LOGIRANJEEEEEEEEEEEEEEEE IZ HANDLESIGNUP Response type: success");
 
@@ -117,6 +120,10 @@ const Login = ({ navigation }) => {
         if (userInfoResponse.ok) {
           const userInfo = await userInfoResponse.json();
 
+          console.log("USER INFO IZ GOOGLE SIGINI", userInfo)
+
+
+
 
           // Call the handleSignup function to register or login the user with the obtained userInfo
           await handleGoogleSignup({
@@ -130,6 +137,7 @@ const Login = ({ navigation }) => {
 
           // Navigate to the Welcome screen or handle it as needed
           if (userInfo) {
+            await dispatch(SET_USER(userInfo));
             await navigation.navigate('Welcome', userInfo);
           }
 
@@ -169,10 +177,8 @@ const Login = ({ navigation }) => {
           await navigation.navigate('Welcome', data);
         }
         // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
       }
     };
-
     getToken();
   }, [navigation]);
 
