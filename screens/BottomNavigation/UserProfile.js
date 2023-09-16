@@ -9,6 +9,7 @@ import { StatusBar } from 'expo-status-bar';
 import { BackHandler } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useFormikContext } from 'formik';
+import { SET_USER, selectUser, LOGOUT_USER } from '../../redux/features/auth/authSlice';
 
 import {
     Colors,
@@ -48,6 +49,7 @@ const UserProfile = () => {
     const [messageType, setMessageType] = useState();
     const [message, setMessage] = useState();
     const dispatch = useDispatch()
+    const currentUser = useSelector(selectUser)
 
     const handleMesage = (message, type = 'FAILED') => {
         setMessage(message);
@@ -107,6 +109,7 @@ const UserProfile = () => {
         }
     }
 
+    console.log("CURENT U PROFILE", currentUser)
     //ovo je objekat koji saljem na backend,zelim da ovaj ulogovani user u userDetails kolekciji pored ovih podataka upise ove podatke i userID , koji verovatno moze da se izvuce iz tokena ? ili kako god da je najbolje da bih posle na osnovu pretrage ovih parametara mogao da nadjem usera koji ima ove podatke
 
     return (

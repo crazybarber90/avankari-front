@@ -120,13 +120,11 @@ const Login = ({ navigation }) => {
         if (userInfoResponse.ok) {
           const userInfo = await userInfoResponse.json();
 
-          console.log("USER INFO IZ GOOGLE SIGINI", userInfo)
-
-
+          // console.log("USER INFO IZ GOOGLE SIGINI", userInfo)
 
 
           // Call the handleSignup function to register or login the user with the obtained userInfo
-          await handleGoogleSignup({
+          const signupResponse = await handleGoogleSignup({
             authentication: response.authentication,
             userInfo: {
               email: userInfo.email,
@@ -135,10 +133,14 @@ const Login = ({ navigation }) => {
             },
           });
 
+          // await console.log("(((((((((((***************signupRESPONSE", signupResponse)
+
           // Navigate to the Welcome screen or handle it as needed
+
+          // OVDE JE signupResponse return funkcije handleGoogleSignup = response usera iz baze
           if (userInfo) {
-            await dispatch(SET_USER(userInfo));
-            await navigation.navigate('Welcome', userInfo);
+            await dispatch(SET_USER(signupResponse));
+            await navigation.navigate('Welcome', signupResponse);
           }
 
         } else {
@@ -199,7 +201,7 @@ const Login = ({ navigation }) => {
 
         try {
           await AsyncStorage.setItem('@token', token);
-          await AsyncStorage.setItem('@user', JSON.stringify(user))
+          await AsyncStorage.setItem('@user', JSON.stringify(user.data))
         } catch (asyncStorageError) {
           console.log("ERROR SAVING TOKEN TO ASYNC STORAHE", asyncStorageError)
         }

@@ -24,6 +24,13 @@ export const StyledContainer = styled.View`
   padding-bottom: 100px;
   background-color: ${primary};
 `;
+export const StyledContainerHome = styled.View`
+  flex: 1;
+  padding: 10px;
+  padding-top: ${StatusBarHeight + 30}px;
+  background-color: ${primary};
+
+`;
 
 export const InnerContainer = styled.View`
   flex: 1;
@@ -53,9 +60,9 @@ export const Avatar = styled.Image`
   margin-top: 10px;
 `;
 export const WelcomeImage = styled.Image`
-  height: 50%;
+  height: 40%;
   min-width: 100%;
-  object-fit: contain;
+  object-fit: cover;
 `;
 
 export const PageTitle = styled.Text`
@@ -90,6 +97,9 @@ export const SubTitle = styled.Text`
 export const StyledFormArea = styled.View`
   width: 90%;
 `;
+export const StyledFormAreaSocial = styled.View`
+  width: 95%;
+`;
 
 export const StyledTextInput = styled.TextInput`
   background-color: ${secondary};
@@ -99,6 +109,19 @@ export const StyledTextInput = styled.TextInput`
   border-radius: 5px;
   font-size: 16px;
   height: 60px;
+  margin-vertical: 3px;
+  margin-bottom: 10px;
+  color: ${tertiary};
+`;
+
+export const StyledTextInputSocial = styled.TextInput`
+  background-color: ${secondary};
+  padding: 5px;
+  padding-left: 55px;
+  padding-right: 25px;
+  border-radius: 5px;
+  font-size: 16px;
+  height: 50px;
   margin-vertical: 3px;
   margin-bottom: 10px;
   color: ${tertiary};
@@ -135,6 +158,12 @@ export const LeftIcon = styled.View`
   position: absolute;
   z-index: 1;
 `;
+export const LeftIconSocial = styled.View`
+  left: 10px;
+  top: 31px;
+  position: absolute;
+  z-index: 1;
+`;
 
 export const RightIcon = styled.TouchableOpacity`
   right: 15px;
@@ -160,6 +189,15 @@ export const StyledButton = styled.TouchableOpacity`
     justify-content: center;
   `}
 `;
+
+export const LogoutButton = styled.TouchableOpacity`
+padding: 5px;
+background-color: ${brand};
+border-radius: 5px;
+margin-vertical: 5px;
+height: 45px;
+width: 55px;
+`
 
 export const ButtonText = styled.Text`
   color: ${primary};

@@ -32,7 +32,7 @@ const SplashScreenComponent = ({ navigation }) => {
         console.log("----------ne ulazi u splash")
         await navigation.navigate('Login');
       }
-      console.log("U-S-E-R is splasha", user)
+      // console.log("U-S-E-R is splasha", user)
       // console.log("T-O-K-E-N is splasha", token)
     };
 

@@ -1,43 +1,89 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { StyleSheet, Text, View, BackHandler, Platform, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, BackHandler, Platform, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux';
-import { LOAD_USER, SET_USER, selectUser, LOGOUT_USER } from '../../redux/features/auth/authSlice';
+import { SET_USER, selectUser, LOGOUT_USER } from '../../redux/features/auth/authSlice';
 import { CommonActions } from '@react-navigation/native';
+import { Formik } from 'formik';
+import { Octicons, Fontisto } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import axios from 'axios';
+
+
 import {
     Colors,
+    StyledContainerHome,
+    StyledContainer,
     InnerContainer,
     PageTitle,
     SubTitle,
+    MsgBox,
     StyledFormArea,
+    StyledTextInput,
+    StyledInputLabel,
     StyledButton,
     ButtonText,
     Line,
+    LeftIcon,
     WelcomeContainer,
     WelcomeImage,
+    LogoutButton,
+    StyledTextInputSocial,
+    StyledFormAreaSocial,
+    LeftIconSocial
 } from '../../components/styles';
+import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import { ImagePicker } from 'expo';
+import * as ImagePicker from 'expo-image-picker'
+// import { ImageManipulator } from 'expo';
+// import { ImageManipulator } from 'expo-image-manipulator';
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as FileSystem from 'expo-file-system';
+import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper';
+import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+
 
 const { brand, darkLight, primary } = Colors;
 
 const Home = ({ navigation, route }) => {
+
+    const [messageType, setMessageType] = useState();
+    const [message, setMessage] = useState();
+    const currentUser = useSelector(selectUser)
+
+
     const [backPressCount, setBackPressCount] = useState(0);
     const [loggedUser, setLoggedUser] = useState(route.params)
-    // const user = useSelector(selectUser)
     const user = route.params
-    // const KURCINA = useSelector(selectUser)
+
+    // IMAGE STATES
+    const [image, setImage] = useState(null);
+    const [hasGalleryPermission, setHasGalleryPermission] = useState(null)
+
+    // SOCIAL NETWORKS==========================
+    const [facebookUrl, setFacebookUrl] = useState('');
+    const [instagramUrl, setInstagramUrl] = useState('');
+    const [twitterUrl, setTwitterUrl] = useState('');
+    const [changedSocialState, setChangedSocialState] = useState(false);
+
+
+    const [userData, setUserData] = useState({
+        facebookUrl: '',
+        instagramUrl: '',
+        phoneNumber: '',
+    });
+
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+
+    // SOCIAL NETWORKS==========================
 
     const { name, email, picture, photo } = loggedUser
     const dispatch = useDispatch()
     // const avatarSource = photo ? { uri: photo } : picture ? { uri: picture } : { uri: 'https://i.ibb.co/4pDNDk1/avatar.png' }
-
-    const avatarSource = { uri: photo || picture || 'https://i.ibb.co/4pDNDk1/avatar.png' };
-
-    // console.log("USER IZ hOME", user)
-
-    // console.log("sssssssssssssssssssssssssssssssssssssssss", user)
+    // const avatarSource = { uri: photo || picture || 'https://i.ibb.co/4pDNDk1/avatar.png' };
+    const avatarSource = image ? { uri: image } : { uri: photo || picture || 'https://i.ibb.co/4pDNDk1/avatar.png' };
 
     async function clearAsyncStorage() {
         try {
@@ -48,20 +94,10 @@ const Home = ({ navigation, route }) => {
         }
     }
 
-    const openImagePicker = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images, // Možete promeniti na 'Videos' ako želite odabrati video
-            allowsEditing: true,
-            aspect: [4, 3], // Omjer širine i visine za uređivanje
-            quality: 1, // Kvalitet slike (0 - 1)
-        });
-
-        if (!result.cancelled) {
-            // Ovde možete obraditi odabranu sliku ili je postaviti u state
-            console.log(result);
-        }
+    const handleMesage = (message, type = 'FAILED') => {
+        setMessage(message);
+        setMessageType(type);
     };
-
 
     const logoutUser = async () => {
         // await AsyncStorage.removeItem('@token');
@@ -79,6 +115,46 @@ const Home = ({ navigation, route }) => {
             })
         )
     }
+
+    useEffect(() => {
+        const fetchUserFromStorage = async () => {
+            try {
+                const userString = await AsyncStorage.getItem('@user');
+                if (userString) {
+                    const user = JSON.parse(userString);
+                    console.log("UsER IZ storage ", user)
+                    // Postavite korisnika u Redux stanje koristeći odgovarajuću Redux akciju
+                    dispatch(SET_USER(user));
+                }
+            } catch (error) {
+                console.error('Error loading user from AsyncStorage:', error);
+            }
+        };
+
+        fetchUserFromStorage();
+        console.log("ODRADIO UPIS U REDUX STEJT")
+    }, [changedSocialState]);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow',
+            (e) => {
+                setKeyboardHeight(e.endCoordinates.height);
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide',
+            () => {
+                setKeyboardHeight(0);
+            }
+        );
+
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
+
     //=================================== REMOVING BACK ARROW FROM WELCOME PAGE
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -121,52 +197,290 @@ const Home = ({ navigation, route }) => {
     //     fetchUser();
     // }, []);
 
+    // PERMISIJA ZA GALERIJU
+    useEffect(() => {
+        (async () => {
+            const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            setHasGalleryPermission(galleryStatus.status === 'granted');
+        })();
+    }, []);
 
+    console.log("CURENTTTTTTTT USERRRRRRRRRRRRRRRRRRRRR", currentUser);
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+        if (!result.canceled) {
+            try {
+                const manipResult = await ImageManipulator.manipulateAsync(
+                    result.assets[0].uri,
+                    [{ resize: { width: 800, height: 600 } }], // Postavite željene dimenzije
+                    { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG } // Postavite kvalitet kompresije
+                );
+
+                const formData = new FormData();
+                formData.append('image', {
+                    uri: manipResult.uri,
+                    name: 'image.jpg',
+                    type: 'image/jpeg',
+                });
+                setImage(manipResult.uri);
+
+                try {
+                    const token = await AsyncStorage.getItem("@token");
+                    const user = await AsyncStorage.getItem("@user");
+
+                    if (!token) {
+                        handleMesage('Token nije dostupan.');
+                        return;
+                    }
+                    const headers = {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    };
+
+                    const url = 'http://192.168.0.13:4000/api/users/upload-user-photo';
+
+                    const response = await axios.put(url, formData, { headers });
+                    const newPhoto = response.data.user.photo;
+
+                    //======================== UPDATE ASYNCSTORAGE SA NOVOM SLIKOM"
+                    const currentUserString = await AsyncStorage.getItem('@user');
+                    const currentUser = JSON.parse(currentUserString);
+                    currentUser.photo = newPhoto;
+
+                    // čuvajnje ažuriranog korisnika u AsyncStorage-u
+                    await AsyncStorage.setItem('@user', JSON.stringify(currentUser));
+
+                    // Ažuriranje Redux stanje kako bi se reflektovale promene slike
+                    await dispatch(SET_USER(currentUser));
+
+                    if (response.status === 200) {
+                        console.log('Update successfully', response.data.user.photo);
+                        const userData = await response;
+                        await setChangedSocialState(!changedSocialState)
+                    }
+                    return response.data;
+                } catch (error) {
+                    const message =
+                        (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+                    handleMesage(message);
+                }
+            } catch (error) {
+                console.error('Greška pri obradi slike:', error);
+            }
+        }
+    };
+
+
+    useEffect(() => {
+        console.log("curent is uzeEffectxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", currentUser);
+    }, [changedSocialState]);
+
+    // console.log("STATEsssssssssssssssssssssssssssssssssssssssssssssssssssssssss", changedSocialState)
+
+    const handleUpdateSocials = async (values, setSubmitting) => {
+        // return console.log("USER DATA", userData)
+        try {
+            const token = await AsyncStorage.getItem("@token");
+
+            if (!token) {
+                handleMesage('Token nije dostupan.');
+                setSubmitting(false);
+                return;
+            }
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            };
+            const url = 'http://192.168.0.13:4000/api/users/update-socials';
+            // return console.log("USERDATAaaaaaaaaaaaaaaaaaaaaaaaaaa", userData)
+
+            const response = await axios.post(url, userData, { headers });
+
+            if (response.status === 200) {
+                console.log('Update successfully', response.data);
+                // const userData = response.data;
+
+                //======================== UPDATE ASYNCSTORAGE SA NOVI SOCIALS"
+                const newFacebookUrl = response.data.user.facebookUrl;
+                const newInstagramUrl = response.data.user.instagramUrl;
+                const newPhoneNumber = response.data.user.phoneNumber;
+
+                // Učitavanje trenutnog korisnika iz AsyncStorage-a
+                const currentUserString = await AsyncStorage.getItem('@user');
+                const currentUser = JSON.parse(currentUserString);
+
+                // Učitavanje trenutnog korisnika iz AsyncStorage-a
+                currentUser.facebookUrl = newFacebookUrl;
+                currentUser.instagramUrl = newInstagramUrl;
+                currentUser.phoneNumber = newPhoneNumber;
+
+                // Ažuriranje nove vrednosti u trenutnom korisniku
+                currentUser.facebookUrl = newFacebookUrl;
+                currentUser.instagramUrl = newInstagramUrl;
+                currentUser.phoneNumber = newPhoneNumber;
+
+                // čuvajte ažuriranog korisnika u AsyncStorage-u
+                await AsyncStorage.setItem('@user', JSON.stringify(currentUser));
+                //======================== UPDATE ASYNCSTORAGE SA NOVI SOCIALS"
+
+
+                await dispatch(SET_USER(response.data));
+
+                await setChangedSocialState(!changedSocialState)
+                console.log('ovo je log sa backenda =============>', userData);
+            }
+            // navigation.navigate('Home', { ...response.data });
+            // navigation.navigate('Home');
+
+            setSubmitting(false);
+            return response.data;
+        } catch (error) {
+            const message =
+                (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+            setSubmitting(false);
+            setTimeout(() => {
+                handleMesage(message);
+            }, 10000)
+        }
+    }
     return (
-        <>
-            {/* <StatusBar style="dark" /> */}
-            <WelcomeImage
-                resizeMode="cover"
-                source={avatarSource}
-            // style={{ width: "100%", height: '30%', objectFit: 'cover', zIndex: 9999, }}
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+
+            <>
+                {/* <StatusBar style="dark" /> */}
+                <WelcomeImage
+                    resizeMode="cover"
+                    source={avatarSource}
+                // style={{ width: "100%", height: '30%', objectFit: 'cover', zIndex: 9999, }}
+                />
+
+                {/* ADD IMAGE BUTTON */}
+                <TouchableOpacity
+                    style={{
+                        position: 'absolute',
+                        top: 250 - keyboardHeight / 2.3,
+                        right: 0,
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        borderRadius: 20,
+                        padding: 10,
+                        margin: 10,
+                    }}
+                    onPress={() => pickImage()}
+                >
+                    <AntDesign name="plus" size={24} color="white" />
+                </TouchableOpacity>
+                {/* {image && <Image source={{ uri: image }} style={{ flex: 1 / 3 }}></Image>} */}
+                <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                    <WelcomeContainer>
+                        <View style={{ position: "absolute", top: -280, right: 20, boxShadow: "1px 1px 1px black", backgroundColor: "black", padding: 2, opacity: 0.7 }}>
+                            <Ionicons name="ios-power-sharp" size={40} color={brand} onPress={logoutUser} />
+                        </View>
+                        {/* <KeyboardAvoidingWrapper> */}
+                        <InnerContainer>
+                            {/* <PageTitle></PageTitle> */}
+                            <Formik
+                                initialValues={{
+                                    facebookUrl: "",
+                                    instagramUrl: "",
+                                    phoneNumber: "Odaberi Pol",
+
+                                }}
+                                // onSubmit={(values, { setSubmitting, setFieldValue }) => {
+                                onSubmit={(values, { setSubmitting }) => {
+                                    // handleUpdateUser(values, setSubmitting, setFieldValue);
+                                    handleUpdateSocials(values, setSubmitting);
+
+                                }}
+                            >
+                                {({ handleBlur, handleSubmit, isSubmitting }) => (
+                                    <StyledFormAreaSocial>
+                                        {/* CITY */}
+                                        <MyTextInput
+                                            label="Facebook"
+                                            icon="facebook-with-circle"
+                                            placeholder="Facebook"
+                                            placeholderTextColor={darkLight}
+                                            onChangeText={(text) => setUserData({ ...userData, facebookUrl: text })}
+                                            onBlur={handleBlur('facebook')}
+                                            value={userData.facebook}
+                                        />
+                                        {/* PLACE */}
+                                        <MyTextInput
+                                            label="Instagram"
+                                            icon="instagram-with-circle"
+                                            placeholder="Instagram"
+                                            placeholderTextColor={darkLight}
+                                            onChangeText={(text) => setUserData({ ...userData, instagramUrl: text })}
+                                            onBlur={handleBlur('instagram')}
+                                            value={userData.instagram}
+                                        />
+                                        <MyTextInput
+                                            label="Phone Number"
+                                            icon="phone"
+                                            placeholder="Phone Number"
+                                            placeholderTextColor={darkLight}
+                                            onChangeText={(text) => setUserData({ ...userData, phoneNumber: text })} onBlur={handleBlur('phoneNumber')}
+                                            value={userData.phoneNumber}
+                                        />
 
 
-            />
+                                        {/* THREE DOTS  */}
+                                        <MsgBox type={messageType}>{message}</MsgBox>
 
-            <TouchableOpacity
-                style={{
-                    position: 'absolute',
-                    top: 330,
-                    right: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                    borderRadius: 20,
-                    padding: 10,
-                    margin: 10,
-                }}
-                onPress={openImagePicker}
-            >
-                <AntDesign name="plus" size={24} color="white" />
-            </TouchableOpacity>
+                                        {/* SUBMIT BUTTON */}
+                                        {!isSubmitting && (
+                                            <StyledButton onPress={handleSubmit}>
+                                                {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
+                                                <ButtonText>UPDATE</ButtonText>
+                                            </StyledButton>
+                                        )}
 
-            <WelcomeContainer>
-                <PageTitle welcome={true}>WELCOME TO AVANKARI</PageTitle>
-                <SubTitle welcome={true}>{name || 'Nikola Petrovic'}</SubTitle>
-                <SubTitle welcome={true}>{email || 'pepy90aa@gmail.com'}</SubTitle>
+                                        {isSubmitting && (
+                                            <StyledButton disabled={true}>
+                                                <ActivityIndicator size="large" color={primary} />
+                                            </StyledButton>
+                                        )}
+                                        {/* SEPARATOR BETWEEN LOGIN AND REGISTER */}
+                                        <Line />
+                                    </StyledFormAreaSocial>
+                                )}
+                            </Formik>
+                        </InnerContainer>
 
-                <StyledFormArea>
-                    {/* SEPARATOR */}
-                    <Line />
+                        {/* </KeyboardAvoidingWrapper> */}
 
-                    {/* LOGOUT BUTTON */}
-                    <StyledButton onPress={logoutUser}>
-                        <ButtonText>Logout</ButtonText>
-                    </StyledButton>
-                </StyledFormArea>
-            </WelcomeContainer>
-        </>
+                    </WelcomeContainer>
+                </TouchableWithoutFeedback>
+            </>
+        </KeyboardAvoidingView>
 
     )
 }
+
+
+//INPUT COMPONENT
+const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
+    return (
+        <View>
+            <LeftIconSocial>
+                <Entypo name={icon} size={25} color={brand} />
+            </LeftIconSocial>
+            <StyledInputLabel>{label}</StyledInputLabel>
+            <StyledTextInputSocial {...props} />
+            {isPassword && (
+                <RightIcon onPress={() => setHidePassword(!hidePassword)}>
+                    <Ionicons name={hidePassword ? 'md-eye-off' : 'md-eye'} size={30} color={darkLight} />
+                </RightIcon>
+            )}
+        </View>
+    );
+};
 
 export default Home
 

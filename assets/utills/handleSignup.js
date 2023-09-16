@@ -19,8 +19,11 @@ export const handleGoogleSignup = async (data) => {
   try {
     const response = await axios.post(url, credentials, { withCredentials: true });
 
+    // console.log("----------------------- ---------------- ---------------USER IS HANDLE-SIGN-UP GOOOOGGGLEEEEEEEEEEEE", response.data)
+
+    // OVDE SE PUNI ASYNCSTORAGE IZ RESPONSA IZ BAZE ZA GOOGLESIGNUP
     await AsyncStorage.setItem('@token', response.data.token);
-    await AsyncStorage.setItem('@user', JSON.stringify(userInfo))
+    await AsyncStorage.setItem('@user', JSON.stringify(response.data))
 
     return response.data;
 

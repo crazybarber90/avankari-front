@@ -7,9 +7,11 @@ const initialState = {
     user: {
         name: "",
         email: "",
-        bio: "",
         photo: "",
-        picture: "",
+        facebookUrl: "",
+        instagramUrl: "",
+        phoneNumber: "",
+        verified: "",
     },
     userID: "",
 };
@@ -33,10 +35,12 @@ const authSlice = createSlice({
             const profile = action.payload;
             state.user.name = profile.name;
             state.user.email = profile.email;
-            state.user.phone = profile.phone;
-            state.user.bio = profile.bio;
             state.user.photo = profile.photo;
-            state.user.picture = profile.picture;
+            state.user.facebookUrl = profile.facebookUrl;
+            state.user.instagramUrl = profile.instagramUrl;
+            state.user.phoneNumber = profile.phoneNumber;
+            state.user.verified = profile.verified;
+            // state.user.picture = profile.picture;
         },
         LOGOUT_USER(state, action) {
             state.user = initialState.user;
