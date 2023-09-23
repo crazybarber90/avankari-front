@@ -14,6 +14,7 @@ import { Formik } from 'formik';
 import { Octicons, Ionicons, Fontisto } from '@expo/vector-icons';
 
 import {
+  CustomFont,
   Colors,
   StyledContainer,
   InnerContainer,
@@ -161,6 +162,7 @@ const Signup = ({ navigation }) => {
               <StyledFormArea>
                 {/* EMAIL INPUT */}
                 <MyTextInput
+                  style={{ fontFamily: CustomFont }}
                   label="Email Address"
                   icon="mail"
                   placeholder="Ener Your Email"
@@ -172,6 +174,7 @@ const Signup = ({ navigation }) => {
                 />
                 {/* FULL NAME INPUT */}
                 <MyTextInput
+                  style={{ fontFamily: CustomFont }}
                   label="Full Name"
                   icon="person"
                   placeholder="Enter Your Name"
@@ -197,6 +200,7 @@ const Signup = ({ navigation }) => {
 
                 {/* PASSWORD INPUT */}
                 <MyTextInput
+                  style={{ fontFamily: CustomFont }}
                   label="Password"
                   icon="lock"
                   placeholder="* * * * * * *"
@@ -212,6 +216,7 @@ const Signup = ({ navigation }) => {
 
                 {/* PASSWORD INPUT 2 */}
                 <MyTextInput
+                  style={{ fontFamily: CustomFont }}
                   label="Confirm Password"
                   icon="lock"
                   placeholder="* * * * * * *"

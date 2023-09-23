@@ -114,7 +114,7 @@ function ResetPasswordScreen({ navigation, route }) {
             <KeyboardAvoidingWrapper>
                 <StyledContainer style={{ width: 400, alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: 50, backgroundColor: 'transparent' }}>
                     <StatusBar style="dark" />
-                    <Text style={{ marginBottom: 30, fontSize: 26, fontWeight: 'bold', color: brand }}>
+                    <Text style={{ marginBottom: 30, fontSize: 26, color: brand }}>
                         Reset Password Confirmation
                     </Text>
                     <InnerContainer>

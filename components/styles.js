@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { View, Image, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Image, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 
 const StatusBarHeight = Constants.statusBarHeight;
@@ -9,13 +9,34 @@ export const Colors = {
   secondary: '#e5e7eb',
   tertiary: '#1F2937',
   darkLight: '#9ca3af',
+
+  // ovo je globalna boja
+  brand: "#399BA6",
   // brand: '#6d28d9',
-  brand: "#008080",
+
+  // ovo je boja za search komponentu
+  search: "#42BA9F",
+  // search: "#a0235c",
+
   green: '#10b981',
   red: '#ef4444',
+  googleButton: "#019E87"
 };
 
-const { primary, secondary, tertiary, darkLight, brand, green, red } = Colors;
+const { primary, secondary, tertiary, darkLight, brand, green, red, googleButton } = Colors;
+
+
+// ===========FONTOVI=========== // 
+//==========================================================================
+//u RootStack se uvoze fontofi koji mora da se DL u assets/fonts
+// Onda se ovde samo upise drugo ime fonta i primenjuje se svuda
+
+// DEFAULTNI FONT
+// const CustomFont = Platform.OS === 'ios' ? 'System' : 'sans-serif';
+// export const CustomFont = 'Pattaya';
+export const CustomFont = 'NanumMyeongjo';
+// export const CustomFont = 'Orbitron';
+//==========================================================================
 
 export const StyledContainer = styled.View`
   flex: 1;
@@ -68,7 +89,7 @@ export const WelcomeImage = styled.Image`
 export const PageTitle = styled.Text`
   font-size: 30px;
   text-align: center;
-  font-weight: bold;
+  font-family: ${CustomFont};
   color: ${brand};
   padding: 10px;
 
@@ -83,14 +104,13 @@ export const SubTitle = styled.Text`
   font-size: 18px;
   margin-bottom: 20px;
   letter-spacing: 1px;
-  font-weight: bold;
   color: ${tertiary};
+  font-family: ${CustomFont};
 
   ${(props) =>
     props.welcome &&
     `
     margin-bottom: 5px;
-    font-weight: normal;
   `}
 `;
 
@@ -114,6 +134,20 @@ export const StyledTextInput = styled.TextInput`
   color: ${tertiary};
 `;
 
+
+export const StyledTextInputWithImage = styled.View`
+  flex-direction: row;
+  align-items: center;
+  background-color: ${secondary};
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  height: 50px;
+  margin-vertical: 3px;
+  margin-bottom: 10px;
+  color: ${tertiary};
+`;
+
 export const StyledTextInputSocial = styled.TextInput`
   background-color: ${secondary};
   padding: 5px;
@@ -125,13 +159,39 @@ export const StyledTextInputSocial = styled.TextInput`
   margin-vertical: 3px;
   margin-bottom: 10px;
   color: ${tertiary};
+  overflow: hidden;
+  font-family: ${CustomFont};
 `;
+
+export const StyledTableInputSocial = styled.TextInput`
+  background-color: transparent;
+  padding-left: 15px;
+  padding-right: 25px;
+  border-radius: 5px;
+  height: 20px;
+  font-size: 16px;
+  margin-vertical: 3px;
+  margin-bottom: 10px;
+  color: ${tertiary};
+  text-transform: uppercase;
+  margin-top:10px;
+  font-family: ${CustomFont};
+
+
+`;
+
+export const StyledImage = styled.Image`
+  opacity:0.8;
+  width: 17%;
+  height: 80%;
+  margin-right: 15px; /* Opciono, dodaje malo prostora između slike i teksta */
+`;
+
 
 export const SyledSelectPicker = styled.View`
   padding: 15px;
   padding-left: 55px;
   padding-right: 55px;
-  border-radius: 5px;
   font-size: 16px;
   height: 60px;
   margin-vertical: 3px;
@@ -144,17 +204,19 @@ export const StyledPickerLabel = styled.Text`
   color: ${tertiary};
   font-size: 13px;
   text-align: left;
+  font-family: ${CustomFont};
 `;
 
 export const StyledInputLabel = styled.Text`
   color: ${tertiary};
   font-size: 13px;
   text-align: left;
+  font-family: ${CustomFont};
 `;
 
 export const LeftIcon = styled.View`
   left: 15px;
-  top: 38px;
+  top: 33px;
   position: absolute;
   z-index: 1;
 `;
@@ -184,7 +246,25 @@ export const StyledButton = styled.TouchableOpacity`
   ${(props) =>
     props.google == true &&
     `
-    background-color: ${green};
+    background-color: ${googleButton};
+    flex-direction: row;
+    justify-content: center;
+  `}
+`;
+
+export const StyledButtonTable = styled.TouchableOpacity`
+  padding: 6px;
+  background-color: ${brand};
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  margin-vertical: 5px;
+  height: 45px;
+
+  ${(props) =>
+    props.google == true &&
+    `
+    background-color: ${googleButton};
     flex-direction: row;
     justify-content: center;
   `}
@@ -202,6 +282,7 @@ width: 55px;
 export const ButtonText = styled.Text`
   color: ${primary};
   font-size: 16px;
+  font-family: ${CustomFont};
   ${(props) =>
     props.google == true &&
     `
@@ -212,13 +293,14 @@ export const ButtonText = styled.Text`
 export const MsgBox = styled.Text`
   text-align: center;
   font-size: 13px;
+  font-family: ${CustomFont};
   color: ${(props) => (props.type == 'SUCCESS' ? green : red)};
 `;
 
 export const MsgBox2 = styled.Text`
   text-align: center;
   font-size: 16px;
-  font-weight: bold;
+  font-family: ${CustomFont};
   color: ${(props) => (props.type == 'SUCCESS' ? green : red)};
 `;
 
@@ -241,6 +323,7 @@ export const ExtraText = styled.Text`
   align-items: center;
   color: ${tertiary};
   font-size: 15px;
+  font-family: ${CustomFont};
 `;
 
 export const TextLink = styled.TouchableOpacity`
@@ -252,4 +335,23 @@ export const TextLinkContent = styled.Text`
   color: ${brand};
   font-size: 15px;
   margin-horizontal: 5px;
+  font-family: ${CustomFont};
 `;
+
+export const ProfileTextContainer = styled.View`
+  margin-bottom: 75px;
+  margin-top: 5px;
+
+`;
+
+export const ProfileText = styled.Text`
+  color: ${brand};
+  font-size: 22px;
+  margin-horizontal: 5px;
+  border: 1px solid ${brand};
+  padding: 5px;
+  margin-bottom: 10px;
+  font-family: ${CustomFont};
+  
+`;
+

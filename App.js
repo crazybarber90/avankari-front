@@ -1,9 +1,25 @@
 //screens
+import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import RootStack from './screens/navigators/RootStack';
 import store from './redux/store';
+import AppLoad from './screens/AppLoad';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from "expo-splash-screen"
+
 
 export default function App() {
+
+  // const [fontsLoaded] = useFonts({
+  //   // 'NanumMyeongjo': require('./assets/fonts/NanumMyeongjo.ttf'),
+  //   // 'Orbitron': require('./assets/fonts/Orbitron.ttf'),
+  //   Pattaya: require('./assets/fonts/Pattaya.ttf'),
+  // });
+
+  // if (!fontsLoaded) {
+  //   return null;
+  // }
+
   return (
     <Provider store={store}>
       <RootStack />

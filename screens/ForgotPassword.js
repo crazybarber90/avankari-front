@@ -12,6 +12,7 @@ import { Formik } from 'formik';
 import { Octicons, Ionicons, Fontisto } from '@expo/vector-icons';
 
 import {
+  CustomFont,
   Colors,
   StyledContainer,
   InnerContainer,
@@ -99,6 +100,7 @@ const ForgotPassword = ({ navigation }) => {
               <StyledFormArea>
                 {/* EMAIL INPUT */}
                 <MyTextInput
+                  style={{ fontFamily: CustomFont }}
                   label="Email Address"
                   icon="mail"
                   placeholder="Enter Your Email"

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ActivityIndicator, Platform } from 'react-nativ
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Octicons, Ionicons, Fontisto } from '@expo/vector-icons';
+import { Octicons, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Formik } from 'formik';
 import { StatusBar } from 'expo-status-bar';
 import { BackHandler } from 'react-native';
@@ -12,6 +12,7 @@ import { useFormikContext } from 'formik';
 import { SET_USER, selectUser, LOGOUT_USER } from '../../redux/features/auth/authSlice';
 
 import {
+    CustomFont,
     Colors,
     StyledContainer,
     InnerContainer,
@@ -51,29 +52,44 @@ const UserProfile = () => {
     const dispatch = useDispatch()
     const currentUser = useSelector(selectUser)
 
-    const handleMesage = (message, type = 'FAILED') => {
+    const handleMesage = (message, type = 'FAILED',) => {
         setMessage(message);
         setMessageType(type);
+
+        // timeout da sakrijete poruku nakon 5 sekundi
+        setTimeout(() => {
+            setMessage(null);
+            setMessageType(null);
+        }, 5000);
     };
 
-
-    // console.log("TOKEN IZ USER DETAILS", token)
     const handleUpdateUser = async (credentials, setSubmitting) => {
 
-        // setSubmitting(true);
         // DA FILTRIRA SVE PROPERTIJE KOJI POCINJU SA ODABERI i da ih ne upisuje u bazu
+        setSubmitting(false);
+
         // const filterValues = (obj) => {
         //     const filtered = {};
         //     for (const key in obj) {
-        //         if (obj[key] !== `Odaberi ${key}`) {
-        //             filtered[key] = obj[key];
+        //         if (!obj[key].startsWith(`Odaberi`)) {
+        //             filtered[key.toLowerCase()] = obj[key];
         //         }
         //     }
         //     return filtered;
         // };
 
-        // const filteredCredentials = filterValues(credentials);
+        const filterValues = (obj) => {
+            const filtered = {};
+            for (const key in obj) {
+                if (obj[key].toLowerCase() !== "odaberi" && !obj[key].toLowerCase().startsWith("odaberi")) {
+                    filtered[key] = obj[key].toLowerCase();
+                }
+            }
+            return filtered;
+        };
 
+        const filteredCredentials = filterValues(credentials);
+        // return console.log('filtered', filteredCredentials)
         try {
             const token = await AsyncStorage.getItem("@token");
 
@@ -89,12 +105,13 @@ const UserProfile = () => {
             };
 
             const url = 'http://192.168.0.13:4000/api/users/update-user';
-            const response = await axios.post(url, credentials, { headers });
+            const response = await axios.post(url, filteredCredentials, { headers });
 
             if (response.status === 200) {
                 console.log('Update successfully');
                 const userDetails = await response;
                 console.log('ovo je user iz logina =============>', userDetails.data);
+                handleMesage(userDetails.data.message, 'SUCCESS');
             }
             // navigation.navigate('Home', { ...response.data });
             // navigation.navigate('Home');
@@ -109,7 +126,7 @@ const UserProfile = () => {
         }
     }
 
-    console.log("CURENT U PROFILE", currentUser)
+    // console.log("CURENT U PROFILE", currentUser)
     //ovo je objekat koji saljem na backend,zelim da ovaj ulogovani user u userDetails kolekciji pored ovih podataka upise ove podatke i userID , koji verovatno moze da se izvuce iz tokena ? ili kako god da je najbolje da bih posle na osnovu pretrage ovih parametara mogao da nadjem usera koji ima ove podatke
 
     return (
@@ -147,9 +164,10 @@ const UserProfile = () => {
                             <StyledFormArea>
                                 {/* CITY */}
                                 <MyTextInput
+                                    style={{ fontFamily: CustomFont }}
                                     label="Current City"
-                                    icon="lock"
-                                    placeholder="City"
+                                    icon="location-city"
+                                    placeholder="City *"
                                     placeholderTextColor={darkLight}
                                     onChangeText={handleChange('city')}
                                     onBlur={handleBlur('city')}
@@ -157,9 +175,10 @@ const UserProfile = () => {
                                 />
                                 {/* PLACE */}
                                 <MyTextInput
+                                    style={{ fontFamily: CustomFont }}
                                     label="Current Place"
-                                    icon="lock"
-                                    placeholder="Current Place"
+                                    icon="location-on"
+                                    placeholder="Current Place *"
                                     placeholderTextColor={darkLight}
                                     onChangeText={handleChange('currentPlace')}
                                     onBlur={handleBlur('currentPlace')}
@@ -168,10 +187,11 @@ const UserProfile = () => {
                                 {/* SEX */}
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Pol", "Muski", "zenski", "aaaa", "hahahhah"]}
+                                    valueOptions={["Odaberi Pol", "Muski", "Zenski"]}
                                     labelOptions="Pol"
                                     value={values.pol}
                                     label="Pol"
+                                    fontFamily={CustomFont}
                                 // values={values}
                                 />
                                 {/* HAIR */}
@@ -217,23 +237,26 @@ const UserProfile = () => {
                                 />
 
                                 {/* THREE DOTS  */}
-                                <MsgBox type={messageType}>{message}</MsgBox>
 
                                 {/* SUBMIT BUTTON */}
                                 {!isSubmitting && (
-                                    <StyledButton onPress={handleSubmit}>
+                                    <StyledButton onPress={handleSubmit} style={{ marginTop: 20 }}>
                                         {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
                                         <ButtonText>UPDATE</ButtonText>
                                     </StyledButton>
                                 )}
 
                                 {isSubmitting && (
-                                    <StyledButton disabled={true}>
+                                    <StyledButton disabled={true} style={{ marginTop: 20 }}>
                                         <ActivityIndicator size="large" color={primary} />
                                     </StyledButton>
                                 )}
-                                {/* SEPARATOR BETWEEN LOGIN AND REGISTER */}
-                                <Line />
+
+                                {/* <MsgBox type={messageType}>{message}</MsgBox> */}
+
+                                <MsgBox type={messageType}>
+                                    <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
+                                </MsgBox>
                             </StyledFormArea>
                         )}
                     </Formik>
@@ -248,7 +271,7 @@ const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, .
     return (
         <View>
             <LeftIcon>
-                <Octicons name={icon} size={30} color={brand} />
+                <MaterialIcons name={icon} size={30} color={brand} />
             </LeftIcon>
             <StyledInputLabel>{label}</StyledInputLabel>
             <StyledTextInput {...props} />
@@ -261,35 +284,7 @@ const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, .
     );
 };
 
-//INPUT COMPONENT
-// const MySelectPicker = ({ valueOptions, labelOptions, value, setFieldValue }) => {
-//     const { values } = useFormikContext();
-//     console.log("VALUE OPTIONS", valueOptions)
-//     return (
-//         <View>
-//             <StyledPickerLabel>{labelOptions}</StyledPickerLabel>
-//             <SyledSelectPicker>
-//                 <Picker style={{
-//                     backgroundColor: brand,
-//                     color: "white",
-//                     width: "100%",
-//                     height: 40,
-//                     marginTop: -10,
-//                     marginLeft: -55,
-//                 }}
-//                     selectedValue={value}
-//                     onValueChange={(selectedValue) => setFieldValue(labelOptions.toLowerCase(), selectedValue)}
-//                 >
-//                     {valueOptions.map((val, index) => (
-//                         <Picker.Item value={val} label={val} key={index} />
-//                     ))}
-//                 </Picker>
-//             </SyledSelectPicker>
-//         </View>
-//     );
-// };
-
-const MySelectPicker = ({ valueOptions, labelOptions, value, label }) => {
+const MySelectPicker = ({ valueOptions, labelOptions, value, label, fontFamily }) => {
     const { setFieldValue } = useFormikContext();
     // console.log("VALUE OPTIONS", valueOptions);
     // console.log("VALUE OPTIONS", value);
@@ -300,19 +295,21 @@ const MySelectPicker = ({ valueOptions, labelOptions, value, label }) => {
                 <Picker
                     style={{
                         backgroundColor: brand,
+
                         color: "white",
                         width: "100%",
-                        height: 40,
+                        height: 60,
                         marginTop: -10,
                         marginLeft: -55,
                     }}
+                    itemStyle={{ fontFamily: fontFamily, overflow: 'hidden', borderRadius: 20, }}
                     selectedValue={value}
                     onValueChange={(selectedValue) =>
                         setFieldValue(labelOptions.toLowerCase(), selectedValue)
                     }
                 >
                     {valueOptions.map((val, index) => (
-                        <Picker.Item value={val} label={val} key={index} />
+                        <Picker.Item style={{ fontFamily: fontFamily }} value={val} label={val} key={index} />
                     ))}
                 </Picker>
             </SyledSelectPicker>

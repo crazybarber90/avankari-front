@@ -14,6 +14,13 @@ import Welcome from '../Welcome';
 import SplashScreen from '../SplashScreen';
 import Verification from '../Verification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SearchList from '../Search/SearchList';
+import { UserProfile } from '../BottomNavigation';
+import SearchItem from '../Search/SearchItem';
+import SingleAvankari from '../Search/SingleAvankari';
+// import * as Font from 'expo-font';
+import { useFonts } from 'expo-font';
+
 
 // COLORS
 import { Colors } from '../../components/styles';
@@ -26,22 +33,14 @@ const Stack = createStackNavigator();
 const RootStack = () => {
   const dispatch = useDispatch()
 
-  // useEffect(() => {
-  //   console.log("OKINUTOOOOOOOO IZ ROOTSTACk")
-  //   const fetchUserFromStorage = async () => {
-  //     try {
-  //       const userString = await AsyncStorage.getItem('@user');
-  //       if (userString) {
-  //         const user = await JSON.parse(userString);
-  //         await dispatch(SET_USER(user));
-  //       }
-  //     } catch (error) {
-  //       console.error('Error loading user from AsyncStorage:', error);
-  //     }
-  //   };
-
-  //   fetchUserFromStorage();
-  // }, [dispatch]);
+  const [fontsLoaded] = useFonts({
+    NanumMyeongjo: require('../../assets/fonts/NanumMyeongjo.ttf'),
+    Orbitron: require('../../assets/fonts/Orbitron.ttf'),
+    Pattaya: require('../../assets/fonts/Pattaya.ttf'),
+  });
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <NavigationContainer>
@@ -58,7 +57,7 @@ const RootStack = () => {
           },
         }}
         initialRouteName="SplashScreen"
-      // initialRouteName="ResetPassword"
+      // initialRouteName="SearchItem"
       >
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="Login" component={Login} />
@@ -67,6 +66,10 @@ const RootStack = () => {
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen options={{ headerTintColor: primary }} name="Welcome" component={Welcome} />
+        <Stack.Screen name="UserProfile" component={UserProfile} />
+        <Stack.Screen name="SearchList" component={SearchList} />
+        <Stack.Screen name="SearchItem" component={SearchItem} />
+        <Stack.Screen name="SingleAvankari" component={SingleAvankari} />
       </Stack.Navigator>
     </NavigationContainer>
   );

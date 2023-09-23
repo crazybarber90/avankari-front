@@ -40,6 +40,7 @@ const authSlice = createSlice({
             state.user.instagramUrl = profile.instagramUrl;
             state.user.phoneNumber = profile.phoneNumber;
             state.user.verified = profile.verified;
+            state.user.table = profile.table;
             // state.user.picture = profile.picture;
         },
         LOGOUT_USER(state, action) {

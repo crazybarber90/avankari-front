@@ -21,6 +21,7 @@ import {
 const Tab = createBottomTabNavigator()
 
 import {
+  CustomFont,
   Colors,
 } from '../components/styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,8 +45,6 @@ const screenOptions = {
 
 const Welcome = ({ navigation, route }) => {
   const [backPressCount, setBackPressCount] = useState(0);
-  const dispatch = useDispatch()
-  const KURCINA = useSelector(selectUser)
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   // const [backPressCount, setBackPressCount] = useState(0);
@@ -137,7 +136,7 @@ const Welcome = ({ navigation, route }) => {
                 return (
                   <View style={{ alignItems: "center", justifyContent: "center" }}>
                     <Ionicons name="home" size={24} color={focused ? tertiary : darkLight} />
-                    <Text style={{ fontSize: 12, color: brand }}>HOME</Text>
+                    <Text style={{ fontSize: 12, color: brand, fontFamily: CustomFont }}>HOME</Text>
                   </View>
                 )
               }
@@ -151,7 +150,7 @@ const Welcome = ({ navigation, route }) => {
                 return (
                   <View style={{ alignItems: "center", justifyContent: "center" }}>
                     <FontAwesome5 name="user-edit" size={24} color={focused ? brand : darkLight} />
-                    <Text style={{ fontSize: 12, color: brand }} >PROFILE</Text>
+                    <Text style={{ fontSize: 12, color: brand, fontFamily: CustomFont }} >PROFILE</Text>
                   </View>
                 )
               }
@@ -167,10 +166,11 @@ const Welcome = ({ navigation, route }) => {
                     alignItems: "center",
                     justifyContent: "center",
                     backgroundColor: brand,
-                    width: Platform.OS == "ios" ? 50 : 60,
+                    width: Platform.OS == "ios" ? 70 : 80,
                     height: Platform.OS == "ios" ? 50 : 60,
-                    top: Platform.OS == "ios" ? -10 : -30,
+                    top: Platform.OS == "ios" ? 0 : -20,
                     borderRadius: Platform.OS == "ios" ? 25 : 30,
+                    elevation: 10,
                   }}>
                     <FontAwesome name="search" size={24} color={focused ? primary : darkLight} style={{ transform: [{ translateY: 6 }] }} />
                     <Text style={{ fontSize: 12, color: "red" }} />
@@ -188,7 +188,7 @@ const Welcome = ({ navigation, route }) => {
                 return (
                   <View style={{ alignItems: "center", justifyContent: "center" }}>
                     <Ionicons name="ios-settings" size={24} color={focused ? brand : darkLight} />
-                    <Text style={{ fontSize: 12, color: brand }} >SETINGS</Text>
+                    <Text style={{ fontSize: 12, color: brand, fontFamily: CustomFont }} >SETINGS</Text>
                   </View>
                 )
               }
@@ -202,7 +202,7 @@ const Welcome = ({ navigation, route }) => {
                 return (
                   <View style={{ alignItems: "center", justifyContent: "center" }}>
                     <Ionicons name="book-sharp" size={24} color={focused ? brand : darkLight} />
-                    <Text style={{ fontSize: 12, color: brand }} >ABOUT</Text>
+                    <Text style={{ fontSize: 12, color: brand, fontFamily: CustomFont }} >ABOUT</Text>
                   </View>
                 )
               }

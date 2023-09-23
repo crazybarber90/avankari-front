@@ -21,16 +21,16 @@ const SplashScreenComponent = ({ navigation }) => {
           // rename name of picture to photo
           const newUser = { ...parsedUser, picture: parsedUser.photo };
           delete newUser.picture;
-          console.log("-----------ulazi u splash newUser", newUser)
-          navigation.navigate('Welcome', newUser);
+          // console.log("-----------ulazi u splash newUser", newUser)
+          navigation.replace('Welcome', newUser);
         } else {
-          console.log(" -----------ulazi u splash parsed user data", parsedUser.data)
-          navigation.navigate('Welcome', parsedUser.data);
+          // console.log(" -----------ulazi u splash parsed user data", parsedUser.data)
+          navigation.replace('Welcome', parsedUser.data);
         }
       }
       else {
-        console.log("----------ne ulazi u splash")
-        await navigation.navigate('Login');
+        // console.log("----------ne ulazi u splash")
+        await navigation.replace('Login');
       }
       // console.log("U-S-E-R is splasha", user)
       // console.log("T-O-K-E-N is splasha", token)

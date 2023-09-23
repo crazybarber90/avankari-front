@@ -31,7 +31,14 @@ import {
     LogoutButton,
     StyledTextInputSocial,
     StyledFormAreaSocial,
-    LeftIconSocial
+    LeftIconSocial,
+    ExtraText,
+    StyledTableInputSocial,
+    StyledImage,
+    StyledTextInputWithImage,
+    ProfileText,
+    ProfileTextContainer,
+    StyledButtonTable
 } from '../../components/styles';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -40,16 +47,19 @@ import * as ImagePicker from 'expo-image-picker'
 // import { ImageManipulator } from 'expo-image-manipulator';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as FileSystem from 'expo-file-system';
+import { ScrollView } from 'react-native';
 import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper';
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import bg from "../../assets/img/bg.png"
 
 
-const { brand, darkLight, primary } = Colors;
+const { brand, darkLight, primary, tertiary } = Colors;
 
 const Home = ({ navigation, route }) => {
 
     const [messageType, setMessageType] = useState();
     const [message, setMessage] = useState();
+    const [messageFor, setMessageFor] = useState();
     const currentUser = useSelector(selectUser)
 
 
@@ -62,10 +72,10 @@ const Home = ({ navigation, route }) => {
     const [hasGalleryPermission, setHasGalleryPermission] = useState(null)
 
     // SOCIAL NETWORKS==========================
-    const [facebookUrl, setFacebookUrl] = useState('');
-    const [instagramUrl, setInstagramUrl] = useState('');
-    const [twitterUrl, setTwitterUrl] = useState('');
+
     const [changedSocialState, setChangedSocialState] = useState(false);
+    const [showInputs, setShowInputs] = useState(false);
+    const [table, setTable] = useState('');
 
 
     const [userData, setUserData] = useState({
@@ -94,9 +104,15 @@ const Home = ({ navigation, route }) => {
         }
     }
 
-    const handleMesage = (message, type = 'FAILED') => {
+    const handleMesage = (message, type = 'FAILED',) => {
         setMessage(message);
         setMessageType(type);
+
+        // timeout da sakrijete poruku nakon 5 sekundi
+        setTimeout(() => {
+            setMessage(null);
+            setMessageType(null);
+        }, 5000);
     };
 
     const logoutUser = async () => {
@@ -106,8 +122,6 @@ const Home = ({ navigation, route }) => {
         clearAsyncStorage();
         console.log("izlogovaaaaaaaaaaaaaaaaaaaaan")
         console.log("------------------------------")
-        // await navigation.navigate('Login')
-
         navigation.dispatch(
             CommonActions.reset({
                 index: 0,
@@ -181,22 +195,6 @@ const Home = ({ navigation, route }) => {
         return () => backHandler.remove();
     }, [navigation, backPressCount]);
 
-
-    // useEffect(() => {
-    //     const fetchUser = async () => {
-    //         try {
-    //             const userString = await AsyncStorage.getItem('@user');
-    //             if (userString) {
-    //                 const user = JSON.parse(userString);
-    //             }
-    //         } catch (error) {
-    //             console.error('Error loading user from AsyncStorage:', error);
-    //         }
-    //     };
-
-    //     fetchUser();
-    // }, []);
-
     // PERMISIJA ZA GALERIJU
     useEffect(() => {
         (async () => {
@@ -207,6 +205,7 @@ const Home = ({ navigation, route }) => {
 
     console.log("CURENTTTTTTTT USERRRRRRRRRRRRRRRRRRRRR", currentUser);
 
+    //=================================== UPLOAD SLIKE
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -216,10 +215,25 @@ const Home = ({ navigation, route }) => {
         });
         if (!result.canceled) {
             try {
+                // STARI NACIN MANJA REZOLUCIJA do 40kb slika
+                // const manipResult = await ImageManipulator.manipulateAsync(
+                //     result.assets[0].uri,
+                //     [{ resize: { width: 800, height: 600 } }], // Postavite željene dimenzije
+                //     { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG } // Postavite kvalitet kompresije
+                // );
+
+
+                // NOV NACIN VECA REZOLUCIJA do 120kb slika
+                const selectedImage = result.assets[0];
+
+                // Automatski izračunajte visinu kako biste očuvali proporcije
+                const width = 1920; // Željena širina
+                const height = (selectedImage.height / selectedImage.width) * width;
+
                 const manipResult = await ImageManipulator.manipulateAsync(
-                    result.assets[0].uri,
-                    [{ resize: { width: 800, height: 600 } }], // Postavite željene dimenzije
-                    { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG } // Postavite kvalitet kompresije
+                    selectedImage.uri,
+                    [{ resize: { width, height } }],
+                    { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
                 );
 
                 const formData = new FormData();
@@ -262,6 +276,9 @@ const Home = ({ navigation, route }) => {
                     if (response.status === 200) {
                         console.log('Update successfully', response.data.user.photo);
                         const userData = await response;
+                        setMessageFor("image")
+
+                        handleMesage('IMAGE CHANGED SUCCESSFULLY !', "SUCCESS");
                         await setChangedSocialState(!changedSocialState)
                     }
                     return response.data;
@@ -277,9 +294,9 @@ const Home = ({ navigation, route }) => {
     };
 
 
-    useEffect(() => {
-        console.log("curent is uzeEffectxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", currentUser);
-    }, [changedSocialState]);
+    // useEffect(() => {
+    //     console.log("curent is uzeEffectxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", currentUser);
+    // }, [changedSocialState]);
 
     // console.log("STATEsssssssssssssssssssssssssssssssssssssssssssssssssssssssss", changedSocialState)
 
@@ -304,7 +321,6 @@ const Home = ({ navigation, route }) => {
 
             if (response.status === 200) {
                 console.log('Update successfully', response.data);
-                // const userData = response.data;
 
                 //======================== UPDATE ASYNCSTORAGE SA NOVI SOCIALS"
                 const newFacebookUrl = response.data.user.facebookUrl;
@@ -333,7 +349,9 @@ const Home = ({ navigation, route }) => {
                 await dispatch(SET_USER(response.data));
 
                 await setChangedSocialState(!changedSocialState)
-                console.log('ovo je log sa backenda =============>', userData);
+                setMessageFor("socials")
+                handleMesage('USPESNO AZURIRANO !', "SUCCESS");
+                console.log('ovo je log sa backenda =============>', currentUser);
             }
             // navigation.navigate('Home', { ...response.data });
             // navigation.navigate('Home');
@@ -344,27 +362,93 @@ const Home = ({ navigation, route }) => {
             const message =
                 (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             setSubmitting(false);
-            setTimeout(() => {
-                handleMesage(message);
-            }, 10000)
+
+            handleMesage(message);
+
+        }
+    }
+
+
+    const updateTable = async () => {
+        // return console.log("TABLE ", table)
+        try {
+            const cleanedTable = table.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+            const token = await AsyncStorage.getItem("@token");
+
+            if (!token) {
+                handleMesage('Token nije dostupan.');
+                setSubmitting(false);
+                return;
+            }
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            };
+            const url = 'http://192.168.0.13:4000/api/users/update-table';
+
+            const response = await axios.post(url, { table: cleanedTable }, { headers });
+            // return console.log("RESPONSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", table)
+
+            if (response.status === 200) {
+                console.log('Update successfully', response.data);
+
+                const newTable = response.data.table;
+
+                // Učitavanje trenutnog korisnika iz AsyncStorage-a
+                const currentUserString = await AsyncStorage.getItem('@user');
+                const currentUser = JSON.parse(currentUserString);
+
+                console.log("=========================== current string ", currentUser)
+
+                currentUser.table = newTable;
+
+                // Učitavanje trenutnog korisnika iz AsyncStorage-a
+                currentUser.table = table;
+
+                // čuvajte ažuriranog korisnika u AsyncStorage-u
+                await AsyncStorage.setItem('@user', JSON.stringify(currentUser));
+                //======================== UPDATE ASYNCSTORAGE SA NOVI SOCIALS"
+                setMessageFor("table")
+                handleMesage('USPESNO AZURIRANA TABLICA !', "SUCCESS");
+                await dispatch(SET_USER(response.data));
+
+                await setChangedSocialState(!changedSocialState)
+            }
+            return response.data;
+
+        } catch (error) {
+            const message =
+                (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+            setSubmitting(false);
+            handleMesage(message);
         }
     }
     return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
             <>
+
                 {/* <StatusBar style="dark" /> */}
+                {/* <View> */}
+
                 <WelcomeImage
                     resizeMode="cover"
                     source={avatarSource}
                 // style={{ width: "100%", height: '30%', objectFit: 'cover', zIndex: 9999, }}
                 />
+                {messageFor === "image" &&
+                    <MsgBox type={messageType} style={{ marginTop: 5 }}>
+                        <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
+                    </MsgBox>
+                }
+                {/* </View> */}
 
                 {/* ADD IMAGE BUTTON */}
                 <TouchableOpacity
                     style={{
                         position: 'absolute',
                         top: 250 - keyboardHeight / 2.3,
+                        // top: 250,
                         right: 0,
                         backgroundColor: 'rgba(0, 0, 0, 0.7)',
                         borderRadius: 20,
@@ -375,90 +459,141 @@ const Home = ({ navigation, route }) => {
                 >
                     <AntDesign name="plus" size={24} color="white" />
                 </TouchableOpacity>
+                <View style={{ position: "absolute", top: 50, right: 20, boxShadow: "1px 1px 1px black", backgroundColor: "black", padding: 2, opacity: 0.7 }}>
+                    <Ionicons name="ios-power-sharp" size={40} color={brand} onPress={logoutUser} />
+                </View>
                 {/* {image && <Image source={{ uri: image }} style={{ flex: 1 / 3 }}></Image>} */}
                 <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                    <WelcomeContainer>
-                        <View style={{ position: "absolute", top: -280, right: 20, boxShadow: "1px 1px 1px black", backgroundColor: "black", padding: 2, opacity: 0.7 }}>
-                            <Ionicons name="ios-power-sharp" size={40} color={brand} onPress={logoutUser} />
-                        </View>
-                        {/* <KeyboardAvoidingWrapper> */}
-                        <InnerContainer>
-                            {/* <PageTitle></PageTitle> */}
-                            <Formik
-                                initialValues={{
-                                    facebookUrl: "",
-                                    instagramUrl: "",
-                                    phoneNumber: "Odaberi Pol",
+                    <ScrollView>
+                        <WelcomeContainer>
+                            {/* <View style={{ position: "absolute", top: -10, right: 20, boxShadow: "1px 1px 1px black", backgroundColor: "black", padding: 2, opacity: 0.7 }}>
+                                <Ionicons name="ios-power-sharp" size={40} color={brand} onPress={logoutUser} />
+                            </View> */}
+                            {/* <KeyboardAvoidingWrapper> */}
 
-                                }}
-                                // onSubmit={(values, { setSubmitting, setFieldValue }) => {
-                                onSubmit={(values, { setSubmitting }) => {
-                                    // handleUpdateUser(values, setSubmitting, setFieldValue);
-                                    handleUpdateSocials(values, setSubmitting);
+                            <InnerContainer>
+                                {/* <PageTitle></PageTitle> */}
+                                <Formik
+                                    initialValues={{
+                                        facebookUrl: "",
+                                        instagramUrl: "",
+                                        phoneNumber: "Odaberi Pol",
 
-                                }}
-                            >
-                                {({ handleBlur, handleSubmit, isSubmitting }) => (
-                                    <StyledFormAreaSocial>
-                                        {/* CITY */}
-                                        <MyTextInput
-                                            label="Facebook"
-                                            icon="facebook-with-circle"
-                                            placeholder="Facebook"
-                                            placeholderTextColor={darkLight}
-                                            onChangeText={(text) => setUserData({ ...userData, facebookUrl: text })}
-                                            onBlur={handleBlur('facebook')}
-                                            value={userData.facebook}
-                                        />
-                                        {/* PLACE */}
-                                        <MyTextInput
-                                            label="Instagram"
-                                            icon="instagram-with-circle"
-                                            placeholder="Instagram"
-                                            placeholderTextColor={darkLight}
-                                            onChangeText={(text) => setUserData({ ...userData, instagramUrl: text })}
-                                            onBlur={handleBlur('instagram')}
-                                            value={userData.instagram}
-                                        />
-                                        <MyTextInput
-                                            label="Phone Number"
-                                            icon="phone"
-                                            placeholder="Phone Number"
-                                            placeholderTextColor={darkLight}
-                                            onChangeText={(text) => setUserData({ ...userData, phoneNumber: text })} onBlur={handleBlur('phoneNumber')}
-                                            value={userData.phoneNumber}
-                                        />
+                                    }}
+                                    // onSubmit={(values, { setSubmitting, setFieldValue }) => {
+                                    onSubmit={(values, { setSubmitting }) => {
+                                        // handleUpdateUser(values, setSubmitting, setFieldValue);
+                                        handleUpdateSocials(values, setSubmitting);
+
+                                    }}
+                                >
+                                    {({ handleBlur, handleSubmit, isSubmitting }) => (
+                                        <StyledFormAreaSocial>
+                                            <TouchableOpacity onPress={() => setShowInputs(!showInputs)}>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                                                    <Octicons name={showInputs ? "triangle-up" : "triangle-down"} size={24} color={brand} />
+                                                    <ExtraText style={{ marginHorizontal: 10, backgroundColor: brand, padding: 7, color: "white", borderRadius: 8 }}>Set Your Social Networks Visible</ExtraText>
+                                                </View>
+                                            </TouchableOpacity>
+                                            {/* CITY */}
+                                            {showInputs && (
+                                                <>
+                                                    <MyTextInput
+                                                        label="Facebook"
+                                                        icon="facebook-with-circle"
+                                                        placeholder="Facebook"
+                                                        placeholderTextColor={darkLight}
+                                                        onChangeText={(text) => setUserData({ ...userData, facebookUrl: text })}
+                                                        onBlur={handleBlur('facebook')}
+                                                        value={userData.facebook}
+                                                    />
+                                                    {/* PLACE */}
+                                                    <MyTextInput
+                                                        label="Instagram"
+                                                        icon="instagram-with-circle"
+                                                        placeholder="Instagram"
+                                                        placeholderTextColor={darkLight}
+                                                        onChangeText={(text) => setUserData({ ...userData, instagramUrl: text })}
+                                                        onBlur={handleBlur('instagram')}
+                                                        value={userData.instagram}
+                                                    />
+                                                    <MyTextInput
+                                                        label="Phone Number"
+                                                        icon="phone"
+                                                        placeholder="Phone Number"
+                                                        placeholderTextColor={darkLight}
+                                                        onChangeText={(text) => setUserData({ ...userData, phoneNumber: text })} onBlur={handleBlur('phoneNumber')}
+                                                        value={userData.phoneNumber}
+                                                    />
 
 
-                                        {/* THREE DOTS  */}
-                                        <MsgBox type={messageType}>{message}</MsgBox>
+                                                    {/* {messageFor === "social" &&
+                                                        <MsgBox type={messageType}>{message}</MsgBox>
+                                                    } */}
 
-                                        {/* SUBMIT BUTTON */}
-                                        {!isSubmitting && (
-                                            <StyledButton onPress={handleSubmit}>
-                                                {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
-                                                <ButtonText>UPDATE</ButtonText>
-                                            </StyledButton>
-                                        )}
+                                                    {/* SUBMIT BUTTON */}
+                                                    {!isSubmitting && (
+                                                        <StyledButton onPress={handleSubmit} style={{ marginBottom: 20 }}>
+                                                            {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
+                                                            <ButtonText>AZURIRAJ MREZE</ButtonText>
+                                                        </StyledButton>
+                                                    )}
 
-                                        {isSubmitting && (
-                                            <StyledButton disabled={true}>
-                                                <ActivityIndicator size="large" color={primary} />
-                                            </StyledButton>
-                                        )}
-                                        {/* SEPARATOR BETWEEN LOGIN AND REGISTER */}
-                                        <Line />
-                                    </StyledFormAreaSocial>
-                                )}
-                            </Formik>
-                        </InnerContainer>
+                                                    {isSubmitting && (
+                                                        <StyledButton disabled={true}>
+                                                            <ActivityIndicator size="large" color={primary} />
+                                                        </StyledButton>
+                                                    )}
 
-                        {/* </KeyboardAvoidingWrapper> */}
+                                                    {messageFor === "socials" &&
+                                                        <MsgBox type={messageType} style={{ marginBottom: 10 }} >
+                                                            <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
+                                                        </MsgBox>
+                                                    }
 
-                    </WelcomeContainer>
+
+                                                    <StyledTextInputWithImage>
+                                                        <StyledImage source={bg} />
+                                                        <StyledTableInputSocial
+                                                            placeholder="Npr BG123CD"
+                                                            placeholderTextColor={darkLight}
+                                                            onChangeText={(text) => setTable(text)}
+
+                                                        />
+                                                    </StyledTextInputWithImage>
+                                                    {!isSubmitting && (
+                                                        <StyledButtonTable onPress={updateTable} style={{ marginBottom: 30 }}>
+                                                            {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
+                                                            <ButtonText>AZURIRAJ TABLICU</ButtonText>
+                                                        </StyledButtonTable>
+                                                    )}
+                                                    {messageFor === "table" &&
+                                                        <MsgBox type={messageType} style={{ marginTop: -30, marginBottom: 20 }}>
+                                                            <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
+                                                        </MsgBox>
+                                                    }
+                                                </>
+                                            )}
+                                            {/* <Line /> */}
+
+                                            <ProfileTextContainer>
+                                                <ProfileText>Tvoj Facebookj profil {'\n'}<Text style={{ color: 'red', fontSize: 15 }}>{currentUser.facebookUrl}</Text></ProfileText>
+                                                <ProfileText>Tvoj Instagram profil  {'\n'} <Text style={{ color: 'red', fontSize: 15 }}>{currentUser.instagramUrl}</Text></ProfileText>
+                                                <ProfileText>Tvoj Broj Telefona  {'\n'}<Text style={{ color: 'red', fontSize: 15 }}>{currentUser.phoneNumber}</Text></ProfileText>
+                                                <ProfileText>Tvoja Tablica  {'\n'}<Text style={{ color: 'red', fontSize: 15 }}>{currentUser.table}</Text></ProfileText>
+                                            </ProfileTextContainer>
+                                        </StyledFormAreaSocial>
+                                    )}
+                                </Formik>
+                            </InnerContainer>
+                            {/* </KeyboardAvoidingWrapper> */}
+
+                        </WelcomeContainer>
+
+                    </ScrollView>
                 </TouchableWithoutFeedback>
             </>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
 
     )
 }

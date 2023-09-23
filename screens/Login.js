@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { View, ActivityIndicator, Platform } from 'react-native';
+import { View, ActivityIndicator, Platform, Text } from 'react-native';
 import axios from 'axios';
 import { validateEmail } from '../assets/utills/MailValidator';
 import { handleGoogleSignup } from '../assets/utills/handleSignup';
@@ -14,6 +14,7 @@ import { Formik } from 'formik';
 //icons
 import { Octicons, Ionicons, Fontisto } from '@expo/vector-icons';
 import {
+  CustomFont,
   Colors,
   StyledContainer,
   InnerContainer,
@@ -107,7 +108,7 @@ const Login = ({ navigation }) => {
       // const user = await AsyncStorage.getItem('@user');
       // const token = await AsyncStorage.getItem('@token');
 
-      console.log("LOGIRANJEEEEEEEEEEEEEEEE IZ HANDLESIGNUP Response type: success");
+      // console.log("LOGIRANJEEEEEEEEEEEEEEEE IZ HANDLESIGNUP Response type: success");
 
       try {
         // const idToken = response.authentication.idToken;
@@ -230,8 +231,8 @@ const Login = ({ navigation }) => {
         <InnerContainer>
           {/* LOGO ON START SCREEN */}
           <PageLogo resizeMode="cover" source={require('./../assets/img/ja.jpg')} />
+          {/* <PageTitle>Avankari</PageTitle> */}
           <PageTitle>Avankari</PageTitle>
-
           <Formik
             initialValues={{ email: '', password: '' }}
             onSubmit={(values, { setSubmitting }) => {
@@ -252,6 +253,7 @@ const Login = ({ navigation }) => {
               <StyledFormArea>
                 {/* EMAIL INPUT */}
                 <MyTextInput
+                  style={{ fontFamily: CustomFont }}
                   label="Email Address"
                   icon="mail"
                   placeholder="Ener Your Email"
@@ -263,6 +265,7 @@ const Login = ({ navigation }) => {
                 />
                 {/* PASSWORD INPUT */}
                 <MyTextInput
+                  style={{ fontFamily: CustomFont }}
                   label="Password"
                   icon="lock"
                   placeholder="* * * * * * *"
