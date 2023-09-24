@@ -177,7 +177,7 @@ const UserProfile = ({ navigation, route }) => {
             <StyledContainer>
                 <StatusBar style="dark" />
                 <InnerContainer>
-                    <PageTitle style={{ color: brand }}>PRONADJI AVANKARIJA PREKO TABLICA</PageTitle>
+                    <PageTitle style={{ color: search }}>PRONADJI AVANKARIJA PREKO TABLICA</PageTitle>
 
                     <Formik
                         initialValues={{
@@ -227,7 +227,7 @@ const UserProfile = ({ navigation, route }) => {
                                 }
                                 {/* SEPARATOR BETWEEN LOGIN AND REGISTER */}
                                 <Line />
-                                <PageTitle style={{ color: brand }}>PRONADJI AVANKARIJA PO IZGLEDU</PageTitle>
+                                <PageTitle style={{ color: search }}>PRONADJI AVANKARIJA PO IZGLEDU</PageTitle>
 
                                 {/* CITY */}
                                 <MyTextInput

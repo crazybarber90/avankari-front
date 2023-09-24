@@ -8,8 +8,9 @@ import {
     TextBoldAvankariStyle,
     TextNormalAvankariStyle,
     TextSpan,
-    SearchListWrapper
+    SearchListWrapper,
 } from '../../components/SearchItemStyle';
+import { Line } from '../../components/styles';
 
 const Settings = ({ navigation, route }) => {
     console.log("------------------------------------")
@@ -34,6 +35,7 @@ const Settings = ({ navigation, route }) => {
                         {singleUser.facebookUrl}
                     </TextNormalAvankariStyle>
                 </TextWrapper>
+                <Line />
 
                 <TextWrapper>
                     <TextNormalAvankariStyle >
@@ -41,6 +43,7 @@ const Settings = ({ navigation, route }) => {
                         {singleUser.instagramUrl}
                     </TextNormalAvankariStyle>
                 </TextWrapper>
+                <Line />
 
                 <TextWrapper>
                     <TextNormalAvankariStyle >
@@ -48,13 +51,15 @@ const Settings = ({ navigation, route }) => {
                         {singleUser.phoneNumber}
                     </TextNormalAvankariStyle>
                 </TextWrapper>
+                <Line />
 
                 <TextWrapper>
                     <TextNormalAvankariStyle >
-                        <TextSpan>GRAD</TextSpan>{'\n'}
+                        <TextSpan>Grad</TextSpan>{'\n'}
                         {singleUser.city}
                     </TextNormalAvankariStyle>
                 </TextWrapper>
+                <Line />
 
                 <TextWrapper>
                     <TextNormalAvankariStyle >

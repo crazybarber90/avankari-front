@@ -13,22 +13,12 @@ import axios from 'axios';
 
 import {
     Colors,
-    StyledContainerHome,
-    StyledContainer,
     InnerContainer,
-    PageTitle,
-    SubTitle,
     MsgBox,
-    StyledFormArea,
-    StyledTextInput,
     StyledInputLabel,
-    StyledButton,
     ButtonText,
-    Line,
-    LeftIcon,
     WelcomeContainer,
     WelcomeImage,
-    LogoutButton,
     StyledTextInputSocial,
     StyledFormAreaSocial,
     LeftIconSocial,
@@ -38,7 +28,9 @@ import {
     StyledTextInputWithImage,
     ProfileText,
     ProfileTextContainer,
-    StyledButtonTable
+    SocialsValues,
+    StyledButtonSocials,
+    MsgBoxLeft
 } from '../../components/styles';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
@@ -53,7 +45,7 @@ import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-
 import bg from "../../assets/img/bg.png"
 
 
-const { brand, darkLight, primary, tertiary } = Colors;
+const { brand, darkLight, primary, tertiary, red } = Colors;
 
 const Home = ({ navigation, route }) => {
 
@@ -76,6 +68,7 @@ const Home = ({ navigation, route }) => {
     const [changedSocialState, setChangedSocialState] = useState(false);
     const [showInputs, setShowInputs] = useState(false);
     const [table, setTable] = useState('');
+    const [loader, setLoader] = useState(false);
 
 
     const [userData, setUserData] = useState({
@@ -301,6 +294,12 @@ const Home = ({ navigation, route }) => {
     // console.log("STATEsssssssssssssssssssssssssssssssssssssssssssssssssssssssss", changedSocialState)
 
     const handleUpdateSocials = async (values, setSubmitting) => {
+        const { facebookUrl, instagramUrl, phoneNumber } = userData
+        if (facebookUrl === "" && instagramUrl === "" && phoneNumber === "") {
+            setMessageFor('socials')
+            handleMesage("Unesi mreze")
+            return setSubmitting(false);
+        }
         // return console.log("USER DATA", userData)
         try {
             const token = await AsyncStorage.getItem("@token");
@@ -369,8 +368,14 @@ const Home = ({ navigation, route }) => {
     }
 
 
-    const updateTable = async () => {
+    const updateTable = async (setSubmitting) => {
         // return console.log("TABLE ", table)
+        setLoader(true);
+        if (table === "") {
+            setMessageFor('table')
+            handleMesage("Unesi tablicu")
+            return setLoader(false);
+        }
         try {
             const cleanedTable = table.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
             const token = await AsyncStorage.getItem("@token");
@@ -391,7 +396,7 @@ const Home = ({ navigation, route }) => {
 
             if (response.status === 200) {
                 console.log('Update successfully', response.data);
-
+                setLoader(false);
                 const newTable = response.data.table;
 
                 // Učitavanje trenutnog korisnika iz AsyncStorage-a
@@ -414,12 +419,13 @@ const Home = ({ navigation, route }) => {
 
                 await setChangedSocialState(!changedSocialState)
             }
+            setLoader(false);
             return response.data;
 
         } catch (error) {
             const message =
                 (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-            setSubmitting(false);
+            setLoader(false);
             handleMesage(message);
         }
     }
@@ -459,8 +465,8 @@ const Home = ({ navigation, route }) => {
                 >
                     <AntDesign name="plus" size={24} color="white" />
                 </TouchableOpacity>
-                <View style={{ position: "absolute", top: 50, right: 20, boxShadow: "1px 1px 1px black", backgroundColor: "black", padding: 2, opacity: 0.7 }}>
-                    <Ionicons name="ios-power-sharp" size={40} color={brand} onPress={logoutUser} />
+                <View style={{ position: "absolute", top: 50, right: 20, boxShadow: "1px 1px 1px black", padding: 2 }}>
+                    <Ionicons name="ios-power-sharp" size={40} color={red} onPress={logoutUser} />
                 </View>
                 {/* {image && <Image source={{ uri: image }} style={{ flex: 1 / 3 }}></Image>} */}
                 <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -492,7 +498,7 @@ const Home = ({ navigation, route }) => {
                                             <TouchableOpacity onPress={() => setShowInputs(!showInputs)}>
                                                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                                                     <Octicons name={showInputs ? "triangle-up" : "triangle-down"} size={24} color={brand} />
-                                                    <ExtraText style={{ marginHorizontal: 10, backgroundColor: brand, padding: 7, color: "white", borderRadius: 8 }}>Set Your Social Networks Visible</ExtraText>
+                                                    <ExtraText style={{ marginHorizontal: 10, backgroundColor: brand, padding: 7, color: "white", fontSize: 16, borderRadius: 8 }}>PODELI SVOJE MREZE</ExtraText>
                                                 </View>
                                             </TouchableOpacity>
                                             {/* CITY */}
@@ -533,22 +539,22 @@ const Home = ({ navigation, route }) => {
 
                                                     {/* SUBMIT BUTTON */}
                                                     {!isSubmitting && (
-                                                        <StyledButton onPress={handleSubmit} style={{ marginBottom: 20 }}>
-                                                            {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
+                                                        <StyledButtonSocials onPress={handleSubmit} style={{ marginBottom: 30 }}>
+                                                            {/* // <StyledButtonSocials disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
                                                             <ButtonText>AZURIRAJ MREZE</ButtonText>
-                                                        </StyledButton>
+                                                        </StyledButtonSocials>
                                                     )}
 
                                                     {isSubmitting && (
-                                                        <StyledButton disabled={true}>
+                                                        <StyledButtonSocials style={{ marginBottom: 30 }} disabled={true}>
                                                             <ActivityIndicator size="large" color={primary} />
-                                                        </StyledButton>
+                                                        </StyledButtonSocials>
                                                     )}
 
                                                     {messageFor === "socials" &&
-                                                        <MsgBox type={messageType} style={{ marginBottom: 10 }} >
+                                                        <MsgBoxLeft type={messageType} style={{ marginBottom: 10 }}>
                                                             <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
-                                                        </MsgBox>
+                                                        </MsgBoxLeft>
                                                     }
 
 
@@ -561,26 +567,36 @@ const Home = ({ navigation, route }) => {
 
                                                         />
                                                     </StyledTextInputWithImage>
-                                                    {!isSubmitting && (
-                                                        <StyledButtonTable onPress={updateTable} style={{ marginBottom: 30 }}>
-                                                            {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
+                                                    {!loader && (
+                                                        <StyledButtonSocials onPress={updateTable} style={{ marginBottom: 30 }}>
                                                             <ButtonText>AZURIRAJ TABLICU</ButtonText>
-                                                        </StyledButtonTable>
+                                                        </StyledButtonSocials>
+                                                    )}
+
+                                                    {loader && (
+                                                        <StyledButtonSocials style={{ marginBottom: 30 }} disabled={true}>
+                                                            <ActivityIndicator size="large" color={primary} />
+                                                        </StyledButtonSocials>
                                                     )}
                                                     {messageFor === "table" &&
-                                                        <MsgBox type={messageType} style={{ marginTop: -30, marginBottom: 20 }}>
+                                                        <MsgBoxLeft type={messageType}>
                                                             <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
-                                                        </MsgBox>
+                                                        </MsgBoxLeft>
                                                     }
                                                 </>
                                             )}
                                             {/* <Line /> */}
 
                                             <ProfileTextContainer>
-                                                <ProfileText>Tvoj Facebookj profil {'\n'}<Text style={{ color: 'red', fontSize: 15 }}>{currentUser.facebookUrl}</Text></ProfileText>
-                                                <ProfileText>Tvoj Instagram profil  {'\n'} <Text style={{ color: 'red', fontSize: 15 }}>{currentUser.instagramUrl}</Text></ProfileText>
-                                                <ProfileText>Tvoj Broj Telefona  {'\n'}<Text style={{ color: 'red', fontSize: 15 }}>{currentUser.phoneNumber}</Text></ProfileText>
-                                                <ProfileText>Tvoja Tablica  {'\n'}<Text style={{ color: 'red', fontSize: 15 }}>{currentUser.table}</Text></ProfileText>
+                                                <ProfileText>Tvoj Facebook Profil
+                                                </ProfileText>
+                                                <SocialsValues>{currentUser.facebookUrl}</SocialsValues>
+                                                <ProfileText>Tvoj Instagram Profil </ProfileText>
+                                                <SocialsValues>{currentUser.instagramUrl}</SocialsValues>
+                                                <ProfileText>Tvoj Broj Telefona</ProfileText>
+                                                <SocialsValues>{currentUser.phoneNumber}</SocialsValues>
+                                                <ProfileText>Tvoja Tablica</ProfileText>
+                                                <SocialsValues>{currentUser.table}</SocialsValues>
                                             </ProfileTextContainer>
                                         </StyledFormAreaSocial>
                                     )}
@@ -600,7 +616,7 @@ const Home = ({ navigation, route }) => {
 
 
 //INPUT COMPONENT
-const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, ...props }) => {
+const MyTextInput = ({ label, icon, ...props }) => {
     return (
         <View>
             <LeftIconSocial>
@@ -608,11 +624,6 @@ const MyTextInput = ({ label, icon, isPassword, hidePassword, setHidePassword, .
             </LeftIconSocial>
             <StyledInputLabel>{label}</StyledInputLabel>
             <StyledTextInputSocial {...props} />
-            {isPassword && (
-                <RightIcon onPress={() => setHidePassword(!hidePassword)}>
-                    <Ionicons name={hidePassword ? 'md-eye-off' : 'md-eye'} size={30} color={darkLight} />
-                </RightIcon>
-            )}
         </View>
     );
 };

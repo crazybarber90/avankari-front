@@ -1,13 +1,13 @@
 import styled from 'styled-components/native';
 import { View, Image, Text, TextInput, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants';
-import { Colors, CustomFont } from './styles';
+import { Colors, CustomFont, Cinzel } from './styles';
 
 // SERCH LIST
 export const SearchListWrapper = styled.View`
 flex: 1;
 align-items: center;
-background-color: ${Colors.brand};
+background-color: ${Colors.secondary};
 padding-top: 0%;
 text-align: left;
 display: flex;
@@ -20,32 +20,41 @@ export const TextWrapper = styled.View`
   elevation: 2;
   padding-horizontal: 20px;
   border-radius: 3px;
+  shadow-color: ${Colors.darkLight};
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.2;
+  shadow-radius: 2px;
 `
 export const TextBoldAvankariStyle = styled.Text`
-    fontSize: 38px;
+    fontSize: 30px;
     margin-bottom: 15px;
-    color: white;
+    color: ${Colors.search};
     letter-spacing: 1px;
     text-align: left;
-    text-shadow: 3px 3px 9px black;
+    text-shadow: 1px 1px 5px ${Colors.tertiary};
     font-family: ${CustomFont};
 
 `;
 
 export const TextNormalAvankariStyle = styled.Text`
     fontSize: 18px;
-    margin: 15px 0;
-    color: white;
+    margin: 5px 0;
+    color: ${Colors.search};
     text-align: left;
-    text-shadow: 3px 3px 6px black;
+    text-shadow: 1px 1px 6px ${Colors.darkLight};
     border-radius: 10px;
     font-family: ${CustomFont};
 `;
 
 export const TextSpan = styled.Text`
+color: ${Colors.tertiary};
+  fontSize: 16px;
+  font-family: ${CustomFont};
+`;
+
+export const Span = styled.Text`
   color: ${Colors.tertiary};
-  text-shadow: 2px 2px 6px ${Colors.darkLight};
-  fontSize: 22px;
+  fontSize: 14px;
   font-family: ${CustomFont};
 `;
 
@@ -55,7 +64,11 @@ height: 35%;
 overflow: hidden;
 border-radius: 30px;
 elevation: 15;
-backgroundColor: black,
+backgroundColor: black;
+shadow-color: ${Colors.darkLight};
+shadow-offset: 15px 14px;
+shadow-opacity: 0.1;
+shadow-radius: 4px;
 `;
 
 export const AvankariAvatar = styled.Image`
@@ -65,7 +78,7 @@ height: 100%;
 
 export const ContentWrapper = styled.View`
 width: 80%;
-color: white;
+color: ${Colors.brand};
 padding: 20px 0;
 text-align: center;
 `;
@@ -74,40 +87,34 @@ text-align: center;
 
 // CARD AVANKARI
 export const Card = styled.View`
-width: 280px;
+width: 240px;
 height: 350px;
-border-color:${Colors.search};
-border-radius: 10px;
-padding-top: 30px;
-align-items: center;
 margin-top: 50px;
 margin-bottom: 20px;
-background-color: ${Colors.primary};
-elevation: 10;
-shadow-color: ${Colors.darkLight};
-shadow-offset: 5px 4px;
-shadow-opacity: 0.1;
-shadow-radius: 10px;
+backgroundColor: ${Colors.secondary};
 `;
 
 export const Avatar = styled.Image`
-  width: 150px;
-  height: 150px;
-  border-radius: 30px;
+  width: 100%;
+  height: 60%;
   margin-bottom: 10px;
 `;
 
 export const TextBoldStyle = styled.Text`
-  font-size: 33px;
+  font-size: 20px;
   margin-bottom: 10px;
-  letter-spacing: 1px;
   font-family: ${CustomFont};
+  margin-left: 10px;
+  color: ${Colors.tertiary};
+  text-shadow: 2px 2px 5px ${Colors.darkLight};
 `;
 
 export const TextNormalStyle = styled.Text`
-    fontSize: 18px;
+    fontSize: 14px;
     margin-bottom: 5px;
     font-family: ${CustomFont};
+    margin-left: 10px;
+    color: ${Colors.tertiary};
 `;
 
 

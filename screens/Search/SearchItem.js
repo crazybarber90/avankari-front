@@ -5,24 +5,26 @@ import {
     Avatar,
     TextBoldStyle,
     TextNormalStyle,
+    TextSpan,
+    Span
 } from '../../components/SearchItemStyle';
 
 
 const SearchItem = ({ navigation, singleUser }) => {
-    // console.log("SEARCHITEEEEEEM", singleUser)
+    console.log("SEARCHITEEEEEEM", singleUser)
     // if (!singleUser) {
     //     return null; // ili neki drugi fallback UI element
     // }
     return (
-        <Card>
+        <Card style={{ elevation: 12 }}>
             <Avatar
                 source={{ uri: singleUser.photo }}
                 loadingIndicatorSource={require('./../../assets/img/avatar.png')} // putanja do avatara assets/img
                 progressiveRenderingEnabled={true} // Ovo omogućava postepeno učitavanje slike
             />
             <TextBoldStyle>{singleUser.name}</TextBoldStyle>
-            <TextNormalStyle>{singleUser.city}</TextNormalStyle>
-            <TextNormalStyle>{singleUser.currentPlace}</TextNormalStyle>
+            <TextNormalStyle><Span>U gradu :</Span> {singleUser.city}</TextNormalStyle>
+            <TextNormalStyle><Span>Lokacija :</Span>  {singleUser.currentPlace}</TextNormalStyle>
         </Card>
     )
 }

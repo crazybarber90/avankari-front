@@ -37,6 +37,8 @@ const RootStack = () => {
     NanumMyeongjo: require('../../assets/fonts/NanumMyeongjo.ttf'),
     Orbitron: require('../../assets/fonts/Orbitron.ttf'),
     Pattaya: require('../../assets/fonts/Pattaya.ttf'),
+    Arimo_normal: require('../../assets/fonts/Arimo.ttf'),
+    Cinzel: require('../../assets/fonts/Cinzel.ttf'),
   });
   if (!fontsLoaded) {
     return null;

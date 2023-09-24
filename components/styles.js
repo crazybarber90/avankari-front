@@ -12,18 +12,21 @@ export const Colors = {
 
   // ovo je globalna boja
   brand: "#399BA6",
+  backgroundColor: "#d9d9d9",
+  // brand: "rgba(4, 145, 145, 0.3)",
   // brand: '#6d28d9',
 
   // ovo je boja za search komponentu
-  search: "#42BA9F",
-  // search: "#a0235c",
+  // search: "#6d28d9",
+  // search: "#42BA9F",
+  search: "#096c7d",
 
   green: '#10b981',
   red: '#ef4444',
   googleButton: "#019E87"
 };
 
-const { primary, secondary, tertiary, darkLight, brand, green, red, googleButton } = Colors;
+const { primary, secondary, tertiary, darkLight, brand, green, red, googleButton, search, backgroundColor } = Colors;
 
 
 // ===========FONTOVI=========== // 
@@ -34,8 +37,12 @@ const { primary, secondary, tertiary, darkLight, brand, green, red, googleButton
 // DEFAULTNI FONT
 // const CustomFont = Platform.OS === 'ios' ? 'System' : 'sans-serif';
 // export const CustomFont = 'Pattaya';
-export const CustomFont = 'NanumMyeongjo';
+// export const CustomFont = 'NanumMyeongjo';
 // export const CustomFont = 'Orbitron';
+// export const CustomFont = 'Arimo_normal';
+export const CustomFont = 'Cinzel';
+export const NanumMyeongjo = 'NanumMyeongjo';
+// export const Cinzel = 'Cinzel';
 //==========================================================================
 
 export const StyledContainer = styled.View`
@@ -43,7 +50,7 @@ export const StyledContainer = styled.View`
   padding: 25px;
   padding-top: ${StatusBarHeight + 30}px;
   padding-bottom: 100px;
-  background-color: ${primary};
+  background-color: ${backgroundColor};
 `;
 export const StyledContainerHome = styled.View`
   flex: 1;
@@ -63,6 +70,7 @@ export const WelcomeContainer = styled(InnerContainer)`
   padding: 25px;
   padding-top: 10px;
   justify-content: center;
+  background-color: ${backgroundColor};
 `;
 
 export const PageLogo = styled.Image`
@@ -87,17 +95,27 @@ export const WelcomeImage = styled.Image`
 `;
 
 export const PageTitle = styled.Text`
-  font-size: 30px;
+  font-size: 22px;
   text-align: center;
   font-family: ${CustomFont};
-  color: ${brand};
   padding: 10px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 5px ${darkLight};
 
   ${(props) =>
     props.welcome &&
     `
    font-size: 35px;
   `}
+`;
+export const PageTitleSmaller = styled.Text`
+  font-size: 18px;
+  text-align: center;
+  font-family: ${CustomFont};
+  margin-top: -10px;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 5px ${darkLight};
+   
 `;
 
 export const SubTitle = styled.Text`
@@ -209,10 +227,11 @@ export const StyledPickerLabel = styled.Text`
 
 export const StyledInputLabel = styled.Text`
   color: ${tertiary};
-  font-size: 13px;
+  font-size: 14px;
   text-align: left;
   font-family: ${CustomFont};
 `;
+
 
 export const LeftIcon = styled.View`
   left: 15px;
@@ -252,22 +271,26 @@ export const StyledButton = styled.TouchableOpacity`
   `}
 `;
 
-export const StyledButtonTable = styled.TouchableOpacity`
-  padding: 6px;
+export const StyledButtonSocials = styled.TouchableOpacity`
+  padding: 5px;
+  width: 60%;
   background-color: ${brand};
   justify-content: center;
   align-items: center;
   border-radius: 5px;
   margin-vertical: 5px;
   height: 45px;
+`;
 
-  ${(props) =>
-    props.google == true &&
-    `
-    background-color: ${googleButton};
-    flex-direction: row;
-    justify-content: center;
-  `}
+export const StyledButtonTable = styled.TouchableOpacity`
+  padding: 5px;
+  width: 60%;
+  background-color: ${brand};
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  margin-vertical: 5px;
+  height: 45px;
 `;
 
 export const LogoutButton = styled.TouchableOpacity`
@@ -302,6 +325,14 @@ export const MsgBox2 = styled.Text`
   font-size: 16px;
   font-family: ${CustomFont};
   color: ${(props) => (props.type == 'SUCCESS' ? green : red)};
+`;
+
+export const MsgBoxLeft = styled.Text`
+  text-align: left;
+  font-size: 14px;
+  font-family: ${CustomFont};
+  color: ${(props) => (props.type == 'SUCCESS' ? green : red)};
+  margin-top: -20px;
 `;
 
 export const Line = styled.View`
@@ -340,18 +371,25 @@ export const TextLinkContent = styled.Text`
 
 export const ProfileTextContainer = styled.View`
   margin-bottom: 75px;
-  margin-top: 5px;
-
+  margin-top: 15px;
 `;
 
 export const ProfileText = styled.Text`
   color: ${brand};
-  font-size: 22px;
+  font-size: 20px;
   margin-horizontal: 5px;
-  border: 1px solid ${brand};
-  padding: 5px;
-  margin-bottom: 10px;
+  paddingHorizontal: 5px;
   font-family: ${CustomFont};
-  
-`;
+  `;
 
+export const SocialsValues = styled.Text`
+  color: ${tertiary};
+  margin-horizontal: 5px;
+  padding: 7px;
+  font-size: 16px;
+  text-align: left;
+  padding-left: 15px;
+  font-family: ${NanumMyeongjo};
+  margin-bottom: 5px;
+
+  `;

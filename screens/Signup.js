@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { validateEmail } from '../assets/utills/MailValidator';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import { StackActions } from '@react-navigation/native';
@@ -41,60 +40,11 @@ const { brand, darkLight, primary } = Colors;
 // DATE PICKER  CALENDAR
 // import DateTimePicker from '@react-native-community/datetimepicker';
 
-// Keyboard Avoiding view
-
 const Signup = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState();
   const [messageType, setMessageType] = useState();
-
-  // const [date, setDate] = useState(new Date(2000, 0, 1));
-
-  // Real date of birth to be sent
-
-  // const [dob, setDob] = useState();
-
-  // const onChange = (event, selectedDate) => {
-  //   const currentDate = selectedDate || date;
-  //   setShow(false);
-  //   setDate(currentDate);
-  //   setDob(currentDate);
-  // };
-
-  // const showDatePicker = () => {
-  //   setShow(true);
-  // };
-
-  //                          ========================= SIGNUP WITHOUT VERIFY TOKEN 4DIDGETS =========================
-  // SIGNUP HANDLER
-  //   const handleSignup = async (credentials, setSubmitting) => {
-  //   setSubmitting(true);
-  //   handleMesage('');
-  //   const url = 'http://192.168.0.13:4000/api/users/register';
-  //     //  POVEZI TELEFON NA WIFI ISTI KAO I KOMP !!!!!!!
-  //   try {
-  //     const response = await axios.post(url, credentials, { withCredentials: true });
-  //     console.log('5555555555555555555 5555555 RESPONSE is zignup', response.data);
-  //     const token = response.data.token
-  //     const user = await response;
-  //     if (response.statusText === 'OK') {
-  //       console.log('User registered successfully');
-  //     }
-  //     navigation.navigate('Welcome', { ...response.data });
-  //     await AsyncStorage.setItem('@token', token);
-  //     await AsyncStorage.setItem('@user', JSON.stringify(user))
-  //     setSubmitting(false);
-  //     // console.log(response.data);
-  //     return response.data;
-  //   } catch (error) {
-  //     const message =
-  //       (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-  //     console.log('MESAGE IS SIGN UP', message);
-  //     setSubmitting(false);
-  //     handleMesage(message);
-  //   }
-  // };
 
   const handleSignup = async (credentials, setSubmitting) => {
     setSubmitting(true);
@@ -131,7 +81,7 @@ const Signup = ({ navigation }) => {
         <InnerContainer>
           {/* LOGO ON START SCREEN */}
           <PageTitle>Avankari</PageTitle>
-          <SubTitle>Account Signup</SubTitle>
+          <SubTitle>Registracija</SubTitle>
 
           {/* DATE PICKER CALENDAR COMPONENT */}
           {show && (
@@ -162,7 +112,7 @@ const Signup = ({ navigation }) => {
               <StyledFormArea>
                 {/* EMAIL INPUT */}
                 <MyTextInput
-                  style={{ fontFamily: CustomFont }}
+                  style={{ fontFamily: CustomFont, }}
                   label="Email Address"
                   icon="mail"
                   placeholder="Ener Your Email"
@@ -251,7 +201,7 @@ const Signup = ({ navigation }) => {
 
                 {/* DON'T HAVE AN ACCOUNT ALLREADY ?????? */}
                 <ExtraView>
-                  <ExtraText>Allready have an account ?</ExtraText>
+                  <ExtraText>Vec imas nalog ?</ExtraText>
                   <TextLink onPress={() => navigation.navigate('Login')}>
                     <TextLinkContent>Login</TextLinkContent>
                   </TextLink>

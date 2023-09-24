@@ -27,13 +27,9 @@ import {
     StyledButton,
     ButtonText,
     MsgBox,
-    Line,
-    ExtraView,
-    ExtraText,
-    TextLink,
-    TextLinkContent,
     SyledSelectPicker,
-    StyledPickerLabel
+    StyledPickerLabel,
+    PageTitleSmaller,
 } from '../../components/styles';
 
 
@@ -134,7 +130,8 @@ const UserProfile = () => {
             <StyledContainer>
                 <StatusBar style="dark" />
                 <InnerContainer>
-                    <PageTitle>ABDEJTUJ SE NA AVANKARI</PageTitle>
+                    <PageTitle style={{ color: brand, marginTop: 10 }}>POSTANI AVANKARI</PageTitle>
+                    <PageTitleSmaller style={{ color: brand }}>BUDI DOSTUPAN</PageTitleSmaller>
 
                     <Formik
                         initialValues={{
