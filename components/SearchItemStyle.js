@@ -8,7 +8,7 @@ export const SearchListWrapper = styled.View`
 flex: 1;
 align-items: center;
 background-color: ${Colors.secondary};
-padding-top: 0%;
+padding-top: 10%;
 text-align: left;
 display: flex;
 `;

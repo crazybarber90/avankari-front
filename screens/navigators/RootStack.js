@@ -15,7 +15,7 @@ import SplashScreen from '../SplashScreen';
 import Verification from '../Verification';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SearchList from '../Search/SearchList';
-import { UserProfile } from '../BottomNavigation';
+import { UserProfile, Home } from '../BottomNavigation';
 import SearchItem from '../Search/SearchItem';
 import SingleAvankari from '../Search/SingleAvankari';
 // import * as Font from 'expo-font';
@@ -64,6 +64,7 @@ const RootStack = () => {
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Verification" component={Verification} />
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="Signup" component={Signup} />

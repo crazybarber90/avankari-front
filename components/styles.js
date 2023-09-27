@@ -45,11 +45,16 @@ export const NanumMyeongjo = 'NanumMyeongjo';
 // export const Cinzel = 'Cinzel';
 //==========================================================================
 
+// export const StyledContainer = styled.View`
+//   flex: 1;
+//   padding: 25px;
+//   padding-top: ${StatusBarHeight + 10}px;
+//   background-color: ${backgroundColor};
+// `;
 export const StyledContainer = styled.View`
   flex: 1;
-  padding: 25px;
-  padding-top: ${StatusBarHeight + 30}px;
-  padding-bottom: 100px;
+  padding: 0 15px;
+  padding-top: ${StatusBarHeight + 10}px;
   background-color: ${backgroundColor};
 `;
 export const StyledContainerHome = styled.View`
@@ -63,19 +68,21 @@ export const StyledContainerHome = styled.View`
 export const InnerContainer = styled.View`
   flex: 1;
   width: 100%;
-  align-items: center;
 `;
 
 export const WelcomeContainer = styled(InnerContainer)`
-  padding: 25px;
-  padding-top: 10px;
+
   justify-content: center;
   background-color: ${backgroundColor};
+  width: 100%;
+  padding-left: 30px;
+  padding-top:20px;
 `;
 
 export const PageLogo = styled.Image`
-  width: 250px;
-  height: 200px;
+  width: 220px;
+  height: 180px;
+  margin-vertical: 30px;
 `;
 
 export const Avatar = styled.Image`
@@ -112,7 +119,7 @@ export const PageTitleSmaller = styled.Text`
   font-size: 18px;
   text-align: center;
   font-family: ${CustomFont};
-  margin-top: -10px;
+  margin-top: -20px;
   margin-bottom: 30px;
   text-shadow: 1px 1px 5px ${darkLight};
    
@@ -136,7 +143,7 @@ export const StyledFormArea = styled.View`
   width: 90%;
 `;
 export const StyledFormAreaSocial = styled.View`
-  width: 95%;
+  width: 70%;
 `;
 
 export const StyledTextInput = styled.TextInput`
@@ -212,8 +219,7 @@ export const SyledSelectPicker = styled.View`
   padding-right: 55px;
   font-size: 16px;
   height: 60px;
-  margin-vertical: 3px;
-  margin-bottom: 10px;
+  margin-bottom: 17px;
   color: ${tertiary};
   display: flex;
 `
@@ -241,7 +247,7 @@ export const LeftIcon = styled.View`
 `;
 export const LeftIconSocial = styled.View`
   left: 10px;
-  top: 31px;
+  top: 32px;
   position: absolute;
   z-index: 1;
 `;
@@ -304,7 +310,7 @@ width: 55px;
 
 export const ButtonText = styled.Text`
   color: ${primary};
-  font-size: 16px;
+  font-size: 14px;
   font-family: ${CustomFont};
   ${(props) =>
     props.google == true &&
@@ -375,18 +381,18 @@ export const ProfileTextContainer = styled.View`
 `;
 
 export const ProfileText = styled.Text`
-  color: ${brand};
-  font-size: 20px;
+  color: ${tertiary};
+  font-size: 16px;
   margin-horizontal: 5px;
   paddingHorizontal: 5px;
   font-family: ${CustomFont};
   `;
 
 export const SocialsValues = styled.Text`
-  color: ${tertiary};
+  color: ${brand};
   margin-horizontal: 5px;
   padding: 7px;
-  font-size: 16px;
+  font-size: 18px;
   text-align: left;
   padding-left: 15px;
   font-family: ${NanumMyeongjo};

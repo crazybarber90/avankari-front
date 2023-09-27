@@ -59,7 +59,7 @@ const SplashScreenComponent = ({ navigation }) => {
   return (
     // OVDE TREBA STAVITI SPLASH SCREENNNNNNNNNNNN <============================================///
     <View style={styles.container}>
-      <Image source={require('./../assets/img/ja.jpg')} style={styles.image} />
+      <Image source={require('./../assets/img/splashLik.png')} style={styles.image} />
     </View>
   );
 };
@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: '50%',
+    height: '50%',
     resizeMode: 'cover',
   },
 });

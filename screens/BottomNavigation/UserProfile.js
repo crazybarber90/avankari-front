@@ -127,11 +127,11 @@ const UserProfile = () => {
 
     return (
         <KeyboardAvoidingWrapper>
-            <StyledContainer>
+            <StyledContainer style={{ marginBottom: 75 }}>
                 <StatusBar style="dark" />
                 <InnerContainer>
-                    <PageTitle style={{ color: brand, marginTop: 10 }}>POSTANI AVANKARI</PageTitle>
-                    <PageTitleSmaller style={{ color: brand }}>BUDI DOSTUPAN</PageTitleSmaller>
+                    <PageTitle style={{ color: brand }}> <Text style={{ fontSize: 35, color: "black" }}>P</Text>OSTANI  <Text style={{ fontSize: 35, color: "black" }}>A</Text>VANKARI</PageTitle>
+                    <PageTitleSmaller style={{ color: "black" }}>BUDI DOSTUPAN</PageTitleSmaller>
 
                     <Formik
                         initialValues={{
@@ -139,8 +139,8 @@ const UserProfile = () => {
                             currentPlace: "",
                             pol: "Odaberi Pol",
                             kosa: "Odaberi Boju Kose",
-                            oci: "Odaberi Boju ociju",
-                            obuca: "Odaberi Obucu",
+                            oci: "Odaberi Boju očiju",
+                            obuca: "Odaberi Obuću",
                             gornjideo: "Odaberi Gornji Deo",
                             donjideo: "Odaberi Donji Deo"
                         }}
@@ -148,7 +148,7 @@ const UserProfile = () => {
                         onSubmit={(values, { setSubmitting }) => {
 
                             if (values.city == '' || values.currentPlace == '') {
-                                handleMesage('Please fill all the fields');
+                                handleMesage('Popuni obavezna polja označena sa *');
                                 // setDisabled(true)
                                 setSubmitting(false);
                             } else {
@@ -162,9 +162,9 @@ const UserProfile = () => {
                                 {/* CITY */}
                                 <MyTextInput
                                     style={{ fontFamily: CustomFont }}
-                                    label="Current City"
+                                    label="Grad *"
                                     icon="location-city"
-                                    placeholder="City *"
+                                    placeholder="npr.  Beograd"
                                     placeholderTextColor={darkLight}
                                     onChangeText={handleChange('city')}
                                     onBlur={handleBlur('city')}
@@ -172,10 +172,10 @@ const UserProfile = () => {
                                 />
                                 {/* PLACE */}
                                 <MyTextInput
-                                    style={{ fontFamily: CustomFont }}
-                                    label="Current Place"
+                                    style={{ fontFamily: CustomFont, marginBottom: 25 }}
+                                    label="Mesto *"
                                     icon="location-on"
-                                    placeholder="Current Place *"
+                                    placeholder="npr.  Fensi kafanica"
                                     placeholderTextColor={darkLight}
                                     onChangeText={handleChange('currentPlace')}
                                     onBlur={handleBlur('currentPlace')}
@@ -184,7 +184,7 @@ const UserProfile = () => {
                                 {/* SEX */}
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Pol", "Muski", "Zenski"]}
+                                    valueOptions={["Odaberi Pol", "Muški", "Ženski"]}
                                     labelOptions="Pol"
                                     value={values.pol}
                                     label="Pol"
@@ -198,27 +198,27 @@ const UserProfile = () => {
                                     labelOptions="Kosa"
                                     value={values.kosa}
                                     // values={values}
-                                    label="Kosa"
+                                    label="Boja Kose"
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Boju Ociju", "Plave", "Zelene", "Braon", "Crne"]}
+                                    valueOptions={["Odaberi Boju Očiju", "Plave", "Zelene", "Braon", "Crne"]}
                                     labelOptions="Oci"
                                     value={values.oci}
                                     // values={values}
-                                    label="Oci"
+                                    label="Oči"
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Obucu", "Patike", "Cipele", "Cizme", "Sandale", "Papuce", "Baletanke",]}
+                                    valueOptions={["Odaberi Obuću", "Patike", "Cipele", "Čizme", "Sandale", "Papuče", "Baletanke",]}
                                     labelOptions="Obuca"
                                     value={values.obuca}
                                     // values={values}
-                                    label="Obuca"
+                                    label="Obuća"
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Gornji Deo", "Majica", "Dukserica", "Trenerka", "Dzemper", "Rolka", "Suskavac", "Jakna", "Kaput"]}
+                                    valueOptions={["Odaberi Gornji Deo", "Majica", "Dukserica", "Trenerka", "Dzemper", "Rolka", "Šuškavac", "Jakna", "Kaput"]}
                                     labelOptions="gornjideo"
                                     value={values.gornjideo}
                                     // values={values}
@@ -226,7 +226,7 @@ const UserProfile = () => {
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Donji Deo", "Sorc", "Trenerka", "Farmerke", "Pantalone", "Haljina", "Suknja",]}
+                                    valueOptions={["Odaberi Donji Deo", "Šorc", "Trenerka", "Farmerke", "Pantalone", "Haljina", "Suknja",]}
                                     labelOptions="donjideo"
                                     value={values.donjideo}
                                     // values={values}
@@ -239,7 +239,7 @@ const UserProfile = () => {
                                 {!isSubmitting && (
                                     <StyledButton onPress={handleSubmit} style={{ marginTop: 20 }}>
                                         {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
-                                        <ButtonText>UPDATE</ButtonText>
+                                        <ButtonText>SNIMI</ButtonText>
                                     </StyledButton>
                                 )}
 
@@ -251,7 +251,7 @@ const UserProfile = () => {
 
                                 {/* <MsgBox type={messageType}>{message}</MsgBox> */}
 
-                                <MsgBox type={messageType}>
+                                <MsgBox type={messageType} style={{ marginBottom: 15 }}>
                                     <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
                                 </MsgBox>
                             </StyledFormArea>

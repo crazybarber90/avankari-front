@@ -45,7 +45,7 @@ import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-
 import bg from "../../assets/img/bg.png"
 
 
-const { brand, darkLight, primary, tertiary, red } = Colors;
+const { brand, darkLight, primary, tertiary, red, search } = Colors;
 
 const Home = ({ navigation, route }) => {
 
@@ -188,6 +188,7 @@ const Home = ({ navigation, route }) => {
         return () => backHandler.remove();
     }, [navigation, backPressCount]);
 
+
     // PERMISIJA ZA GALERIJU
     useEffect(() => {
         (async () => {
@@ -287,12 +288,6 @@ const Home = ({ navigation, route }) => {
     };
 
 
-    // useEffect(() => {
-    //     console.log("curent is uzeEffectxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", currentUser);
-    // }, [changedSocialState]);
-
-    // console.log("STATEsssssssssssssssssssssssssssssssssssssssssssssssssssssssss", changedSocialState)
-
     const handleUpdateSocials = async (values, setSubmitting) => {
         const { facebookUrl, instagramUrl, phoneNumber } = userData
         if (facebookUrl === "" && instagramUrl === "" && phoneNumber === "") {
@@ -352,9 +347,6 @@ const Home = ({ navigation, route }) => {
                 handleMesage('USPESNO AZURIRANO !', "SUCCESS");
                 console.log('ovo je log sa backenda =============>', currentUser);
             }
-            // navigation.navigate('Home', { ...response.data });
-            // navigation.navigate('Home');
-
             setSubmitting(false);
             return response.data;
         } catch (error) {
@@ -429,25 +421,81 @@ const Home = ({ navigation, route }) => {
             handleMesage(message);
         }
     }
+
+    const removeNetworks = async () => {
+        setMessageFor('removeNetworks')
+        setLoader(true)
+        try {
+            // return console.log("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOAAAAAA")
+            const token = await AsyncStorage.getItem("@token");
+
+            if (!token) {
+                handleMesage('Token nije dostupan.');
+                return;
+            }
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            };
+            const url = 'http://192.168.0.13:4000/api/users/remove-networks';
+
+            const response = await axios.post(url, {}, { headers });
+
+            console.log("RESPONSEEEEEEEEEEEEEEEEEEEE=================================================EEEEEEEEEEEEEEEE", response)
+            if (response.status === 200) {
+                console.log('Remove successfully', response.data);
+                setLoader(false);
+
+                // Učitavanje trenutnog korisnika iz AsyncStorage-a
+                const currentUserString = await AsyncStorage.getItem('@user');
+                const currentUser = JSON.parse(currentUserString);
+
+                console.log("=========================== current string ", currentUser)
+
+                currentUser.table = "";
+                currentUser.facebookUrl = "";
+                currentUser.instagramUrl = "";
+                currentUser.phoneNumber = "";
+
+                // // Učitavanje trenutnog korisnika iz AsyncStorage-a
+                // currentUser.table = table;
+                // currentUser.facebookUrl = facebookUrl;
+                // currentUser.instagramUrl = instagramUrl;
+                // currentUser.phoneNumber = phoneNumber;
+
+                // čuvajte ažuriranog korisnika u AsyncStorage-u
+                await AsyncStorage.setItem('@user', JSON.stringify(currentUser));
+                //======================== UPDATE ASYNCSTORAGE SA NOVI SOCIALS"
+                setMessageFor("removeNetworks")
+                handleMesage('Uspešno si uklonio mreže!', "SUCCESS");
+                await dispatch(SET_USER(response.data));
+
+                await setChangedSocialState(!changedSocialState)
+            }
+            setLoader(false);
+            return response.data;
+
+        } catch (error) {
+            const message =
+                (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+            setLoader(false);
+            handleMesage("Došlo je do greške prilikom brisanja mreža korisnika.");
+        }
+    }
     return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-
             <>
-
                 {/* <StatusBar style="dark" /> */}
-                {/* <View> */}
-
                 <WelcomeImage
                     resizeMode="cover"
                     source={avatarSource}
                 // style={{ width: "100%", height: '30%', objectFit: 'cover', zIndex: 9999, }}
                 />
                 {messageFor === "image" &&
-                    <MsgBox type={messageType} style={{ marginTop: 5 }}>
+                    <MsgBox type={messageType} style={{ marginTop: 5, textAlign: "left" }}>
                         <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
                     </MsgBox>
                 }
-                {/* </View> */}
 
                 {/* ADD IMAGE BUTTON */}
                 <TouchableOpacity
@@ -465,20 +513,18 @@ const Home = ({ navigation, route }) => {
                 >
                     <AntDesign name="plus" size={24} color="white" />
                 </TouchableOpacity>
+
                 <View style={{ position: "absolute", top: 50, right: 20, boxShadow: "1px 1px 1px black", padding: 2 }}>
                     <Ionicons name="ios-power-sharp" size={40} color={red} onPress={logoutUser} />
                 </View>
+
                 {/* {image && <Image source={{ uri: image }} style={{ flex: 1 / 3 }}></Image>} */}
-                <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                    <ScrollView>
-                        <WelcomeContainer>
-                            {/* <View style={{ position: "absolute", top: -10, right: 20, boxShadow: "1px 1px 1px black", backgroundColor: "black", padding: 2, opacity: 0.7 }}>
-                                <Ionicons name="ios-power-sharp" size={40} color={brand} onPress={logoutUser} />
-                            </View> */}
+                <WelcomeContainer>
+                    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                        <ScrollView>
                             {/* <KeyboardAvoidingWrapper> */}
 
                             <InnerContainer>
-                                {/* <PageTitle></PageTitle> */}
                                 <Formik
                                     initialValues={{
                                         facebookUrl: "",
@@ -498,9 +544,11 @@ const Home = ({ navigation, route }) => {
                                             <TouchableOpacity onPress={() => setShowInputs(!showInputs)}>
                                                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                                                     <Octicons name={showInputs ? "triangle-up" : "triangle-down"} size={24} color={brand} />
-                                                    <ExtraText style={{ marginHorizontal: 10, backgroundColor: brand, padding: 7, color: "white", fontSize: 16, borderRadius: 8 }}>PODELI SVOJE MREZE</ExtraText>
+                                                    <ExtraText style={{ marginHorizontal: 10, backgroundColor: brand, padding: 7, color: "white", fontSize: 16, borderRadius: 8 }}>Podeli svoje mreže</ExtraText>
                                                 </View>
                                             </TouchableOpacity>
+
+
                                             {/* CITY */}
                                             {showInputs && (
                                                 <>
@@ -524,9 +572,9 @@ const Home = ({ navigation, route }) => {
                                                         value={userData.instagram}
                                                     />
                                                     <MyTextInput
-                                                        label="Phone Number"
+                                                        label="Broj telefona"
                                                         icon="phone"
-                                                        placeholder="Phone Number"
+                                                        placeholder="0601234567"
                                                         placeholderTextColor={darkLight}
                                                         onChangeText={(text) => setUserData({ ...userData, phoneNumber: text })} onBlur={handleBlur('phoneNumber')}
                                                         value={userData.phoneNumber}
@@ -541,7 +589,7 @@ const Home = ({ navigation, route }) => {
                                                     {!isSubmitting && (
                                                         <StyledButtonSocials onPress={handleSubmit} style={{ marginBottom: 30 }}>
                                                             {/* // <StyledButtonSocials disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
-                                                            <ButtonText>AZURIRAJ MREZE</ButtonText>
+                                                            <ButtonText>Ažuriraj mreže</ButtonText>
                                                         </StyledButtonSocials>
                                                     )}
 
@@ -569,7 +617,7 @@ const Home = ({ navigation, route }) => {
                                                     </StyledTextInputWithImage>
                                                     {!loader && (
                                                         <StyledButtonSocials onPress={updateTable} style={{ marginBottom: 30 }}>
-                                                            <ButtonText>AZURIRAJ TABLICU</ButtonText>
+                                                            <ButtonText>Ažuriraj tablicu</ButtonText>
                                                         </StyledButtonSocials>
                                                     )}
 
@@ -597,17 +645,30 @@ const Home = ({ navigation, route }) => {
                                                 <SocialsValues>{currentUser.phoneNumber}</SocialsValues>
                                                 <ProfileText>Tvoja Tablica</ProfileText>
                                                 <SocialsValues>{currentUser.table}</SocialsValues>
+                                                <TouchableOpacity onPress={removeNetworks}>
+                                                    <View style={{ width: 150, paddingTop: 15 }}>
+                                                        <ExtraText style={{ marginHorizontal: 10, backgroundColor: search, padding: 9, color: "white", fontSize: 12, borderRadius: 8, textAlign: "center" }}>Ukloni svoje mreže</ExtraText>
+                                                    </View>
+                                                </TouchableOpacity>
+
+                                                {messageFor === "removeNetworks" &&
+                                                    <MsgBox type={messageType} style={{ marginTop: 10, paddingBottom: 25, textAlign: "left", paddingLeft: 10 }}>
+                                                        <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red', textAlign: "left" }}>{message}</Text>
+                                                    </MsgBox>
+                                                }
                                             </ProfileTextContainer>
+
+
                                         </StyledFormAreaSocial>
                                     )}
                                 </Formik>
                             </InnerContainer>
                             {/* </KeyboardAvoidingWrapper> */}
 
-                        </WelcomeContainer>
 
-                    </ScrollView>
-                </TouchableWithoutFeedback>
+                        </ScrollView>
+                    </TouchableWithoutFeedback>
+                </WelcomeContainer>
             </>
         </KeyboardAvoidingView >
 

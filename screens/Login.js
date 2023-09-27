@@ -226,13 +226,14 @@ const Login = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingWrapper>
-      <StyledContainer>
+      {/* <StyledContainer> */}
+      <>
         <StatusBar style="dark" />
-        <InnerContainer>
+        <InnerContainer style={{ flex: 1, alignItems: 'center', paddingTop: 20 }}>
           {/* LOGO ON START SCREEN */}
-          <PageLogo resizeMode="cover" source={require('./../assets/img/ja.jpg')} />
+          <PageLogo resizeMode="contain" source={require('./../assets/img/lik2.png')} />
           {/* <PageTitle>Avankari</PageTitle> */}
-          <PageTitle>Avankari</PageTitle>
+          {/* <PageTitle>Avankari</PageTitle> */}
           <Formik
             initialValues={{ email: '', password: '' }}
             onSubmit={(values, { setSubmitting }) => {
@@ -322,7 +323,8 @@ const Login = ({ navigation }) => {
             )}
           </Formik>
         </InnerContainer>
-      </StyledContainer>
+      </>
+      {/* </StyledContainer> */}
     </KeyboardAvoidingWrapper>
   );
 };

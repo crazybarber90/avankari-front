@@ -3,32 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import RootStack from './screens/navigators/RootStack';
 import store from './redux/store';
-import AppLoad from './screens/AppLoad';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from "expo-splash-screen"
 
 
 export default function App() {
-
-  // const [fontsLoaded] = useFonts({
-  //   // 'NanumMyeongjo': require('./assets/fonts/NanumMyeongjo.ttf'),
-  //   // 'Orbitron': require('./assets/fonts/Orbitron.ttf'),
-  //   Pattaya: require('./assets/fonts/Pattaya.ttf'),
-  // });
-
-  // if (!fontsLoaded) {
-  //   return null;
-  // }
 
   return (
     <Provider store={store}>
       <RootStack />
     </Provider>
   )
-  // return <Welcome />;
 }
 
-// https://www.youtube.com/watch?v=tZVKk-V0Xko&list=PLk8gdrb2DmCicLTZJWC2cCTFXloTBMBCt&index=2
 
 /*
       clientId: '175142944378-g6u6ijon4tem0dmcktb2m1ncjq7t0nes.apps.googleusercontent.com',

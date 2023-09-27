@@ -53,51 +53,56 @@ const ForgotPassword = ({ navigation }) => {
       });
       if (response.data.success) {
         dispatch(SET_EMAIL(email));
+        await handleMesage('PROVERITE VAŠu EMAIL ADRESU', "SUCCESS");
         navigation.navigate('ResetPassword'); // Šaljemo token kao parametar
+
       } else {
-        handleMesage2('Error reset password, try again');
+        await handleMesage('Korisnik nije pronadjen!');
       }
     } catch (error) {
+      await handleMesage('Korisnik nije pronadjen!');
       console.error(error);
     }
   };
 
-  const handleMesage = (message, type = 'FAILED') => {
+  const handleMesage = (message, type = 'FAILED',) => {
     setMessage(message);
     setMessageType(type);
-  };
 
-  const handleMesage2 = (message, type = 'SUCCESS') => {
-    setMessage(message);
-    setMessageType(type);
+    // timeout da sakrijete poruku nakon 5 sekundi
+    setTimeout(() => {
+      setMessage(null);
+      setMessageType(null);
+    }, 5000);
   };
 
   return (
     <KeyboardAvoidingWrapper>
-      <StyledContainer>
+      {/* <StyledContainer > */}
+      <>
         <StatusBar style="dark" />
-        <InnerContainer>
+        <InnerContainer style={{ flex: 1, alignItems: "center", paddingTop: 30 }}>
           {/* LOGO ON START SCREEN */}
-          <PageLogo resizeMode="cover" source={require('./../assets/img/ja.jpg')} />
-          <PageTitle>Avankari</PageTitle>
+          <PageLogo style={{ marginBottom: 40 }} resizeMode="contain" source={require('./../assets/img/lik2.png')} />
+          {/* <PageTitle>Avankari</PageTitle> */}
 
           <Formik
             initialValues={{ email: '' }}
             onSubmit={async (values, { setSubmitting }) => {
               if (values.email === '') {
-                handleMesage('Please enter your email');
+                handleMesage('Unesite vašu email adresu');
                 setSubmitting(false);
               } else if (!validateEmail(values.email)) {
                 setSubmitting(false);
-                handleMesage('Please enter a valid email');
+                handleMesage('Tip adrese nije validan');
               } else {
                 handleResetPassword(values);
-                handleMesage2('CHECK YOUR EMAIL !!!');
+                // await handleMesage('PROVERITE VAŠU EMAIL ADRESU!!!', "SUCCESS");
               }
             }}
           >
             {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
-              <StyledFormArea>
+              <StyledFormArea >
                 {/* EMAIL INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
@@ -141,7 +146,8 @@ const ForgotPassword = ({ navigation }) => {
             )}
           </Formik>
         </InnerContainer>
-      </StyledContainer>
+      </>
+      {/* </StyledContainer> */}
     </KeyboardAvoidingWrapper>
   );
 };

@@ -76,9 +76,10 @@ const Signup = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingWrapper>
-      <StyledContainer>
+      {/* <StyledContainer> */}
+      <>
         <StatusBar style="dark" />
-        <InnerContainer>
+        <InnerContainer style={{ flex: 1, alignItems: "center", paddingTop: 40 }}>
           {/* LOGO ON START SCREEN */}
           <PageTitle>Avankari</PageTitle>
           <SubTitle>Registracija</SubTitle>
@@ -210,7 +211,8 @@ const Signup = ({ navigation }) => {
             )}
           </Formik>
         </InnerContainer>
-      </StyledContainer>
+      </>
+      {/* </StyledContainer> */}
     </KeyboardAvoidingWrapper>
   );
 };
