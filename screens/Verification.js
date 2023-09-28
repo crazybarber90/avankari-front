@@ -50,11 +50,16 @@ const Verification = ({ route, navigation }) => {
         setNextInputIndex(newInputIndex)
     }
 
-    const handleMesage = (message, type = 'FAILED') => {
+    const handleMesage = (message, type = 'FAILED',) => {
         setMessage(message);
         setMessageType(type);
-    };
 
+        // timeout da sakrijete poruku nakon 5 sekundi
+        setTimeout(() => {
+            setMessage(null);
+            setMessageType(null);
+        }, 5000);
+    };
     const submitOTP = async () => {
         Keyboard.dismiss();
 
@@ -85,14 +90,14 @@ const Verification = ({ route, navigation }) => {
                     }, 1500);
                 } else {
                     // If res is not defined or res.success is not true
-                    handleMesage(res ? res.message : "An error occurred while verifying the email. Please try again.", 'FAILED');
+                    handleMesage(res ? res.message : "Pogrešan pin, pokušaj ponovo");
                 }
             } catch (error) {
                 console.error("Error in submitOTP:", error);
-                handleMesage("An error occurred while verifying the email. Please try again.", 'FAILED');
+                handleMesage("An error occurred while verifying the email. Please try again");
             }
         } else {
-            handleMesage("Invalid OTP. Please enter a valid OTP.", 'FAILED');
+            handleMesage("Unesi ceo pin");
         }
     }
 
@@ -123,14 +128,11 @@ const Verification = ({ route, navigation }) => {
         {/* {res?.success ? <MsgBox type="SUCCESS">{message}</MsgBox> : <MsgBox type="FAILED">{message}</MsgBox>} */}
         {/* <MsgBox type={messageType}>{message}</MsgBox> */}
         {/* Poruka o grešci za status "fail" */}
-        {verificationStatus === 'fail' && (
-            <MsgBox type="FAILED">Verification code is incorrect. Please try again.</MsgBox>
-        )}
 
-        {/* Poruka o grešci za ostale slučajeve */}
-        {verificationStatus !== 'fail' && (
-            <MsgBox type={messageType}>{message}</MsgBox>
-        )}
+        <MsgBox type={messageType} style={{ paddingHorizontal: 20, textAlign: "center" }}>
+            <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
+        </MsgBox>
+
 
         <TouchableOpacity style={styles.submitIcon} onPress={submitOTP}>
             <Icon name="checkmark-outline" size={24} color="#fff" />
@@ -164,7 +166,8 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: brand,
         justifyContent: 'center',
-        alignItems: "center"
+        alignItems: "center",
+        marginBottom: 15,
     },
     input: {
         fontSize: 25,

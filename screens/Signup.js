@@ -96,14 +96,14 @@ const Signup = ({ navigation }) => {
               // values = {...values, dateOfBirth: dob};
               // console.log('VALUES', values);
               if (values.email == '' || values.name == '' || values.password == '' || values.confirmPassword == '') {
-                handleMesage('Please fill all the fields');
+                handleMesage('Popuni sva polja');
                 setSubmitting(false);
               } else if (!validateEmail(values.email)) {
                 setSubmitting(false);
-                return handleMesage('Please enter a valid email');
+                return handleMesage('Unesi validan Email');
               } else if (values.password !== values.confirmPassword) {
                 setSubmitting(false);
-                return handleMesage('Password do not match');
+                return handleMesage('Šifre se ne podudaraju');
               } else {
                 handleSignup(values, setSubmitting);
               }
@@ -114,9 +114,9 @@ const Signup = ({ navigation }) => {
                 {/* EMAIL INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont, }}
-                  label="Email Address"
+                  label="Email Adresa"
                   icon="mail"
-                  placeholder="Ener Your Email"
+                  placeholder="Petar@gmail.com"
                   placeholderTextColor={darkLight}
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
@@ -126,9 +126,9 @@ const Signup = ({ navigation }) => {
                 {/* FULL NAME INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Full Name"
+                  label="Ime"
                   icon="person"
-                  placeholder="Enter Your Name"
+                  placeholder="Petar"
                   placeholderTextColor={darkLight}
                   onChangeText={handleChange('name')}
                   onBlur={handleBlur('name')}
@@ -152,7 +152,7 @@ const Signup = ({ navigation }) => {
                 {/* PASSWORD INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Password"
+                  label="Lozinka"
                   icon="lock"
                   placeholder="* * * * * * *"
                   placeholderTextColor={darkLight}
@@ -168,7 +168,7 @@ const Signup = ({ navigation }) => {
                 {/* PASSWORD INPUT 2 */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Confirm Password"
+                  label="Potvrod Lozinku"
                   icon="lock"
                   placeholder="* * * * * * *"
                   placeholderTextColor={darkLight}
@@ -187,7 +187,7 @@ const Signup = ({ navigation }) => {
                 {/* LOGIN BUTTON */}
                 {!isSubmitting && (
                   <StyledButton onPress={handleSubmit}>
-                    <ButtonText>Signup</ButtonText>
+                    <ButtonText>Registruj se</ButtonText>
                   </StyledButton>
                 )}
 
@@ -202,9 +202,9 @@ const Signup = ({ navigation }) => {
 
                 {/* DON'T HAVE AN ACCOUNT ALLREADY ?????? */}
                 <ExtraView>
-                  <ExtraText>Vec imas nalog ?</ExtraText>
+                  <ExtraText>Već imaš nalog ?</ExtraText>
                   <TextLink onPress={() => navigation.navigate('Login')}>
-                    <TextLinkContent>Login</TextLinkContent>
+                    <TextLinkContent>Uloguj se</TextLinkContent>
                   </TextLink>
                 </ExtraView>
               </StyledFormArea>

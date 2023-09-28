@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { View, ActivityIndicator, Platform, Text } from 'react-native';
+import { View, ActivityIndicator, Platform, Text, Button, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { validateEmail } from '../assets/utills/MailValidator';
 import { handleGoogleSignup } from '../assets/utills/handleSignup';
 import * as Google from 'expo-auth-session/providers/google';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BackHandler } from 'react-native';
+import { SET_LANGUAGE } from '../redux/features/translationSlice';
 
 
 //formik
@@ -38,7 +39,7 @@ import {
 
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import { SET_USER } from '../redux/features/auth/authSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // Destructured colors from 1st prop Colors from style
 const { brand, darkLight, primary } = Colors;
 
@@ -52,6 +53,8 @@ const Login = ({ navigation }) => {
   const [disabled, setDisabled] = useState(false);
   const dispatch = useDispatch()
 
+  const translation = useSelector((state) => state.translation.messages)
+
 
   const [backPressCount, setBackPressCount] = useState(0);
 
@@ -61,6 +64,22 @@ const Login = ({ navigation }) => {
     iosClientId: `175142944378-5ele4obm50pe6ok3dm5dvoq6etb572jr.apps.googleusercontent.com`,
     scopes: ['openid', 'profile', 'email']
   });
+
+  // UCITAVANJE ODABRANOG JEZIKA 
+  useEffect(() => {
+    const getSelectedLanguage = async () => {
+      try {
+        const selectedLanguage = await AsyncStorage.getItem('selectedLanguage');
+        if (selectedLanguage) {
+          // Postavi jezik u Redux store
+          dispatch(SET_LANGUAGE({ locale: selectedLanguage }));
+        }
+      } catch (error) {
+        console.error('Error reading selected language from AsyncStorage:', error);
+      }
+    };
+    getSelectedLanguage();
+  }, [dispatch]);
 
 
   // Whenever response changed, run this function
@@ -228,6 +247,25 @@ const Login = ({ navigation }) => {
     <KeyboardAvoidingWrapper>
       {/* <StyledContainer> */}
       <>
+
+        <View style={{ position: "absolute", top: 30, right: 30 }}>
+          <TouchableOpacity style={{ marginBottom: 40, backgroundColor: brand, paddingHorizontal: 11, paddingVertical: 7, color: primary, borderRadius: 5 }}
+            onPress={() => {
+              dispatch(SET_LANGUAGE({ locale: 'srp' }));
+            }}
+          >
+            <Text>Srp</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ backgroundColor: brand, paddingHorizontal: 11, paddingVertical: 7, color: primary, borderRadius: 5 }}
+            onPress={() => {
+              dispatch(SET_LANGUAGE({ locale: 'en' }));
+            }}
+          >
+            <Text>En</Text>
+          </TouchableOpacity>
+        </View>
+
         <StatusBar style="dark" />
         <InnerContainer style={{ flex: 1, alignItems: 'center', paddingTop: 20 }}>
           {/* LOGO ON START SCREEN */}
@@ -255,9 +293,9 @@ const Login = ({ navigation }) => {
                 {/* EMAIL INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Email Address"
+                  label="Email Adresa"
                   icon="mail"
-                  placeholder="Ener Your Email"
+                  placeholder="petar@gmail.com"
                   placeholderTextColor={darkLight}
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
@@ -267,7 +305,7 @@ const Login = ({ navigation }) => {
                 {/* PASSWORD INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Password"
+                  label="Lozinka"
                   icon="lock"
                   placeholder="* * * * * * *"
                   placeholderTextColor={darkLight}
@@ -286,7 +324,8 @@ const Login = ({ navigation }) => {
                 {!isSubmitting && (
                   <StyledButton onPress={handleSubmit}>
                     {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
-                    <ButtonText>Login</ButtonText>
+                    {/* <ButtonText>Uloguj se</ButtonText> */}
+                    <ButtonText>{translation.login[1]}</ButtonText>
                   </StyledButton>
                 )}
 
@@ -299,7 +338,7 @@ const Login = ({ navigation }) => {
 
                 <ExtraView>
                   <TextLink onPress={() => navigation.navigate('ForgotPassword')}>
-                    <TextLinkContent>Forgot Password ?</TextLinkContent>
+                    <TextLinkContent>Zaboravio si šifru ?</TextLinkContent>
                   </TextLink>
                 </ExtraView>
 
@@ -314,9 +353,9 @@ const Login = ({ navigation }) => {
 
                 {/* DON'T HAVE AN ACCOUNT ALLREADY ?????? */}
                 <ExtraView>
-                  <ExtraText>Don't have an account allready?</ExtraText>
+                  <ExtraText>Nisi registrovan?</ExtraText>
                   <TextLink onPress={() => navigation.navigate('Signup')}>
-                    <TextLinkContent>Signup</TextLinkContent>
+                    <TextLinkContent>Registruj se</TextLinkContent>
                   </TextLink>
                 </ExtraView>
               </StyledFormArea>

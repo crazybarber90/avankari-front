@@ -53,8 +53,10 @@ const ForgotPassword = ({ navigation }) => {
       });
       if (response.data.success) {
         dispatch(SET_EMAIL(email));
-        await handleMesage('PROVERITE VAŠu EMAIL ADRESU', "SUCCESS");
-        navigation.navigate('ResetPassword'); // Šaljemo token kao parametar
+        await handleMesage('Proveri svoju email adresu', "SUCCESS");
+        setTimeout(() => {
+          navigation.navigate('ResetPassword'); // Šaljemo token kao parametar
+        }, 3000)
 
       } else {
         await handleMesage('Korisnik nije pronadjen!');
@@ -90,7 +92,7 @@ const ForgotPassword = ({ navigation }) => {
             initialValues={{ email: '' }}
             onSubmit={async (values, { setSubmitting }) => {
               if (values.email === '') {
-                handleMesage('Unesite vašu email adresu');
+                handleMesage('Unesi email adresu');
                 setSubmitting(false);
               } else if (!validateEmail(values.email)) {
                 setSubmitting(false);
@@ -106,9 +108,9 @@ const ForgotPassword = ({ navigation }) => {
                 {/* EMAIL INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Email Address"
+                  label="Email Addresa"
                   icon="mail"
-                  placeholder="Enter Your Email"
+                  placeholder="petar@gmail.com"
                   placeholderTextColor={darkLight}
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
@@ -125,7 +127,7 @@ const ForgotPassword = ({ navigation }) => {
                 {/* LOGIN BUTTON */}
                 {!isSubmitting && (
                   <StyledButton onPress={handleSubmit}>
-                    <ButtonText>Reset Password</ButtonText>
+                    <ButtonText>Promeni lozinku</ButtonText>
                   </StyledButton>
                 )}
 
@@ -137,9 +139,9 @@ const ForgotPassword = ({ navigation }) => {
 
                 {/* DON'T HAVE AN ACCOUNT ALREADY ?????? */}
                 <ExtraView>
-                  <ExtraText>Don't have an account already?</ExtraText>
+                  <ExtraText>Nemaš nalog?</ExtraText>
                   <TextLink onPress={() => navigation.navigate('Signup')}>
-                    <TextLinkContent>Signup</TextLinkContent>
+                    <TextLinkContent>Registruj se</TextLinkContent>
                   </TextLink>
                 </ExtraView>
               </StyledFormArea>

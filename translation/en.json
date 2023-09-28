@@ -1,0 +1,14 @@
+{
+    "login": {
+        "1": "Login"
+    },
+    "register": {
+        "1": "Register"
+    },
+    "forgotPassword": {
+        "1": "Forgot password?"
+    },
+    "signInWithGoogle": {
+        "1": "Signup with Google"
+    }
+}

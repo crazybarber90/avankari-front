@@ -45,7 +45,7 @@ import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-
 import bg from "../../assets/img/bg.png"
 
 
-const { brand, darkLight, primary, tertiary, red, search } = Colors;
+const { brand, darkLight, primary, tertiary, red, search, backgroundColor } = Colors;
 
 const Home = ({ navigation, route }) => {
 
@@ -344,7 +344,7 @@ const Home = ({ navigation, route }) => {
 
                 await setChangedSocialState(!changedSocialState)
                 setMessageFor("socials")
-                handleMesage('USPESNO AZURIRANO !', "SUCCESS");
+                handleMesage('Uspešno ažurirane mreže!', "SUCCESS");
                 console.log('ovo je log sa backenda =============>', currentUser);
             }
             setSubmitting(false);
@@ -406,7 +406,7 @@ const Home = ({ navigation, route }) => {
                 await AsyncStorage.setItem('@user', JSON.stringify(currentUser));
                 //======================== UPDATE ASYNCSTORAGE SA NOVI SOCIALS"
                 setMessageFor("table")
-                handleMesage('USPESNO AZURIRANA TABLICA !', "SUCCESS");
+                handleMesage('Uspešno ažurirana tablica!', "SUCCESS");
                 await dispatch(SET_USER(response.data));
 
                 await setChangedSocialState(!changedSocialState)
@@ -492,7 +492,7 @@ const Home = ({ navigation, route }) => {
                 // style={{ width: "100%", height: '30%', objectFit: 'cover', zIndex: 9999, }}
                 />
                 {messageFor === "image" &&
-                    <MsgBox type={messageType} style={{ marginTop: 5, textAlign: "left" }}>
+                    <MsgBox type={messageType} style={{ paddingTop: 8, paddingLeft: 10, textAlign: "left", backgroundColor: backgroundColor }}>
                         <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
                     </MsgBox>
                 }

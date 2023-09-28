@@ -1,0 +1,14 @@
+{
+    "login": {
+        "1": "Uloguj se"
+    },
+    "register": {
+        "1": "Registruj se"
+    },
+    "forgotPassword": {
+        "1": "Zaboravio si lozinku?"
+    },
+    "signInWithGoogle": {
+        "1": "Uloguj se sa Google nalogom"
+    }
+}
