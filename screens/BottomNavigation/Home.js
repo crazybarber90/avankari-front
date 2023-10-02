@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { StyleSheet, Text, View, BackHandler, Platform, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, BackHandler, Platform, TouchableOpacity, Image, ActivityIndicator, AppState } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux';
 import { SET_USER, selectUser, LOGOUT_USER } from '../../redux/features/auth/authSlice';
@@ -48,7 +48,7 @@ import bg from "../../assets/img/bg.png"
 const { brand, darkLight, primary, tertiary, red, search, backgroundColor } = Colors;
 
 const Home = ({ navigation, route }) => {
-
+    const translation = useSelector((state) => state.translation.messages);
     const [messageType, setMessageType] = useState();
     const [message, setMessage] = useState();
     const [messageFor, setMessageFor] = useState();
@@ -88,14 +88,39 @@ const Home = ({ navigation, route }) => {
     // const avatarSource = { uri: photo || picture || 'https://i.ibb.co/4pDNDk1/avatar.png' };
     const avatarSource = image ? { uri: image } : { uri: photo || picture || 'https://i.ibb.co/4pDNDk1/avatar.png' };
 
-    async function clearAsyncStorage() {
+    // async function clearAsyncStorage() {
+    //     try {
+    //         await AsyncStorage.clear();
+    //         console.log('AsyncStorage cleared');
+    //     } catch (error) {
+    //         console.error('Error clearing AsyncStorage:', error);
+    //     }
+    // }
+
+    // FUNCTION THAT DELETE EVERYTHING FROM ASYNCSTORAGE EXEPT SELECTED LANGUAGE
+    async function clearAsyncStorageExeptLanguage() {
         try {
-            await AsyncStorage.clear();
-            console.log('AsyncStorage cleared');
+            const keys = await AsyncStorage.getAllKeys();
+            const filteredKeys = keys.filter((key) => key !== 'selectedLanguage');
+            await AsyncStorage.multiRemove(filteredKeys)
+
         } catch (error) {
-            console.error('Error clearing AsyncStorage:', error);
+            console.error('Logout Error', error)
         }
     }
+
+    const logoutUser = async () => {
+        await dispatch(LOGOUT_USER())
+        // clearAsyncStorage();
+        clearAsyncStorageExeptLanguage();
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+            })
+        )
+    }
+
 
     const handleMesage = (message, type = 'FAILED',) => {
         setMessage(message);
@@ -108,20 +133,6 @@ const Home = ({ navigation, route }) => {
         }, 5000);
     };
 
-    const logoutUser = async () => {
-        // await AsyncStorage.removeItem('@token');
-        // await AsyncStorage.removeItem('@user');
-        await dispatch(LOGOUT_USER())
-        clearAsyncStorage();
-        console.log("izlogovaaaaaaaaaaaaaaaaaaaaan")
-        console.log("------------------------------")
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 0,
-                routes: [{ name: 'Login' }],
-            })
-        )
-    }
 
     useEffect(() => {
         const fetchUserFromStorage = async () => {
@@ -139,7 +150,6 @@ const Home = ({ navigation, route }) => {
         };
 
         fetchUserFromStorage();
-        console.log("ODRADIO UPIS U REDUX STEJT")
     }, [changedSocialState]);
 
     useEffect(() => {
@@ -243,7 +253,7 @@ const Home = ({ navigation, route }) => {
                     const user = await AsyncStorage.getItem("@user");
 
                     if (!token) {
-                        handleMesage('Token nije dostupan.');
+                        handleMesage(translation.notAvailableToken[1]);
                         return;
                     }
                     const headers = {
@@ -272,7 +282,7 @@ const Home = ({ navigation, route }) => {
                         const userData = await response;
                         setMessageFor("image")
 
-                        handleMesage('IMAGE CHANGED SUCCESSFULLY !', "SUCCESS");
+                        handleMesage(translation.imageChanged[1], "SUCCESS");
                         await setChangedSocialState(!changedSocialState)
                     }
                     return response.data;
@@ -282,7 +292,7 @@ const Home = ({ navigation, route }) => {
                     handleMesage(message);
                 }
             } catch (error) {
-                console.error('Greška pri obradi slike:', error);
+                console.error(translation.anErrorOccured[1], error);
             }
         }
     };
@@ -292,7 +302,7 @@ const Home = ({ navigation, route }) => {
         const { facebookUrl, instagramUrl, phoneNumber } = userData
         if (facebookUrl === "" && instagramUrl === "" && phoneNumber === "") {
             setMessageFor('socials')
-            handleMesage("Unesi mreze")
+            handleMesage(translation.shareYourNetworks[2])
             return setSubmitting(false);
         }
         // return console.log("USER DATA", userData)
@@ -300,7 +310,7 @@ const Home = ({ navigation, route }) => {
             const token = await AsyncStorage.getItem("@token");
 
             if (!token) {
-                handleMesage('Token nije dostupan.');
+                handleMesage(translation.notAvailableToken[1]);
                 setSubmitting(false);
                 return;
             }
@@ -344,7 +354,7 @@ const Home = ({ navigation, route }) => {
 
                 await setChangedSocialState(!changedSocialState)
                 setMessageFor("socials")
-                handleMesage('Uspešno ažurirane mreže!', "SUCCESS");
+                handleMesage(translation.networksUpdatedSuccess[1], "SUCCESS");
                 console.log('ovo je log sa backenda =============>', currentUser);
             }
             setSubmitting(false);
@@ -354,7 +364,7 @@ const Home = ({ navigation, route }) => {
                 (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             setSubmitting(false);
 
-            handleMesage(message);
+            handleMesage(translation.anErrorOccured[1]);
 
         }
     }
@@ -365,7 +375,7 @@ const Home = ({ navigation, route }) => {
         setLoader(true);
         if (table === "") {
             setMessageFor('table')
-            handleMesage("Unesi tablicu")
+            handleMesage(translation.enterTable[1])
             return setLoader(false);
         }
         try {
@@ -373,7 +383,7 @@ const Home = ({ navigation, route }) => {
             const token = await AsyncStorage.getItem("@token");
 
             if (!token) {
-                handleMesage('Token nije dostupan.');
+                handleMesage(translation.notAvailableToken[1]);
                 setSubmitting(false);
                 return;
             }
@@ -406,7 +416,7 @@ const Home = ({ navigation, route }) => {
                 await AsyncStorage.setItem('@user', JSON.stringify(currentUser));
                 //======================== UPDATE ASYNCSTORAGE SA NOVI SOCIALS"
                 setMessageFor("table")
-                handleMesage('Uspešno ažurirana tablica!', "SUCCESS");
+                handleMesage(translation.tableUpdatedSuccess[1], "SUCCESS");
                 await dispatch(SET_USER(response.data));
 
                 await setChangedSocialState(!changedSocialState)
@@ -430,7 +440,7 @@ const Home = ({ navigation, route }) => {
             const token = await AsyncStorage.getItem("@token");
 
             if (!token) {
-                handleMesage('Token nije dostupan.');
+                handleMesage(translation.notAvailableToken[1]);
                 return;
             }
             const headers = {
@@ -441,9 +451,7 @@ const Home = ({ navigation, route }) => {
 
             const response = await axios.post(url, {}, { headers });
 
-            console.log("RESPONSEEEEEEEEEEEEEEEEEEEE=================================================EEEEEEEEEEEEEEEE", response)
             if (response.status === 200) {
-                console.log('Remove successfully', response.data);
                 setLoader(false);
 
                 // Učitavanje trenutnog korisnika iz AsyncStorage-a
@@ -467,7 +475,7 @@ const Home = ({ navigation, route }) => {
                 await AsyncStorage.setItem('@user', JSON.stringify(currentUser));
                 //======================== UPDATE ASYNCSTORAGE SA NOVI SOCIALS"
                 setMessageFor("removeNetworks")
-                handleMesage('Uspešno si uklonio mreže!', "SUCCESS");
+                handleMesage(translation.removedNetworksSuccess[1], "SUCCESS");
                 await dispatch(SET_USER(response.data));
 
                 await setChangedSocialState(!changedSocialState)
@@ -479,7 +487,7 @@ const Home = ({ navigation, route }) => {
             const message =
                 (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             setLoader(false);
-            handleMesage("Došlo je do greške prilikom brisanja mreža korisnika.");
+            handleMesage(translation.anErrorOccured[1]);
         }
     }
     return (
@@ -529,7 +537,7 @@ const Home = ({ navigation, route }) => {
                                     initialValues={{
                                         facebookUrl: "",
                                         instagramUrl: "",
-                                        phoneNumber: "Odaberi Pol",
+                                        phoneNumber: "",
 
                                     }}
                                     // onSubmit={(values, { setSubmitting, setFieldValue }) => {
@@ -544,7 +552,7 @@ const Home = ({ navigation, route }) => {
                                             <TouchableOpacity onPress={() => setShowInputs(!showInputs)}>
                                                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
                                                     <Octicons name={showInputs ? "triangle-up" : "triangle-down"} size={24} color={brand} />
-                                                    <ExtraText style={{ marginHorizontal: 10, backgroundColor: brand, padding: 7, color: "white", fontSize: 16, borderRadius: 8 }}>Podeli svoje mreže</ExtraText>
+                                                    <ExtraText style={{ marginHorizontal: 10, backgroundColor: brand, padding: 7, color: "white", fontSize: 16, borderRadius: 8 }}>{translation.shareYourNetworks[1]}</ExtraText>
                                                 </View>
                                             </TouchableOpacity>
 
@@ -572,7 +580,7 @@ const Home = ({ navigation, route }) => {
                                                         value={userData.instagram}
                                                     />
                                                     <MyTextInput
-                                                        label="Broj telefona"
+                                                        label={translation.phoneNumber[1]}
                                                         icon="phone"
                                                         placeholder="0601234567"
                                                         placeholderTextColor={darkLight}
@@ -589,7 +597,7 @@ const Home = ({ navigation, route }) => {
                                                     {!isSubmitting && (
                                                         <StyledButtonSocials onPress={handleSubmit} style={{ marginBottom: 30 }}>
                                                             {/* // <StyledButtonSocials disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
-                                                            <ButtonText>Ažuriraj mreže</ButtonText>
+                                                            <ButtonText>{translation.updateNetworks[1]}</ButtonText>
                                                         </StyledButtonSocials>
                                                     )}
 
@@ -617,7 +625,7 @@ const Home = ({ navigation, route }) => {
                                                     </StyledTextInputWithImage>
                                                     {!loader && (
                                                         <StyledButtonSocials onPress={updateTable} style={{ marginBottom: 30 }}>
-                                                            <ButtonText>Ažuriraj tablicu</ButtonText>
+                                                            <ButtonText>{translation.updateTable[1]}</ButtonText>
                                                         </StyledButtonSocials>
                                                     )}
 
@@ -636,18 +644,18 @@ const Home = ({ navigation, route }) => {
                                             {/* <Line /> */}
 
                                             <ProfileTextContainer>
-                                                <ProfileText>Tvoj Facebook Profil
+                                                <ProfileText>{translation.yourFacebookProfile[1]}
                                                 </ProfileText>
                                                 <SocialsValues>{currentUser.facebookUrl}</SocialsValues>
-                                                <ProfileText>Tvoj Instagram Profil </ProfileText>
+                                                <ProfileText>{translation.yourInstagramProfile[1]}</ProfileText>
                                                 <SocialsValues>{currentUser.instagramUrl}</SocialsValues>
-                                                <ProfileText>Tvoj Broj Telefona</ProfileText>
+                                                <ProfileText>{translation.yourPhoneNumber[1]}</ProfileText>
                                                 <SocialsValues>{currentUser.phoneNumber}</SocialsValues>
-                                                <ProfileText>Tvoja Tablica</ProfileText>
+                                                <ProfileText>{translation.yourTable[1]}</ProfileText>
                                                 <SocialsValues>{currentUser.table}</SocialsValues>
                                                 <TouchableOpacity onPress={removeNetworks}>
                                                     <View style={{ width: 150, paddingTop: 15 }}>
-                                                        <ExtraText style={{ marginHorizontal: 10, backgroundColor: search, padding: 9, color: "white", fontSize: 12, borderRadius: 8, textAlign: "center" }}>Ukloni svoje mreže</ExtraText>
+                                                        <ExtraText style={{ marginHorizontal: 10, backgroundColor: search, padding: 9, color: "white", fontSize: 12, borderRadius: 8, textAlign: "center" }}>{translation.removeYourNetworks[1]}</ExtraText>
                                                     </View>
                                                 </TouchableOpacity>
 

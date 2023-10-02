@@ -3,12 +3,145 @@
         "1": "Login"
     },
     "register": {
-        "1": "Register"
+        "1": "Register",
+        "2": "Register"
+    },
+    "emailLabel": {
+        "1": "Email Address"
+    },
+    "loginPasswordLabel": {
+        "1": "Password"
     },
     "forgotPassword": {
-        "1": "Forgot password?"
+        "1": "Forgot password ?"
     },
     "signInWithGoogle": {
         "1": "Signup with Google"
+    },
+    "notRegistered": {
+        "1": "Not registered ?"
+    },
+    "loginValidation": {
+        "1": "Enter Your Email and Password",
+        "2": "Please enter a valid Email"
+    },
+    "changePassword": {
+        "1": "Change Password",
+        "2": "Change Your Password"
+    },
+    "dontHaveAccYet": {
+        "1": "You don't have account?"
+    },
+    "enterEmailAddress": {
+        "1": "Enter Your Email"
+    },
+    "emailNotValid": {
+        "1": "Email is not valid"
+    },
+    "userNotFound": {
+        "1": "User not found"
+    },
+    "checkYourEmail": {
+        "1": "Check Your Email address"
+    },
+    "fillAllFields": {
+        "1": "Fil all fields"
+    },
+    "passwordsNotMatch": {
+        "1": "Passwords do not match"
+    },
+    "name": {
+        "1": "Name"
+    },
+    "password": {
+        "1": "Password"
+    },
+    "repeatPassword": {
+        "1": "Repeat Password"
+    },
+    "allreadyHaveAcc": {
+        "1": "Allready have an account ?"
+    },
+    "passwordMustBe6": {
+        "1": "Password must be up to 6 characters"
+    },
+    "verifyEmail": {
+        "1": " Please verify your email, PIN has been sent to your email!"
+    },
+    "wrongPin": {
+        "1": "Wrong PIN, try again!"
+    },
+    "enterFullPin": {
+        "1": "Enter full PIN!"
+    },
+    "anErrorOccured": {
+        "1": "An error occurred, please try again!"
+    },
+    "resetPasswordSuccesfully": {
+        "1": "Password Reset succesfully"
+    },
+    "changePasswordCodeSent": {
+        "1": "Verification code has been sent, check Your Email"
+    },
+    "verifyCode": {
+        "1": "Verification code"
+    },
+    "newPassword": {
+        "1": "New Password"
+    },
+    "yourCode": {
+        "1": "Your code"
+    },
+    "change": {
+        "1": "Change"
+    },
+    "resendCode": {
+        "1": "Resend code"
+    },
+    "notAvailableToken": {
+        "1": "Token is not available"
+    },
+    "imageChanged": {
+        "1": "Image changed successfully"
+    },
+    "networksUpdatedSuccess": {
+        "1": "Networks updated successfully!"
+    },
+    "enterTable": {
+        "1": "Enter Your table"
+    },
+    "yourTable": {
+        "1": "Your car table"
+    },
+    "tableUpdatedSuccess": {
+        "1": "Table updated successfully!"
+    },
+    "removedNetworksSuccess": {
+        "1": "You have successfully removed the networks !"
+    },
+    "shareYourNetworks": {
+        "1": "Share Your networks",
+        "2": "Enter networks"
+    },
+    "phoneNumber": {
+        "1": "Phone Number"
+    },
+    "updateNetworks": {
+        "1": "Update Your Networks"
+    },
+    "updateTable": {
+        "1": "Update Car Table"
+    },
+    "yourFacebookProfile": {
+        "1": "Yoru Facebook Profile"
+    },
+    "yourInstagramProfile": {
+        "1": "Yoru Instagram Profile"
+    },
+    "yourPhoneNumber": {
+        "1": "Yoru Phone Number"
+    },
+    "removeYourNetworks": {
+        "1": "Yoru Phone Number"
     }
 }

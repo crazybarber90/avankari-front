@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { View, ActivityIndicator, Platform, Text, Button, TouchableOpacity } from 'react-native';
+import { View, ActivityIndicator, Platform, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { validateEmail } from '../assets/utills/MailValidator';
 import { handleGoogleSignup } from '../assets/utills/handleSignup';
@@ -8,7 +8,6 @@ import * as Google from 'expo-auth-session/providers/google';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BackHandler } from 'react-native';
 import { SET_LANGUAGE } from '../redux/features/translationSlice';
-
 
 //formik
 import { Formik } from 'formik';
@@ -40,18 +39,17 @@ import {
 import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 import { SET_USER } from '../redux/features/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
+
 // Destructured colors from 1st prop Colors from style
 const { brand, darkLight, primary } = Colors;
 
-// Keyboard Avoiding view
-// import * as Google from 'expo-google-app-auth';
 const Login = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [message, setMessage] = useState();
   const [messageType, setMessageType] = useState();
   const [myToken, setMyToken] = useState(null);
-  const [disabled, setDisabled] = useState(false);
   const dispatch = useDispatch()
+  const [currentLang, setCurrentLang] = useState()
 
   const translation = useSelector((state) => state.translation.messages)
 
@@ -65,22 +63,30 @@ const Login = ({ navigation }) => {
     scopes: ['openid', 'profile', 'email']
   });
 
+  // console.log("CURRENT LANG", currentLang)
+  // const keys = AsyncStorage.getAllKeys();
+  // console.log("KEYYYYSSSS", keys)
+
+
   // UCITAVANJE ODABRANOG JEZIKA 
   useEffect(() => {
+    console.log("UISAOOOO")
     const getSelectedLanguage = async () => {
       try {
         const selectedLanguage = await AsyncStorage.getItem('selectedLanguage');
         if (selectedLanguage) {
-          // Postavi jezik u Redux store
           dispatch(SET_LANGUAGE({ locale: selectedLanguage }));
+          setCurrentLang(selectedLanguage);
         }
+        // else {
+        //   dispatch(SET_LANGUAGE({ locale: "srp" }));
+        // }
       } catch (error) {
         console.error('Error reading selected language from AsyncStorage:', error);
       }
     };
     getSelectedLanguage();
   }, [dispatch]);
-
 
   // Whenever response changed, run this function
   // Response will triger useEffect, useEffect will try to get the user info if "success" , getrUserInfo, save localy to state
@@ -98,7 +104,6 @@ const Login = ({ navigation }) => {
 
 
   //===================================>>> DEVICE'S BACK DOESN'T WORK, IF PRESS X2, EXIT FROM APP
-
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       // Onemogućite funkcionalnost "back" dugmeta samo ako ste na ekranu za prijavljivanje
@@ -127,8 +132,6 @@ const Login = ({ navigation }) => {
       // const user = await AsyncStorage.getItem('@user');
       // const token = await AsyncStorage.getItem('@token');
 
-      // console.log("LOGIRANJEEEEEEEEEEEEEEEE IZ HANDLESIGNUP Response type: success");
-
       try {
         // const idToken = response.authentication.idToken;
         const userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
@@ -140,9 +143,6 @@ const Login = ({ navigation }) => {
         if (userInfoResponse.ok) {
           const userInfo = await userInfoResponse.json();
 
-          // console.log("USER INFO IZ GOOGLE SIGINI", userInfo)
-
-
           // Call the handleSignup function to register or login the user with the obtained userInfo
           const signupResponse = await handleGoogleSignup({
             authentication: response.authentication,
@@ -152,10 +152,6 @@ const Login = ({ navigation }) => {
               photo: userInfo.picture,
             },
           });
-
-          // await console.log("(((((((((((***************signupRESPONSE", signupResponse)
-
-          // Navigate to the Welcome screen or handle it as needed
 
           // OVDE JE signupResponse return funkcije handleGoogleSignup = response usera iz baze
           if (userInfo) {
@@ -234,7 +230,13 @@ const Login = ({ navigation }) => {
       const message =
         (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
       setSubmitting(false);
-      handleMesage(message);
+      try {
+        const errorResponse = JSON.parse(message);
+        const errorMessage = currentLang === 'en' ? errorResponse.eng : errorResponse.srp;
+        await handleMesage(errorMessage);
+      } catch (parseError) {
+        await handleMesage('Server Error');
+      }
     }
   };
 
@@ -248,22 +250,48 @@ const Login = ({ navigation }) => {
       {/* <StyledContainer> */}
       <>
 
-        <View style={{ position: "absolute", top: 30, right: 30 }}>
-          <TouchableOpacity style={{ marginBottom: 40, backgroundColor: brand, paddingHorizontal: 11, paddingVertical: 7, color: primary, borderRadius: 5 }}
+        {/* CHANGE LANGUAGES FLAGS */}
+        <View style={{ position: "absolute", top: 20, right: -30 }}>
+
+          {currentLang === "en" && <TouchableOpacity
+            style={{ color: primary, width: 100, height: 100, textAlign: "left" }}
             onPress={() => {
               dispatch(SET_LANGUAGE({ locale: 'srp' }));
+              setCurrentLang('srp')
+
             }}
           >
-            <Text>Srp</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ backgroundColor: brand, paddingHorizontal: 11, paddingVertical: 7, color: primary, borderRadius: 5 }}
+            <ImageBackground
+              source={require('../assets/img/srbFlag.png')}
+              style={{
+                width: '55%',
+                height: '50%',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={{ color: brand, marginTop: 20, textAlign: "left", fontFamily: CustomFont, fontSize: 12 }}>Srb</Text>
+            </ImageBackground>
+          </TouchableOpacity>}
+
+          {currentLang === "srp" && <TouchableOpacity
+            style={{ color: primary, width: 100, height: 100, textAlign: "left" }}
             onPress={() => {
               dispatch(SET_LANGUAGE({ locale: 'en' }));
+              setCurrentLang('en')
             }}
           >
-            <Text>En</Text>
-          </TouchableOpacity>
+            <ImageBackground
+              source={require('../assets/img/engFlag.png')}
+              style={{
+                width: '55%',
+                height: '50%',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={{ color: brand, marginTop: 20, textAlign: "left", fontFamily: CustomFont, fontSize: 12 }}>Eng</Text>
+            </ImageBackground>
+          </TouchableOpacity>}
+
         </View>
 
         <StatusBar style="dark" />
@@ -277,12 +305,12 @@ const Login = ({ navigation }) => {
             onSubmit={(values, { setSubmitting }) => {
 
               if (values.email == '' || values.password == '') {
-                handleMesage('Please fill all the fields');
+                handleMesage(translation.loginValidation[1]);
                 // setDisabled(true)
                 setSubmitting(false);
               } else if (!validateEmail(values.email)) {
                 setSubmitting(false);
-                return handleMesage('Please enter a valid email');
+                return handleMesage(translation.loginValidation[2]);
               } else {
                 handleLogin(values, setSubmitting);
               }
@@ -293,7 +321,7 @@ const Login = ({ navigation }) => {
                 {/* EMAIL INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Email Adresa"
+                  label={translation.emailLabel[1]}
                   icon="mail"
                   placeholder="petar@gmail.com"
                   placeholderTextColor={darkLight}
@@ -305,7 +333,7 @@ const Login = ({ navigation }) => {
                 {/* PASSWORD INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Lozinka"
+                  label={translation.loginPasswordLabel[1]}
                   icon="lock"
                   placeholder="* * * * * * *"
                   placeholderTextColor={darkLight}
@@ -338,7 +366,7 @@ const Login = ({ navigation }) => {
 
                 <ExtraView>
                   <TextLink onPress={() => navigation.navigate('ForgotPassword')}>
-                    <TextLinkContent>Zaboravio si šifru ?</TextLinkContent>
+                    <TextLinkContent>{translation.forgotPassword[1]}</TextLinkContent>
                   </TextLink>
                 </ExtraView>
 
@@ -347,15 +375,15 @@ const Login = ({ navigation }) => {
 
                 <StyledButton google={true} onPress={() => promptAsync({ showInRecents: true })}>
                   <Fontisto name="google" color={primary} size={25} />
-                  <ButtonText google={true}>Sign in with Google</ButtonText>
+                  <ButtonText google={true}>{translation.signInWithGoogle[1]}</ButtonText>
                 </StyledButton>
 
 
                 {/* DON'T HAVE AN ACCOUNT ALLREADY ?????? */}
                 <ExtraView>
-                  <ExtraText>Nisi registrovan?</ExtraText>
+                  <ExtraText>{translation.notRegistered[1]}</ExtraText>
                   <TextLink onPress={() => navigation.navigate('Signup')}>
-                    <TextLinkContent>Registruj se</TextLinkContent>
+                    <TextLinkContent>{translation.register[1]}</TextLinkContent>
                   </TextLink>
                 </ExtraView>
               </StyledFormArea>

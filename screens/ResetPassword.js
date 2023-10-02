@@ -37,6 +37,7 @@ const { brand, darkLight, primary } = Colors;
 
 
 function ResetPasswordScreen({ navigation, route }) {
+    const translation = useSelector((state) => state.translation.messages);
     // const { token } = route.params; // Dobijanje tokena iz URL-a ili navigacije
     const resendEmail = useSelector(selectEmail)
     const [hidePassword, setHidePassword] = useState(true);
@@ -73,7 +74,7 @@ function ResetPasswordScreen({ navigation, route }) {
             });
 
             if (response.data.success) {
-                handleMesage2('Password Reset succesfully');
+                handleMesage2(translation.resetPasswordSuccesfully[1]);
                 setTimeout(() => {
                     navigation.navigate('Login');
                 }, 1500)
@@ -104,15 +105,15 @@ function ResetPasswordScreen({ navigation, route }) {
                 }
             }).then((response) => {
                 if (response.data.success) {
-                    handleMesage('Verfikacion kod je ponovo poslat, proveri svoj email!', "SUCCESS");
+                    handleMesage(translation.changePasswordCodeSent[1], "SUCCESS");
                     setIsButtonDisabled(true)
                 } else {
-                    handleMesage('Greška pri slanju verifikacionog koda, pokušaj kasnije');
+                    handleMesage(translation.anErrorOccured[1]);
                 }
             })
         } catch (error) {
             console.error(error)
-            handleMesage('Greška pri slanju verifikacionog koda, pokušaj kasnije');
+            handleMesage(translation.anErrorOccured[1]);
         }
     };
 
@@ -123,7 +124,7 @@ function ResetPasswordScreen({ navigation, route }) {
                 <StyledContainer style={{ width: 400, alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: 50, backgroundColor: 'transparent' }}>
                     <StatusBar style="dark" />
                     <Text style={{ marginBottom: 50, fontSize: 26, color: brand, fontFamily: CustomFont }}>
-                        Promena Lozinke
+                        {translation.changePassword[2]}
                     </Text>
                     <InnerContainer>
                         <Formik
@@ -132,10 +133,10 @@ function ResetPasswordScreen({ navigation, route }) {
 
                                 if (values.newPassword == '' || values.confirmPassword == '' || values.code == '') {
                                     setSubmitting(false);
-                                    return handleMesage('Popuni sva polja');
+                                    return handleMesage(translation.fillAllFields[1]);
                                 } else if (values.newPassword !== values.confirmPassword) {
                                     setSubmitting(false);
-                                    return handleMesage('Šifre se ne podudaraju');
+                                    return handleMesage(translation.passwordsNotMatch[1]);
                                 } else {
                                     handleSubmitReset(values, setSubmitting);
                                 }
@@ -146,9 +147,9 @@ function ResetPasswordScreen({ navigation, route }) {
                                     {/* EMAIL INPUT */}
                                     <MyTextInput
                                         style={{ fontFamily: CustomFont }}
-                                        label="Verifikacioni kod"
+                                        label={translation.verifyCode[1]}
                                         icon="mail"
-                                        placeholder="Vaš kod"
+                                        placeholder={translation.yourCode[1]}
                                         placeholderTextColor={darkLight}
                                         onChangeText={handleChange('code')}
                                         onBlur={handleBlur('code')}
@@ -160,7 +161,7 @@ function ResetPasswordScreen({ navigation, route }) {
                                     {/* PASSWORD INPUT */}
                                     <MyTextInput
                                         style={{ fontFamily: CustomFont }}
-                                        label="Nova Šifra"
+                                        label={translation.newPassword[1]}
                                         icon="lock"
                                         placeholder="* * * * * * *"
                                         placeholderTextColor={darkLight}
@@ -175,7 +176,7 @@ function ResetPasswordScreen({ navigation, route }) {
                                     {/* PASSWORD INPUT */}
                                     <MyTextInput
                                         style={{ fontFamily: CustomFont }}
-                                        label="Ponovi Šifru"
+                                        label={translation.repeatPassword[1]}
                                         icon="lock"
                                         placeholder="* * * * * * *"
                                         placeholderTextColor={darkLight}
@@ -194,7 +195,7 @@ function ResetPasswordScreen({ navigation, route }) {
                                     {!isSubmitting && (
                                         // <StyledButton onPress={handleSubmitReset}>
                                         <StyledButton onPress={handleSubmit}>
-                                            <ButtonText>Promeni</ButtonText>
+                                            <ButtonText>{translation.change[1]}</ButtonText>
                                         </StyledButton>
                                     )}
 
@@ -208,8 +209,8 @@ function ResetPasswordScreen({ navigation, route }) {
                         </Formik>
                         <ExtraView>
                             <TextLink>
-                                <TextLinkContent style={{ margin: 20, opacity: isButtonDisabled ? 0.5 : 1, }} onPress={handleResendCode}>Pošalj kod ponovo</TextLinkContent>
-                                <TextLinkContent onPress={() => navigation.navigate('Login')}>Uloguj se</TextLinkContent>
+                                <TextLinkContent style={{ margin: 20, opacity: isButtonDisabled ? 0.5 : 1, }} onPress={handleResendCode}>{translation.resendCode[1]}</TextLinkContent>
+                                <TextLinkContent onPress={() => navigation.navigate('Login')}>{translation.login[1]}</TextLinkContent>
                             </TextLink>
                         </ExtraView>
                     </InnerContainer>

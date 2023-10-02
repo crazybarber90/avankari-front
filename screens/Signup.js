@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { validateEmail } from '../assets/utills/MailValidator';
@@ -15,7 +16,6 @@ import { Octicons, Ionicons, Fontisto } from '@expo/vector-icons';
 import {
   CustomFont,
   Colors,
-  StyledContainer,
   InnerContainer,
   PageTitle,
   SubTitle,
@@ -41,6 +41,7 @@ const { brand, darkLight, primary } = Colors;
 // import DateTimePicker from '@react-native-community/datetimepicker';
 
 const Signup = ({ navigation }) => {
+  const translation = useSelector((state) => state.translation.messages);
   const [hidePassword, setHidePassword] = useState(true);
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState();
@@ -82,7 +83,7 @@ const Signup = ({ navigation }) => {
         <InnerContainer style={{ flex: 1, alignItems: "center", paddingTop: 40 }}>
           {/* LOGO ON START SCREEN */}
           <PageTitle>Avankari</PageTitle>
-          <SubTitle>Registracija</SubTitle>
+          <SubTitle>{translation.register[2]}</SubTitle>
 
           {/* DATE PICKER CALENDAR COMPONENT */}
           {show && (
@@ -96,14 +97,17 @@ const Signup = ({ navigation }) => {
               // values = {...values, dateOfBirth: dob};
               // console.log('VALUES', values);
               if (values.email == '' || values.name == '' || values.password == '' || values.confirmPassword == '') {
-                handleMesage('Popuni sva polja');
+                handleMesage(translation.fillAllFields[1]);
                 setSubmitting(false);
               } else if (!validateEmail(values.email)) {
                 setSubmitting(false);
-                return handleMesage('Unesi validan Email');
+                return handleMesage(translation.emailNotValid[1]);
               } else if (values.password !== values.confirmPassword) {
                 setSubmitting(false);
-                return handleMesage('Šifre se ne podudaraju');
+                return handleMesage(translation.passwordsNotMatch[1]);
+              } else if (values.password.length < 6) {
+                setSubmitting(false);
+                return handleMesage(translation.passwordMustBe6[1]);
               } else {
                 handleSignup(values, setSubmitting);
               }
@@ -114,7 +118,7 @@ const Signup = ({ navigation }) => {
                 {/* EMAIL INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont, }}
-                  label="Email Adresa"
+                  label={translation.emailLabel[1]}
                   icon="mail"
                   placeholder="Petar@gmail.com"
                   placeholderTextColor={darkLight}
@@ -126,7 +130,7 @@ const Signup = ({ navigation }) => {
                 {/* FULL NAME INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Ime"
+                  label={translation.name[1]}
                   icon="person"
                   placeholder="Petar"
                   placeholderTextColor={darkLight}
@@ -152,7 +156,7 @@ const Signup = ({ navigation }) => {
                 {/* PASSWORD INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Lozinka"
+                  label={translation.password[1]}
                   icon="lock"
                   placeholder="* * * * * * *"
                   placeholderTextColor={darkLight}
@@ -168,7 +172,7 @@ const Signup = ({ navigation }) => {
                 {/* PASSWORD INPUT 2 */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Potvrod Lozinku"
+                  label={translation.repeatPassword[1]}
                   icon="lock"
                   placeholder="* * * * * * *"
                   placeholderTextColor={darkLight}
@@ -187,7 +191,7 @@ const Signup = ({ navigation }) => {
                 {/* LOGIN BUTTON */}
                 {!isSubmitting && (
                   <StyledButton onPress={handleSubmit}>
-                    <ButtonText>Registruj se</ButtonText>
+                    <ButtonText>{translation.register[1]}</ButtonText>
                   </StyledButton>
                 )}
 
@@ -202,9 +206,9 @@ const Signup = ({ navigation }) => {
 
                 {/* DON'T HAVE AN ACCOUNT ALLREADY ?????? */}
                 <ExtraView>
-                  <ExtraText>Već imaš nalog ?</ExtraText>
+                  <ExtraText>{translation.allreadyHaveAcc[1]}</ExtraText>
                   <TextLink onPress={() => navigation.navigate('Login')}>
-                    <TextLinkContent>Uloguj se</TextLinkContent>
+                    <TextLinkContent>{translation.login[1]}</TextLinkContent>
                   </TextLink>
                 </ExtraView>
               </StyledFormArea>

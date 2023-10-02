@@ -3,12 +3,145 @@
         "1": "Uloguj se"
     },
     "register": {
-        "1": "Registruj se"
+        "1": "Registruj se",
+        "2": "Registracija"
+    },
+    "emailLabel": {
+        "1": "Email Adresa"
+    },
+    "loginPasswordLabel": {
+        "1": "Lozinka"
     },
     "forgotPassword": {
-        "1": "Zaboravio si lozinku?"
+        "1": "Zaboravio si lozinku ?"
     },
     "signInWithGoogle": {
-        "1": "Uloguj se sa Google nalogom"
+        "1": "Pristupi sa Google nalogom"
+    },
+    "notRegistered": {
+        "1": "Nisi Registrovan ?"
+    },
+    "loginValidation": {
+        "1": "Unesi svoj Email i šifru",
+        "2": "Email nije validan"
+    },
+    "changePassword": {
+        "1": "Promeni Lozinku",
+        "2": "Promena Lozinke"
+    },
+    "dontHaveAccYet": {
+        "1": "Nemaš nalog ?"
+    },
+    "enterEmailAddress": {
+        "1": "Unesi Email Adresu"
+    },
+    "emailNotValid": {
+        "1": "Email nije validan"
+    },
+    "userNotFound": {
+        "1": "Korisnik nije pronadjen"
+    },
+    "checkYourEmail": {
+        "1": "Proveri Svoju Email Adresu"
+    },
+    "fillAllFields": {
+        "1": "Popuni sva polja"
+    },
+    "passwordsNotMatch": {
+        "1": "Šifre se ne podudaraju"
+    },
+    "name": {
+        "1": "Ime"
+    },
+    "password": {
+        "1": "Lozinka"
+    },
+    "repeatPassword": {
+        "1": "Ponovi Lozinku"
+    },
+    "allreadyHaveAcc": {
+        "1": "Već imaš nalog ?"
+    },
+    "passwordMustBe6": {
+        "1": "Lozinka mora imati najmanje 6 karaktera"
+    },
+    "verifyEmail": {
+        "1": "Verifikuj svoj nalog, PIN ti je poslat na Email adresu"
+    },
+    "wrongPin": {
+        "1": "Pogrešan PIN, pokušaj ponovo!"
+    },
+    "enterFullPin": {
+        "1": "Unesi ceo PIN!"
+    },
+    "anErrorOccured": {
+        "1": "Došlo je do kreške, pokušaj ponovo!"
+    },
+    "resetPasswordSuccesfully": {
+        "1": "Šifra je uspešno promenjena"
+    },
+    "changePasswordCodeSent": {
+        "1": "Verifikacion kod je poslat, proveri svoj Email"
+    },
+    "verifyCode": {
+        "1": "Verifikacion kod"
+    },
+    "newPassword": {
+        "1": "Nova Šifra"
+    },
+    "yourCode": {
+        "1": "Tvoj kod"
+    },
+    "change": {
+        "1": "Promeni"
+    },
+    "resendCode": {
+        "1": "Pošalji kod ponovo"
+    },
+    "notAvailableToken": {
+        "1": "Token nije dostupan"
+    },
+    "imageChanged": {
+        "1": "Uspešno izmenjena slika"
+    },
+    "networksUpdatedSuccess": {
+        "1": "Uspešno ažurirane mreže!"
+    },
+    "enterTable": {
+        "1": "Unesi svoju tablicu"
+    },
+    "yourTable": {
+        "1": "Tvoja tablica"
+    },
+    "tableUpdatedSuccess": {
+        "1": "Uspešno ažurirana tablica"
+    },
+    "removedNetworksSuccess": {
+        "1": "Uspešno si uklonio mreže!"
+    },
+    "shareYourNetworks": {
+        "1": "Podeli svoje mreže"
+    },
+    "phoneNumber": {
+        "1": "Broj Telefona"
+    },
+    "updateNetworks": {
+        "1": "Ažuriraj svoje mreže",
+        "2": "Unesi mreže"
+    },
+    "updateTable": {
+        "1": "Ažuriraj tablicu"
+    },
+    "yourFacebookProfile": {
+        "1": "Tvoj Facebook Profil"
+    },
+    "yourInstagramProfile": {
+        "1": "Tvoj Instagram Profil"
+    },
+    "yourPhoneNumber": {
+        "1": "Tvoj Broj Telefona"
+    },
+    "removeYourNetworks": {
+        "1": "Ukloni svoje mreže"
     }
 }

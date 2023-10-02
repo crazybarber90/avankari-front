@@ -38,6 +38,8 @@ import KeyboardAvoidingWrapper from '../components/KeyboardAvoidingWrapper';
 const { brand, darkLight, primary } = Colors;
 
 const ForgotPassword = ({ navigation }) => {
+  const translation = useSelector((state) => state.translation.messages);
+
   const [message, setMessage] = useState();
   const [messageType, setMessageType] = useState();
   const dispatch = useDispatch();
@@ -53,16 +55,16 @@ const ForgotPassword = ({ navigation }) => {
       });
       if (response.data.success) {
         dispatch(SET_EMAIL(email));
-        await handleMesage('Proveri svoju email adresu', "SUCCESS");
+        await handleMesage(translation.checkYourEmail[1], "SUCCESS");
         setTimeout(() => {
           navigation.navigate('ResetPassword'); // Šaljemo token kao parametar
         }, 3000)
 
       } else {
-        await handleMesage('Korisnik nije pronadjen!');
+        await handleMesage(translation.userNotFound[1]);
       }
     } catch (error) {
-      await handleMesage('Korisnik nije pronadjen!');
+      await handleMesage(translation.userNotFound[1]);
       console.error(error);
     }
   };
@@ -92,11 +94,11 @@ const ForgotPassword = ({ navigation }) => {
             initialValues={{ email: '' }}
             onSubmit={async (values, { setSubmitting }) => {
               if (values.email === '') {
-                handleMesage('Unesi email adresu');
+                handleMesage(translation.enterEmailAddress[1]);
                 setSubmitting(false);
               } else if (!validateEmail(values.email)) {
                 setSubmitting(false);
-                handleMesage('Tip adrese nije validan');
+                handleMesage(translation.emailNotValid[1]);
               } else {
                 handleResetPassword(values);
                 // await handleMesage('PROVERITE VAŠU EMAIL ADRESU!!!', "SUCCESS");
@@ -108,7 +110,7 @@ const ForgotPassword = ({ navigation }) => {
                 {/* EMAIL INPUT */}
                 <MyTextInput
                   style={{ fontFamily: CustomFont }}
-                  label="Email Addresa"
+                  label={translation.emailLabel[1]}
                   icon="mail"
                   placeholder="petar@gmail.com"
                   placeholderTextColor={darkLight}
@@ -127,7 +129,7 @@ const ForgotPassword = ({ navigation }) => {
                 {/* LOGIN BUTTON */}
                 {!isSubmitting && (
                   <StyledButton onPress={handleSubmit}>
-                    <ButtonText>Promeni lozinku</ButtonText>
+                    <ButtonText>{translation.changePassword[1]}</ButtonText>
                   </StyledButton>
                 )}
 
@@ -139,9 +141,9 @@ const ForgotPassword = ({ navigation }) => {
 
                 {/* DON'T HAVE AN ACCOUNT ALREADY ?????? */}
                 <ExtraView>
-                  <ExtraText>Nemaš nalog?</ExtraText>
+                  <ExtraText>{translation.dontHaveAccYet[1]}</ExtraText>
                   <TextLink onPress={() => navigation.navigate('Signup')}>
-                    <TextLinkContent>Registruj se</TextLinkContent>
+                    <TextLinkContent>{translation.register[1]}</TextLinkContent>
                   </TextLink>
                 </ExtraView>
               </StyledFormArea>

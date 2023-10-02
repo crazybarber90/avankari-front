@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, KeyboardAvoidingView, Dimensions, TouchableOpacity, Keyboard } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import { useSelector } from 'react-redux';
 import {
     Colors, MsgBox,
 } from '../components/styles';
@@ -27,7 +27,7 @@ const isObjValid = (obj) => {
 const { brand, darkLight, primary } = Colors;
 
 const Verification = ({ route, navigation }) => {
-
+    const translation = useSelector((state) => state.translation.messages);
     // const dispatch = useDispatch()
     const [message, setMessage] = useState();
     const [messageType, setMessageType] = useState();
@@ -90,14 +90,14 @@ const Verification = ({ route, navigation }) => {
                     }, 1500);
                 } else {
                     // If res is not defined or res.success is not true
-                    handleMesage(res ? res.message : "Pogrešan pin, pokušaj ponovo");
+                    handleMesage(res ? res.message : translation.wrongPin[1]);
                 }
             } catch (error) {
                 console.error("Error in submitOTP:", error);
-                handleMesage("An error occurred while verifying the email. Please try again");
+                handleMesage(translation.anErrorOccured[1]);
             }
         } else {
-            handleMesage("Unesi ceo pin");
+            handleMesage(translation.enterFullPin[1]);
         }
     }
 
@@ -107,7 +107,7 @@ const Verification = ({ route, navigation }) => {
 
     return <KeyboardAvoidingView style={styles.container}>
         <Text style={styles.heading}>
-            Please verify your email, PIN has been sent to your email!
+            {translation.verifyEmail[1]}
         </Text>
         <View style={styles.otpContainer}>
             {inputs.map((inp, index) => {
