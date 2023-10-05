@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import React from 'react'
 import {
     Card,
@@ -11,7 +12,8 @@ import {
 
 
 const SearchItem = ({ navigation, singleUser }) => {
-    console.log("SEARCHITEEEEEEM", singleUser)
+    const translation = useSelector((state) => state.translation.messages);
+
     // if (!singleUser) {
     //     return null; // ili neki drugi fallback UI element
     // }
@@ -23,8 +25,8 @@ const SearchItem = ({ navigation, singleUser }) => {
                 progressiveRenderingEnabled={true} // Ovo omogućava postepeno učitavanje slike
             />
             <TextBoldStyle>{singleUser.name}</TextBoldStyle>
-            <TextNormalStyle><Span>U gradu :</Span> {singleUser.city}</TextNormalStyle>
-            <TextNormalStyle><Span>Lokacija :</Span>  {singleUser.currentPlace}</TextNormalStyle>
+            <TextNormalStyle><Span>{translation.inCity[1]}</Span> {singleUser.city}</TextNormalStyle>
+            <TextNormalStyle><Span>{translation.location[1]}</Span>  {singleUser.currentPlace}</TextNormalStyle>
         </Card>
     )
 }

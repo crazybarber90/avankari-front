@@ -143,5 +143,131 @@
     },
     "removeYourNetworks": {
         "1": "Yoru Phone Number"
+    },
+    "firstLetter": {
+        "1": "B"
+    },
+    "restLetters": {
+        "1": "ECOME"
+    },
+    "beAvailable": {
+        "1": "STAY AVAILABLE"
+    },
+    "eG": {
+        "1": "e.g."
+    },
+    "city": {
+        "1": "City *",
+        "2": "City"
+    },
+    "currentPlace": {
+        "1": "Place *",
+        "2": "Place"
+    },
+    "genderLabel": {
+        "1": "Gender"
+    },
+    "gender": {
+        "1": "Select Gender",
+        "2": "Male",
+        "3": "Female"
+    },
+    "hairLabel": {
+        "1": "Hair Color"
+    },
+    "hair": {
+        "1": "Select Hair Color",
+        "2": "Brown",
+        "3": "Black",
+        "4": "Blond",
+        "5": "Red"
+    },
+    "eyesLabel": {
+        "1": "Eyes Color"
+    },
+    "eyes": {
+        "1": "Select Eyes Color",
+        "2": "Blue",
+        "3": "Green",
+        "4": "Brown",
+        "5": "Black"
+    },
+    "shoesLabel": {
+        "1": "Shoes"
+    },
+    "shoes": {
+        "1": "Select Shoes",
+        "2": "Sneakers",
+        "3": "Shoes",
+        "4": "Boots",
+        "5": "Sandals",
+        "6": "Slippers",
+        "7": "Ballet flats"
+    },
+    "upperWardrobeLabel": {
+        "1": "Upper Wardrobe"
+    },
+    "upperWardrobe": {
+        "1": "Select Upper Wardrobe",
+        "2": "T-shirt",
+        "3": "Hoodie",
+        "4": "Tracksuit Top",
+        "5": "Sweater",
+        "6": "Blouse",
+        "7": "Shusher",
+        "8": "Jacket",
+        "9": "Coat"
+    },
+    "lowerWardrobeLabel": {
+        "1": "Lower Wardrobe"
+    },
+    "lowerWardrobe": {
+        "1": "Select Lower Wardrobe",
+        "2": "Shorts",
+        "3": "Sweat suit",
+        "4": "Jeans",
+        "5": "Pants",
+        "6": "Dress",
+        "7": "A skirt"
+    },
+    "save": {
+        "1": "SAVE"
+    },
+    "fillAllRequiredFields": {
+        "1": "Fill in the mandatory fields marked with *"
+    },
+    "findAvankariViaTable": {
+        "1": "Find Avankari via table"
+    },
+    "findAvankariViaAppearance": {
+        "1": "Find Avankari by appearance"
+    },
+    "egTable": {
+        "1": "e.g. De1234dg"
+    },
+    "search": {
+        "1": "Search"
+    },
+    "cityAndPlaceAreMandatory": {
+        "1": "City and Place are required fields!"
+    },
+    "inCity": {
+        "1": "In City :"
+    },
+    "location": {
+        "1": "Location :"
+    },
+    "reportProblemToAdmin": {
+        "1": "Report Problem"
+    },
+    "enterText": {
+        "1": "Enter text",
+        "2": "Enter message"
+    },
+    "wait1hourProblemReport": {
+        "1": "You must wait at least 1 hour before reporting the problem again!"
+    },
+    "atleast10characters": {
+        "1": "The message must have a minimum of 10 characters!"
     }
 }

@@ -40,6 +40,7 @@ import {
 import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper';
 const { brand, darkLight, primary, search } = Colors;
 const UserProfile = ({ navigation, route }) => {
+    const translation = useSelector((state) => state.translation.messages);
 
     const [messageType, setMessageType] = useState();
     const [message, setMessage] = useState();
@@ -61,34 +62,22 @@ const UserProfile = ({ navigation, route }) => {
         }, 5000);
     };
 
-    // console.log("TOKEN IZ USER DETAILS", token)
     const handleUpdateUser = async (credentials, setSubmitting) => {
 
-        // setSubmitting(true);
-        // const filterValues = (obj) => {
-        //     const filtered = {};
-        //     for (const key in obj) {
-        //         if (!obj[key].startsWith(`Odaberi`)) {
-        //             filtered[key] = obj[key];
-        //         }
-        //     }
-        //     return filtered;
-        // };
         const filterValues = (obj) => {
             const filtered = {};
             for (const key in obj) {
-                if (obj[key].toLowerCase() !== "odaberi" && !obj[key].toLowerCase().startsWith("odaberi")) {
-                    filtered[key] = obj[key].toLowerCase();
+                const lowerCaseValue = obj[key].toLowerCase();
+                if (!(lowerCaseValue === "odaberi" || lowerCaseValue.startsWith("odaberi")) &&
+                    !(lowerCaseValue === "select" || lowerCaseValue.startsWith("select"))) {
+                    filtered[key] = lowerCaseValue;
                 }
             }
             return filtered;
         };
 
-
         const filteredCredentials = filterValues(credentials);
 
-        // console.log("FLITRIRANIKREDENCIJALI IZ SEARCH", filteredCredentials)
-        // console.log("KREDENCIJALI IZ SEARCH", credentials)
         try {
             setSubmitting(false)
             const token = await AsyncStorage.getItem("@token");
@@ -108,15 +97,8 @@ const UserProfile = ({ navigation, route }) => {
             const response = await axios.post(url, filteredCredentials, { headers });
 
             if (response.status === 200) {
-                console.log("------------------------------------")
-                console.log('Search successfully');
-                console.log("------------------------------------")
                 navigation.navigate('SearchList', { responseData: response.data.users });
             }
-            // navigation.navigate('Home', { ...response.data });
-            // navigation.navigate('Home');
-            // OVDE MORA DA SALJE NA STRANICU searchList sa response, ako ima, ako nema da salje na NOT FOUND STRANICU
-
 
             setSubmitting(false);
             return response.data;
@@ -133,8 +115,6 @@ const UserProfile = ({ navigation, route }) => {
         //ovde se salje i response, trebao bi da bude niz usera
         // navigation.navigate('SearchList');
         const cleanedTable = table.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
-        // console.log(cleanedString);
-        // return console.log("-------------------------------------TABLE ", cleanedString)
         try {
             const token = await AsyncStorage.getItem("@token");
 
@@ -151,7 +131,6 @@ const UserProfile = ({ navigation, route }) => {
 
             setMessageFor("table")
             const response = await axios.post(url, { table: cleanedTable }, { headers });
-            // return console.log("RESPONSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", table)
 
             if (response.status === 200) {
                 console.log("------------------------------------")
@@ -169,7 +148,6 @@ const UserProfile = ({ navigation, route }) => {
         }
     }
 
-    // console.log("CURENT U PROFILE", currentUser)
     //ovo je objekat koji saljem na backend,zelim da ovaj ulogovani user u userDetails kolekciji pored ovih podataka upise ove podatke i userID , koji verovatno moze da se izvuce iz tokena ? ili kako god da je najbolje da bih posle na osnovu pretrage ovih parametara mogao da nadjem usera koji ima ove podatke
 
     return (
@@ -177,24 +155,30 @@ const UserProfile = ({ navigation, route }) => {
             <StyledContainer style={{ marginBottom: 75 }} >
                 <StatusBar style="dark" />
                 <InnerContainer>
-                    <PageTitle style={{ color: search }}>Pronadji Avankarija preko tablice</PageTitle>
+                    <PageTitle style={{ color: search }}>{translation.findAvankariViaTable[1]}</PageTitle>
 
                     <Formik
                         initialValues={{
                             city: "",
                             currentPlace: "",
-                            pol: "Odaberi Pol",
-                            kosa: "Odaberi Boju Kose",
-                            oci: "Odaberi Boju očiju",
-                            obuca: "Odaberi Obuću",
-                            gornjideo: "Odaberi Gornji Deo",
-                            donjideo: "Odaberi Donji Deo"
+                            // pol: "Odaberi Pol",
+                            pol: translation.gender[1],
+                            // kosa: "Odaberi Boju Kose",
+                            kosa: translation.hair[1],
+                            // oci: "Odaberi Boju očiju",
+                            oci: translation.eyes[1],
+                            // obuca: "Odaberi Obuću",
+                            obuca: translation.shoes[1],
+                            // gornjideo: "Odaberi Gornji Deo",
+                            gornjideo: translation.upperWardrobe[1],
+                            // donjideo: "Odaberi Donji Deo"
+                            donjideo: translation.lowerWardrobe[1]
                         }}
                         // onSubmit={(values, { setSubmitting, setFieldValue }) => {
                         onSubmit={(values, { setSubmitting }) => {
 
                             if (values.city == '' || values.currentPlace == '') {
-                                handleMesage('Grad i Mesto su obavezni parametri!', 'FAILED');
+                                handleMesage(translation.cityAndPlaceAreMandatory[1]);
                                 // setDisabled(true)
                                 setSubmitting(false);
                             } else {
@@ -209,7 +193,8 @@ const UserProfile = ({ navigation, route }) => {
                                 <StyledTextInputWithImage>
                                     <StyledImage source={bg} />
                                     <StyledTableInputSocial
-                                        placeholder="Npr BG123CD"
+                                        // placeholder="Npr BG123CD"
+                                        placeholder={translation.egTable[1]}
                                         placeholderTextColor={darkLight}
                                         onChangeText={(text) => setTable(text)}
                                     />
@@ -217,7 +202,7 @@ const UserProfile = ({ navigation, route }) => {
 
                                 <StyledButtonTable onPress={() => updateTable()} style={{ marginBottom: 20, backgroundColor: search }}>
                                     {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
-                                    <ButtonText>TRAZI</ButtonText>
+                                    <ButtonText>{translation.search[1]}</ButtonText>
                                 </StyledButtonTable>
 
                                 {messageFor === "table" &&
@@ -227,14 +212,16 @@ const UserProfile = ({ navigation, route }) => {
                                 }
                                 {/* SEPARATOR BETWEEN LOGIN AND REGISTER */}
                                 <Line />
-                                <PageTitle style={{ color: search }}>Pronadji Avankarija po izgledu</PageTitle>
+                                <PageTitle style={{ color: search }}>{translation.findAvankariViaAppearance[1]}</PageTitle>
 
                                 {/* CITY */}
                                 <MyTextInput
                                     style={{ fontFamily: CustomFont }}
-                                    label="Grad *"
+                                    // label="Grad *"
+                                    label={translation.city[1]}
                                     icon="location-city"
-                                    placeholder="npr.  Beograd"
+                                    // placeholder="npr.  Beograd"
+                                    placeholder={`${translation.eG[1]} Beograd`}
                                     placeholderTextColor={darkLight}
                                     onChangeText={handleChange('city')}
                                     onBlur={handleBlur('city')}
@@ -243,9 +230,9 @@ const UserProfile = ({ navigation, route }) => {
                                 {/* PLACE */}
                                 <MyTextInput
                                     style={{ fontFamily: CustomFont, marginBottom: 25 }}
-                                    label="Mesto *"
+                                    label={translation.currentPlace[1]}
                                     icon="location-on"
-                                    placeholder="npr.  Knez Mihailova"
+                                    placeholder={`${translation.eG[1]} Caffe Centar`}
                                     placeholderTextColor={darkLight}
                                     onChangeText={handleChange('currentPlace')}
                                     onBlur={handleBlur('currentPlace')}
@@ -254,58 +241,70 @@ const UserProfile = ({ navigation, route }) => {
                                 {/* SEX */}
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Pol", "Muški", "Ženski"]}
+                                    // valueOptions={["Odaberi Pol", "Muški", "Ženski"]}
+                                    valueOptions={[translation.gender[1], translation.gender[2], translation.gender[3]]}
                                     labelOptions="Pol"
                                     value={values.pol}
                                     // value={values.pol === "Odaberi Pol" ? "" : values.pol}
-                                    label="Pol"
+                                    // label="Pol"
+                                    label={translation.genderLabel[1]}
                                 // values={values}
                                 />
                                 {/* HAIR */}
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Boju Kose", "Braon", "Crna", "Plava", "Crvena"]}
+                                    // valueOptions={["Odaberi Boju Kose", "Braon", "Crna", "Plava", "Crvena"]}
+                                    valueOptions={[translation.hair[1], translation.hair[2], translation.hair[3], translation.hair[4], translation.hair[5]]}
                                     labelOptions="Kosa"
                                     value={values.kosa}
                                     // value={values.kosa === "Odaberi Kosu" ? "" : values.kosa}
                                     // values={values}
-                                    label="Boja Kose"
+                                    // label="Boja Kose"
+                                    label={translation.hairLabel[1]}
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Boju Očiju", "Plave", "Zelene", "Braon", "Crne"]}
+                                    // valueOptions={["Odaberi Boju Očiju", "Plave", "Zelene", "Braon", "Crne"]}
+                                    valueOptions={[translation.eyes[1], translation.eyes[2], translation.eyes[3], translation.eyes[4], translation.eyes[5]]}
                                     labelOptions="Oci"
                                     value={values.oci}
                                     // value={values.oci === "Odaberi Oci" ? "" : values.oci}
                                     // values={values}
-                                    label="Oči"
+                                    // label="Oči"
+                                    label={translation.eyesLabel[1]}
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Obuću", "Patike", "Cipele", "Čizme", "Sandale", "Papuče", "Baletanke",]}
+                                    // valueOptions={["Odaberi Obuću", "Patike", "Cipele", "Čizme", "Sandale", "Papuče", "Baletanke",]}
+                                    valueOptions={[translation.shoes[1], translation.shoes[2], translation.shoes[3], translation.shoes[4], translation.shoes[5], translation.shoes[6], translation.shoes[7]]}
                                     labelOptions="Obuca"
                                     value={values.obuca}
                                     // value={values.obuca === "Odaberi Obucu" ? "" : values.obuca}
                                     // values={values}
-                                    label="Obuća"
+                                    // label="Obuća"
+                                    label={translation.shoesLabel[1]}
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Gornji Deo", "Majica", "Dukserica", "Trenerka", "Dzemper", "Rolka", "Šuškavac", "Jakna", "Kaput"]}
+                                    // valueOptions={["Odaberi Gornji Deo", "Majica", "Dukserica", "Trenerka", "Dzemper", "Rolka", "Šuškavac", "Jakna", "Kaput"]}
+                                    valueOptions={[translation.upperWardrobe[1], translation.upperWardrobe[2], translation.upperWardrobe[3], translation.upperWardrobe[4], translation.upperWardrobe[5], translation.upperWardrobe[6], translation.upperWardrobe[7], translation.upperWardrobe[8], translation.upperWardrobe[9]]}
                                     labelOptions="gornjideo"
                                     value={values.gornjideo}
                                     // value={values.gornjideo === "Odaberi Gornji Deo" ? "" : values.gornjideo}
                                     // values={values}
-                                    label="Gornji Deo"
+                                    // label="Gornji Deo"
+                                    label={translation.upperWardrobeLabel[1]}
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Donji Deo", "Šorc", "Trenerka", "Farmerke", "Pantalone", "Haljina", "Suknja",]}
+                                    // valueOptions={["Odaberi Donji Deo", "Šorc", "Trenerka", "Farmerke", "Pantalone", "Haljina", "Suknja",]}
+                                    valueOptions={[translation.lowerWardrobe[1], translation.lowerWardrobe[2], translation.lowerWardrobe[3], translation.lowerWardrobe[4], translation.lowerWardrobe[5], translation.lowerWardrobe[6], translation.lowerWardrobe[7]]}
                                     labelOptions="donjideo"
                                     value={values.donjideo}
                                     // value={values.donjideo === "Odaberi Donji Deo" ? "" : values.donjideo}
                                     // values={values}
-                                    label="Donji Deo"
+                                    // label="Donji Deo"
+                                    label={translation.lowerWardrobeLabel[1]}
                                 />
 
                                 {/* <MsgBox type={messageType}>{message}</MsgBox> */}
@@ -314,7 +313,7 @@ const UserProfile = ({ navigation, route }) => {
                                 {!isSubmitting && (
                                     <StyledButton onPress={handleSubmit} style={{ backgroundColor: search, marginTop: 21 }}>
                                         {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
-                                        <ButtonText>TRAZI</ButtonText>
+                                        <ButtonText>{translation.search[1]}</ButtonText>
                                     </StyledButton>
                                 )}
 

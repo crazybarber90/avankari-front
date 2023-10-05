@@ -42,6 +42,7 @@ import {
 import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper';
 const { brand, darkLight, primary } = Colors;
 const UserProfile = () => {
+    const translation = useSelector((state) => state.translation.messages);
 
     const [messageType, setMessageType] = useState();
     const [message, setMessage] = useState();
@@ -77,20 +78,21 @@ const UserProfile = () => {
         const filterValues = (obj) => {
             const filtered = {};
             for (const key in obj) {
-                if (obj[key].toLowerCase() !== "odaberi" && !obj[key].toLowerCase().startsWith("odaberi")) {
-                    filtered[key] = obj[key].toLowerCase();
+                const lowerCaseValue = obj[key].toLowerCase();
+                if (!(lowerCaseValue === "odaberi" || lowerCaseValue.startsWith("odaberi")) &&
+                    !(lowerCaseValue === "select" || lowerCaseValue.startsWith("select"))) {
+                    filtered[key] = lowerCaseValue;
                 }
             }
             return filtered;
         };
 
         const filteredCredentials = filterValues(credentials);
-        // return console.log('filtered', filteredCredentials)
         try {
             const token = await AsyncStorage.getItem("@token");
 
             if (!token) {
-                handleMesage('Token nije dostupan.');
+                handleMesage(notAvailableToken[1]);
                 setSubmitting(false);
                 return;
             }
@@ -99,6 +101,7 @@ const UserProfile = () => {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             };
+            // return console.log("KREDENCIALIII", filteredCredentials)
 
             const url = 'http://192.168.0.13:4000/api/users/update-user';
             const response = await axios.post(url, filteredCredentials, { headers });
@@ -130,25 +133,31 @@ const UserProfile = () => {
             <StyledContainer style={{ marginBottom: 75 }}>
                 <StatusBar style="dark" />
                 <InnerContainer>
-                    <PageTitle style={{ color: brand }}> <Text style={{ fontSize: 35, color: "black" }}>P</Text>OSTANI  <Text style={{ fontSize: 35, color: "black" }}>A</Text>VANKARI</PageTitle>
-                    <PageTitleSmaller style={{ color: "black" }}>BUDI DOSTUPAN</PageTitleSmaller>
+                    <PageTitle style={{ color: brand }}> <Text style={{ fontSize: 35, color: "black" }}>{translation.firstLetter[1]}</Text>{translation.restLetters[1]} <Text style={{ fontSize: 35, color: "black" }}>A</Text>VANKARI</PageTitle>
+                    <PageTitleSmaller style={{ color: "black" }}>{translation.beAvailable[1]}</PageTitleSmaller>
 
                     <Formik
                         initialValues={{
                             city: "",
                             currentPlace: "",
-                            pol: "Odaberi Pol",
-                            kosa: "Odaberi Boju Kose",
-                            oci: "Odaberi Boju očiju",
-                            obuca: "Odaberi Obuću",
-                            gornjideo: "Odaberi Gornji Deo",
-                            donjideo: "Odaberi Donji Deo"
+                            // pol: "Odaberi Pol",
+                            pol: translation.gender[1],
+                            // kosa: "Odaberi Boju Kose",
+                            kosa: translation.hair[1],
+                            // oci: "Odaberi Boju očiju",
+                            oci: translation.eyes[1],
+                            // obuca: "Odaberi Obuću",
+                            obuca: translation.shoes[1],
+                            // gornjideo: "Odaberi Gornji Deo",
+                            gornjideo: translation.upperWardrobe[1],
+                            // donjideo: "Odaberi Donji Deo"
+                            donjideo: translation.lowerWardrobe[1]
                         }}
                         // onSubmit={(values, { setSubmitting, setFieldValue }) => {
                         onSubmit={(values, { setSubmitting }) => {
 
                             if (values.city == '' || values.currentPlace == '') {
-                                handleMesage('Popuni obavezna polja označena sa *');
+                                handleMesage(translation.cityAndPlaceAreMandatory[1]);
                                 // setDisabled(true)
                                 setSubmitting(false);
                             } else {
@@ -162,9 +171,9 @@ const UserProfile = () => {
                                 {/* CITY */}
                                 <MyTextInput
                                     style={{ fontFamily: CustomFont }}
-                                    label="Grad *"
+                                    label={translation.city[1]}
                                     icon="location-city"
-                                    placeholder="npr.  Beograd"
+                                    placeholder={`${translation.eG[1]} Beograd`}
                                     placeholderTextColor={darkLight}
                                     onChangeText={handleChange('city')}
                                     onBlur={handleBlur('city')}
@@ -173,9 +182,9 @@ const UserProfile = () => {
                                 {/* PLACE */}
                                 <MyTextInput
                                     style={{ fontFamily: CustomFont, marginBottom: 25 }}
-                                    label="Mesto *"
+                                    label={translation.currentPlace[1]}
                                     icon="location-on"
-                                    placeholder="npr.  Fensi kafanica"
+                                    placeholder={`${translation.eG[1]} Caffe Centar`}
                                     placeholderTextColor={darkLight}
                                     onChangeText={handleChange('currentPlace')}
                                     onBlur={handleBlur('currentPlace')}
@@ -184,53 +193,68 @@ const UserProfile = () => {
                                 {/* SEX */}
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Pol", "Muški", "Ženski"]}
+                                    // valueOptions={["Odaberi Pol", "Muški", "Ženski"]}
+                                    valueOptions={[translation.gender[1], translation.gender[2], translation.gender[3]]}
                                     labelOptions="Pol"
                                     value={values.pol}
-                                    label="Pol"
+                                    // label="Pol"
+                                    label={translation.genderLabel[1]}
                                     fontFamily={CustomFont}
                                 // values={values}
                                 />
                                 {/* HAIR */}
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Boju Kose", "Braon", "Crna", "Plava", "Crvena"]}
+                                    // valueOptions={["Odaberi Boju Kose", "Braon", "Crna", "Plava", "Crvena"]}
+                                    valueOptions={[translation.hair[1], translation.hair[2], translation.hair[3], translation.hair[4], translation.hair[5]]}
                                     labelOptions="Kosa"
                                     value={values.kosa}
-                                    // values={values}
-                                    label="Boja Kose"
+                                    // label="Boja Kose"
+                                    label={translation.hairLabel[1]}
+                                // values={values}
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Boju Očiju", "Plave", "Zelene", "Braon", "Crne"]}
+                                    // valueOptions={["Odaberi Boju Očiju", "Plave", "Zelene", "Braon", "Crne"]}
+                                    valueOptions={[translation.eyes[1], translation.eyes[2], translation.eyes[3], translation.eyes[4], translation.eyes[5]]}
+
                                     labelOptions="Oci"
                                     value={values.oci}
-                                    // values={values}
-                                    label="Oči"
+                                    // label="Oči"
+                                    label={translation.eyesLabel[1]}
+                                // values={values}
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Obuću", "Patike", "Cipele", "Čizme", "Sandale", "Papuče", "Baletanke",]}
+                                    // valueOptions={["Odaberi Obuću", "Patike", "Cipele", "Čizme", "Sandale", "Papuče", "Baletanke",]}
+                                    valueOptions={[translation.shoes[1], translation.shoes[2], translation.shoes[3], translation.shoes[4], translation.shoes[5], translation.shoes[6], translation.shoes[7]]}
                                     labelOptions="Obuca"
                                     value={values.obuca}
-                                    // values={values}
-                                    label="Obuća"
+                                    // label="Obuća"
+                                    label={translation.shoesLabel[1]}
+                                // values={values}
+
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Gornji Deo", "Majica", "Dukserica", "Trenerka", "Dzemper", "Rolka", "Šuškavac", "Jakna", "Kaput"]}
+                                    // valueOptions={["Odaberi Gornji Deo", "Majica", "Dukserica", "Trenerka", "Dzemper", "Rolka", "Šuškavac", "Jakna", "Kaput"]}
+                                    valueOptions={[translation.upperWardrobe[1], translation.upperWardrobe[2], translation.upperWardrobe[3], translation.upperWardrobe[4], translation.upperWardrobe[5], translation.upperWardrobe[6], translation.upperWardrobe[7], translation.upperWardrobe[8], translation.upperWardrobe[9]]}
                                     labelOptions="gornjideo"
                                     value={values.gornjideo}
-                                    // values={values}
-                                    label="Gornji Deo"
+                                    // label="Gornji Deo"
+                                    label={translation.upperWardrobeLabel[1]}
+                                // values={values}
+
                                 />
                                 <MySelectPicker
                                     setFieldValue={setFieldValue}
-                                    valueOptions={["Odaberi Donji Deo", "Šorc", "Trenerka", "Farmerke", "Pantalone", "Haljina", "Suknja",]}
+                                    // valueOptions={["Odaberi Donji Deo", "Šorc", "Trenerka", "Farmerke", "Pantalone", "Haljina", "Suknja",]}
+                                    valueOptions={[translation.lowerWardrobe[1], translation.lowerWardrobe[2], translation.lowerWardrobe[3], translation.lowerWardrobe[4], translation.lowerWardrobe[5], translation.lowerWardrobe[6], translation.lowerWardrobe[7]]}
                                     labelOptions="donjideo"
                                     value={values.donjideo}
-                                    // values={values}
-                                    label="Donji Deo"
+                                    // label="Donji Deo"
+                                    label={translation.lowerWardrobeLabel[1]}
+                                // values={values}
                                 />
 
                                 {/* THREE DOTS  */}
@@ -239,7 +263,7 @@ const UserProfile = () => {
                                 {!isSubmitting && (
                                     <StyledButton onPress={handleSubmit} style={{ marginTop: 20 }}>
                                         {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
-                                        <ButtonText>SNIMI</ButtonText>
+                                        <ButtonText>{translation.save[1]}</ButtonText>
                                     </StyledButton>
                                 )}
 

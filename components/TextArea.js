@@ -3,11 +3,12 @@ import { View, TextInput, ActivityIndicator, Text, Dimensions, StyleSheet } from
 import axios from 'axios';
 import { StyledButtonSocials, ButtonText, MsgBox, Colors, CustomFont } from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
 
 
 const { brand, darkLight, primary } = Colors;
 const TextArea = ({ navigation }) => {
-
+    const translation = useSelector((state) => state.translation.messages);
 
     const [message, setMessage] = useState();
     const [messageType, setMessageType] = useState();
@@ -41,17 +42,17 @@ const TextArea = ({ navigation }) => {
 
         if (text === "") {
             setLoader(false)
-            return handleMesage("Unesi Poruku!")
+            return handleMesage(translation.enterText[2])
         } else if (text.length < 10) {
             setLoader(false)
-            return handleMesage("Poruka mora imati minimum 10 karaktera!")
+            return handleMesage(translation.atleast10characters[1])
         }
 
         try {
             const token = await AsyncStorage.getItem("@token");
 
             if (!token) {
-                handleMesage('Token nije dostupan.');
+                handleMesage(translation.notAvailableToken[1]);
                 setLoader(false);
                 return;
             }
@@ -65,7 +66,6 @@ const TextArea = ({ navigation }) => {
             const response = await axios.post(url, { text }, { headers });
 
             if (response.status === 200) {
-                console.log('Update successfully', response.data.message);
 
                 handleMesage(response.data.message, "SUCCESS");
                 setTimeout(() => {
@@ -80,8 +80,7 @@ const TextArea = ({ navigation }) => {
             return response.data;
 
         } catch (error) {
-            // console.error('Greška pri slanju emaila:', error);
-            handleMesage("Morate sačekati najmanje 1 sat pre nego što ponovo pošaljete email!")
+            handleMesage(translation.wait1hourProblemReport[1])
             setLoader(false)
             setIsButtonDisabled(true)
         }
@@ -91,7 +90,7 @@ const TextArea = ({ navigation }) => {
         <View style={styles.container}>
             <TextInput
                 style={styles.textInput}
-                placeholder="Unesi tekst"
+                placeholder={translation.enterText[1]}
                 value={text}
                 onChangeText={handleTextChange}
                 textAlignVertical="top"
@@ -99,7 +98,7 @@ const TextArea = ({ navigation }) => {
             />
             {!loader && (
                 <StyledButtonSocials onPress={handleSubmit} style={{ marginBottom: 20, opacity: isButtonDisabled ? 0.5 : 1, marginTop: 20 }} disabled={isButtonDisabled}>
-                    <ButtonText>Posalji</ButtonText>
+                    <ButtonText>{translation.send[1]}</ButtonText>
                 </StyledButtonSocials>
             )}
 

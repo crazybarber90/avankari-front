@@ -143,5 +143,134 @@
     },
     "removeYourNetworks": {
         "1": "Ukloni svoje mreže"
+    },
+    "firstLetter": {
+        "1": "P"
+    },
+    "restLetters": {
+        "1": "OSTANI"
+    },
+    "beAvailable": {
+        "1": "BUDI DOSTUPAN"
+    },
+    "eG": {
+        "1": "npr."
+    },
+    "city": {
+        "1": "Grad *",
+        "2": "Grad "
+    },
+    "currentPlace": {
+        "1": "Mesto *",
+        "2": "Mesto"
+    },
+    "genderLabel": {
+        "1": "Pol"
+    },
+    "gender": {
+        "1": "Odaberi Pol",
+        "2": "Muški",
+        "3": "Ženski"
+    },
+    "hairLabel": {
+        "1": "Boja Kose"
+    },
+    "hair": {
+        "1": "Odaberi Boju Kose",
+        "2": "Braon",
+        "3": "Crna",
+        "4": "Plava",
+        "5": "Crvena"
+    },
+    "eyesLabel": {
+        "1": "Boja Očiju"
+    },
+    "eyes": {
+        "1": "Odaberi Boju Očiju",
+        "2": "Plave",
+        "3": "Zelene",
+        "4": "Braon",
+        "5": "Crne"
+    },
+    "shoesLabel": {
+        "1": "Obuća"
+    },
+    "shoes": {
+        "1": "Odaberi Obuću",
+        "2": "Patike",
+        "3": "Cipele",
+        "4": "Čizme",
+        "5": "Sandale",
+        "6": "Papuče",
+        "7": "Baletanke"
+    },
+    "upperWardrobeLabel": {
+        "1": "Gornji Deo"
+    },
+    "upperWardrobe": {
+        "1": "Odaberi Donji Deo",
+        "2": "Šorc",
+        "3": "Dukserica",
+        "4": "Trenerka",
+        "5": "Dzemper",
+        "6": "Rolka",
+        "7": "Šuškavac",
+        "8": "Jakna",
+        "9": "Kaput"
+    },
+    "lowerWardrobeLabel": {
+        "1": "Donji Deo"
+    },
+    "lowerWardrobe": {
+        "1": "Odaberi Donji Deo",
+        "2": "Šorc",
+        "3": "Trenerka",
+        "4": "Farmerke",
+        "5": "Pantalone",
+        "6": "Haljina",
+        "7": "Suknja"
+    },
+    "save": {
+        "1": "SAČUVAJ"
+    },
+    "fillAllRequiredFields": {
+        "1": "Popuni obavezna polja označena sa *"
+    },
+    "findAvankariViaTable": {
+        "1": "Find Avankari via table"
+    },
+    "findAvankariViaAppearance": {
+        "1": "Pronadji Avankarija po izgledu"
+    },
+    "egTable": {
+        "1": "Npr. BG123C"
+    },
+    "search": {
+        "1": "Traži"
+    },
+    "cityAndPlaceAreMandatory": {
+        "1": "Grad i Mesto su obavezni parametri!"
+    },
+    "inCity": {
+        "1": "U Gradu :"
+    },
+    "location": {
+        "1": "Lokacija :"
+    },
+    "reportProblemToAdmin": {
+        "1": "Prijavi Problem"
+    },
+    "enterText": {
+        "1": "Unesi tekst",
+        "2": "Unesi poruku"
+    },
+    "wait1hourProblemReport": {
+        "1": "Morate sačekati najmanje 1 sat pre nego što ponovo prijavite problem!"
+    },
+    "atleast10characters": {
+        "1": "Poruka mora imati minimum 10 karaktera!"
+    },
+    "send": {
+        "1": "Pošalji"
     }
 }

@@ -193,16 +193,15 @@ export const StyledTableInputSocial = styled.TextInput`
   padding-left: 15px;
   padding-right: 25px;
   border-radius: 5px;
+  width: 100%;
   height: 20px;
-  font-size: 16px;
+  font-size: 14px;
   margin-vertical: 3px;
   margin-bottom: 10px;
   color: ${tertiary};
   text-transform: uppercase;
   margin-top:10px;
   font-family: ${CustomFont};
-
-
 `;
 
 export const StyledImage = styled.Image`

@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import React from 'react'
+import { useSelector } from 'react-redux';
 import {
     AvankariImageWrapper,
     AvankariAvatar,
@@ -13,9 +14,7 @@ import {
 import { Line } from '../../components/styles';
 
 const Settings = ({ navigation, route }) => {
-    console.log("------------------------------------")
-    console.log("ROUTE IZ SINGLE AVANKARI", route)
-    console.log("------------------------------------")
+    const translation = useSelector((state) => state.translation.messages);
     const { singleUser } = route.params
     return (
         <SearchListWrapper>
@@ -48,14 +47,14 @@ const Settings = ({ navigation, route }) => {
                 <TextWrapper>
                     <TextNormalAvankariStyle >
                         <TextSpan>Telefon</TextSpan>{'\n'}
-                        {singleUser.phoneNumber}
+                        {singleUser.phoneNumber[1]}
                     </TextNormalAvankariStyle>
                 </TextWrapper>
                 <Line />
 
                 <TextWrapper>
                     <TextNormalAvankariStyle >
-                        <TextSpan>Grad</TextSpan>{'\n'}
+                        <TextSpan>{translation.city[2]}</TextSpan>{'\n'}
                         {singleUser.city}
                     </TextNormalAvankariStyle>
                 </TextWrapper>
@@ -63,7 +62,7 @@ const Settings = ({ navigation, route }) => {
 
                 <TextWrapper>
                     <TextNormalAvankariStyle >
-                        <TextSpan>Mesto</TextSpan>{'\n'}
+                        <TextSpan>{translation.currentPlace[2]}</TextSpan>{'\n'}
                         {singleUser.currentPlace}
                     </TextNormalAvankariStyle>
                 </TextWrapper>
@@ -75,32 +74,31 @@ const Settings = ({ navigation, route }) => {
 
 export default Settings
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        // justifyContent: 'center',
-        marginTop: "20%",
-    },
-    imageContainer: {
-        width: '80%',
-        height: '45%',
-        overflow: 'hidden', // Da bi se slika pravilno obrezivala
-        marginBottom: 10, // Dodajte razmak između slike i informacija
-        borderRadius: 10,
-    },
-    infoContainer: {
-        width: '90%',
-        alignItems: 'center',
-        color: 'white',
-    },
-    name: {
-        color: 'white',
-        fontSize: 20,
-        marginBottom: 10, // Dodajte razmak između imena i ostalih informacija
-    },
-    info: {
-        fontSize: 16,
-        marginBottom: 5,
-    },
-})
+// const styles = StyleSheet.create({
+//     container: {
+//         flex: 1,
+//         alignItems: 'center',
+//         marginTop: "20%",
+//     },
+//     imageContainer: {
+//         width: '80%',
+//         height: '45%',
+//         overflow: 'hidden',
+//         marginBottom: 10,
+//         borderRadius: 10,
+//     },
+//     infoContainer: {
+//         width: '90%',
+//         alignItems: 'center',
+//         color: 'white',
+//     },
+//     name: {
+//         color: 'white',
+//         fontSize: 20,
+//         marginBottom: 10,
+//     },
+//     info: {
+//         fontSize: 16,
+//         marginBottom: 5,
+//     },
+// })
