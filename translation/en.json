@@ -269,5 +269,8 @@
     },
     "atleast10characters": {
         "1": "The message must have a minimum of 10 characters!"
+    },
+    "send": {
+        "1": "Send"
     }
 }
