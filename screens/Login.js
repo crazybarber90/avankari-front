@@ -8,6 +8,7 @@ import * as Google from 'expo-auth-session/providers/google';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BackHandler } from 'react-native';
 import { SET_LANGUAGE } from '../redux/features/translationSlice';
+import { CheckBox } from 'react-native-elements';
 
 //formik
 import { Formik } from 'formik';
@@ -41,7 +42,7 @@ import { SET_USER } from '../redux/features/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Destructured colors from 1st prop Colors from style
-const { brand, darkLight, primary } = Colors;
+const { brand, darkLight, primary, search, tertiary } = Colors;
 
 const Login = ({ navigation }) => {
   const [hidePassword, setHidePassword] = useState(true);
@@ -50,6 +51,9 @@ const Login = ({ navigation }) => {
   const [myToken, setMyToken] = useState(null);
   const dispatch = useDispatch()
   const [currentLang, setCurrentLang] = useState()
+  const [isChecked, setIsChecked] = useState(false);
+  const [messageForGoole, setMessageForGoogle] = useState();
+  const [messageForLogin, setMessageForLogin] = useState();
 
   const translation = useSelector((state) => state.translation.messages)
 
@@ -66,6 +70,10 @@ const Login = ({ navigation }) => {
   // console.log("CURRENT LANG", currentLang)
   // const keys = AsyncStorage.getAllKeys();
   // console.log("KEYYYYSSSS", keys)
+
+  const toggleCheckBox = () => {
+    setIsChecked(!isChecked);
+  };
 
 
   // UCITAVANJE ODABRANOG JEZIKA 
@@ -126,6 +134,7 @@ const Login = ({ navigation }) => {
   let isSigningUp = false;
 
   const handleSignInWithGoogle = async () => {
+    setMessageForGoogle("googleSignin")
     if (response?.type === 'success' && !isSigningUp) {
       isSigningUp = true;
       // await AsyncStorage.removeItem('@token');
@@ -204,6 +213,7 @@ const Login = ({ navigation }) => {
   const handleLogin = async (credentials, setSubmitting) => {
     setSubmitting(true);
     handleMesage('');
+    setMessageForLogin("loginnn")
     const url = 'http://192.168.0.13:4000/api/users/login';
     //  POVEZI TELEFON NA WIFI ISTI KAO I KOMP !!!!!!!
     try {
@@ -240,10 +250,17 @@ const Login = ({ navigation }) => {
     }
   };
 
-  const handleMesage = (message, type = 'FAILED') => {
+  const handleMesage = (message, type = 'FAILED',) => {
     setMessage(message);
     setMessageType(type);
+
+    // timeout da sakrijete poruku nakon 5 sekundi
+    setTimeout(() => {
+      setMessage(null);
+      setMessageType(null);
+    }, 5000);
   };
+
 
   return (
     <KeyboardAvoidingWrapper>
@@ -251,7 +268,7 @@ const Login = ({ navigation }) => {
       <>
 
         {/* CHANGE LANGUAGES FLAGS */}
-        <View style={{ position: "absolute", top: 20, right: -30 }}>
+        <View style={{ position: "absolute", top: 40, right: -30 }}>
 
           {currentLang === "en" && <TouchableOpacity
             style={{ color: primary, width: 100, height: 100, textAlign: "left" }}
@@ -345,8 +362,6 @@ const Login = ({ navigation }) => {
                   hidePassword={hidePassword}
                   setHidePassword={setHidePassword}
                 />
-                {/* THREE DOTS  */}
-                <MsgBox type={messageType}>{message}</MsgBox>
 
                 {/* LOGIN BUTTON */}
                 {!isSubmitting && (
@@ -370,10 +385,27 @@ const Login = ({ navigation }) => {
                   </TextLink>
                 </ExtraView>
 
-                {/* SEPARATOR BETWEEN LOGIN AND REGISTER */}
                 <Line />
 
-                <StyledButton google={true} onPress={() => promptAsync({ showInRecents: true })}>
+                < MsgBox style={{ fontSize: 15 }} type={messageType}>{message}</MsgBox>
+
+                {/*  CHECKBOX FOR TERMS OF USE */}
+                <View style={{ marginVertical: 10 }}>
+                  <View>
+                    <TextLinkContent style={{ textAlign: "center", color: tertiary, borderColor: tertiary, borderWidth: 0.2, padding: 5 }} onPress={() => navigation.navigate("TermsOfConditions")} >{translation.readTermsOfUse[1]}</TextLinkContent>
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <CheckBox
+                      checked={isChecked}
+                      onPress={toggleCheckBox}
+                      checkedColor={brand}
+                    />
+                    <TextLinkContent style={{ marginLeft: -15 }}>{translation.iAgreeWithTerms[1]}</TextLinkContent>
+                  </View>
+                </View>
+
+                {/* GOOGLE SIGNUP BUTTON */}
+                <StyledButton google={true} onPress={isChecked ? () => promptAsync({ showInRecents: true }) : () => handleMesage(translation.youMustAgree[1])}>
                   <Fontisto name="google" color={primary} size={25} />
                   <ButtonText google={true}>{translation.signInWithGoogle[1]}</ButtonText>
                 </StyledButton>
@@ -392,7 +424,7 @@ const Login = ({ navigation }) => {
         </InnerContainer>
       </>
       {/* </StyledContainer> */}
-    </KeyboardAvoidingWrapper>
+    </KeyboardAvoidingWrapper >
   );
 };
 

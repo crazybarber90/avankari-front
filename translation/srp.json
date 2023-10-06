@@ -272,5 +272,14 @@
     },
     "send": {
         "1": "Pošalji"
+    },
+    "readTermsOfUse": {
+        "1": "Pročitaj uslove korišćenja"
+    },
+    "youMustAgree": {
+        "1": "Moraš se složiti sa uslovima korišćenja!"
+    },
+    "iAgreeWithTerms": {
+        "1": "Slažem se sa uslovima korišćenja!"
     }
 }

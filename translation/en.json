@@ -272,5 +272,14 @@
     },
     "send": {
         "1": "Send"
+    },
+    "readTermsOfUse": {
+        "1": "Read terms of use"
+    },
+    "youMustAgree": {
+        "1": "You must agree with terms of use!"
+    },
+    "iAgreeWithTerms": {
+        "1": "I agree with terms of use!"
     }
 }

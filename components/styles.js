@@ -80,8 +80,8 @@ export const WelcomeContainer = styled(InnerContainer)`
 `;
 
 export const PageLogo = styled.Image`
-  width: 220px;
-  height: 180px;
+  width: 150px;
+  height: 120px;
   margin-vertical: 30px;
 `;
 

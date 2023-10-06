@@ -2,6 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { CheckBox } from 'react-native-elements';
+
+
 import axios from 'axios';
 import { validateEmail } from '../assets/utills/MailValidator';
 
@@ -35,7 +38,7 @@ import {
 } from '../components/styles';
 
 // Destructured colors from 1st prop Colors from style
-const { brand, darkLight, primary } = Colors;
+const { brand, darkLight, primary, search, tertiary } = Colors;
 
 // DATE PICKER  CALENDAR
 // import DateTimePicker from '@react-native-community/datetimepicker';
@@ -46,6 +49,7 @@ const Signup = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState();
   const [messageType, setMessageType] = useState();
+  const [isChecked, setIsChecked] = useState(false);
 
   const handleSignup = async (credentials, setSubmitting) => {
     setSubmitting(true);
@@ -70,9 +74,20 @@ const Signup = ({ navigation }) => {
     }
   };
 
-  const handleMesage = (message, type = 'FAILED') => {
+  const toggleCheckBox = () => {
+    setIsChecked(!isChecked);
+    console.log('isChecked:', isChecked);
+  };
+
+  const handleMesage = (message, type = 'FAILED',) => {
     setMessage(message);
     setMessageType(type);
+
+    // timeout da sakrijete poruku nakon 5 sekundi
+    setTimeout(() => {
+      setMessage(null);
+      setMessageType(null);
+    }, 5000);
   };
 
   return (
@@ -80,15 +95,17 @@ const Signup = ({ navigation }) => {
       {/* <StyledContainer> */}
       <>
         <StatusBar style="dark" />
-        <InnerContainer style={{ flex: 1, alignItems: "center", paddingTop: 40 }}>
+        <InnerContainer style={{ flex: 1, alignItems: "center", paddingTop: 30 }}>
           {/* LOGO ON START SCREEN */}
-          <PageTitle>Avankari</PageTitle>
-          <SubTitle>{translation.register[2]}</SubTitle>
+          {/* <PageTitle>Avankari</PageTitle> */}
+          <SubTitle style={{ paddingTop: 20, fontSize: 22 }}>{translation.register[2]}</SubTitle>
 
           {/* DATE PICKER CALENDAR COMPONENT */}
-          {show && (
+          {/* {show && (
             <DateTimePicker testID="dateTimePicker" value={date} mode="date" is24Hour={true} onChange={onChange} />
-          )}
+          )} */}
+          {/* npm install @react-native-community/datetimepicker  verziju "6.5.2",*/}
+
 
           {/* VALIDACIJA FORMIK / removed :  dateOfBirth: ''*/}
           <Formik
@@ -185,12 +202,28 @@ const Signup = ({ navigation }) => {
                   setHidePassword={setHidePassword}
                 />
 
+                {/*  CHECKBOX FOR TERMS OF USE */}
+
+                <View>
+                  <View style={{ marginVertical: 15 }}>
+                    <TextLinkContent style={{ textAlign: "center", color: tertiary, borderColor: tertiary, borderWidth: 0.2, padding: 5 }} onPress={() => navigation.navigate("TermsOfConditions")} >{translation.readTermsOfUse[1]}</TextLinkContent>
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <CheckBox
+                      checked={isChecked}
+                      onPress={toggleCheckBox}
+                      checkedColor={brand}
+                    />
+                    <TextLinkContent style={{ marginLeft: -15 }}>{translation.iAgreeWithTerms[1]}</TextLinkContent>
+                  </View>
+                </View>
+
                 {/* THREE DOTS  */}
                 <MsgBox type={messageType}>{message}</MsgBox>
 
                 {/* LOGIN BUTTON */}
                 {!isSubmitting && (
-                  <StyledButton onPress={handleSubmit}>
+                  <StyledButton onPress={isChecked ? handleSubmit : () => handleMesage(translation.youMustAgree[1])}>
                     <ButtonText>{translation.register[1]}</ButtonText>
                   </StyledButton>
                 )}

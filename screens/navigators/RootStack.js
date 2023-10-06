@@ -26,6 +26,7 @@ import { useFonts } from 'expo-font';
 import { Colors } from '../../components/styles';
 import { useDispatch } from 'react-redux';
 import { SET_USER } from '../../redux/features/auth/authSlice';
+import TermsOfConditions from '../TermsOfConditions';
 const { primary, tertiary } = Colors;
 
 const Stack = createStackNavigator();
@@ -73,6 +74,7 @@ const RootStack = () => {
         <Stack.Screen name="SearchList" component={SearchList} />
         <Stack.Screen name="SearchItem" component={SearchItem} />
         <Stack.Screen name="SingleAvankari" component={SingleAvankari} />
+        <Stack.Screen name="TermsOfConditions" component={TermsOfConditions} />
       </Stack.Navigator>
     </NavigationContainer>
   );
