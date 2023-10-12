@@ -122,7 +122,38 @@ export const PageTitleSmaller = styled.Text`
   margin-top: -20px;
   margin-bottom: 30px;
   text-shadow: 1px 1px 5px ${darkLight};
-   
+`;
+
+export const TermsHeadings = styled.Text`
+  width: 100%;
+  font-size: 20px;
+  text-align: left;
+  font-family: ${CustomFont};
+  padding: 10px;
+  text-shadow: 1px 1px 5px ${darkLight};
+  color: ${search};
+`;
+
+export const TermsTextContent = styled.Text`
+  width: 100%;
+  font-size: 15px;
+  text-align: left;
+  font-family: ${CustomFont};
+  padding: 10px;
+  margin-top: -15px;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 5px ${darkLight};
+`;
+
+export const TermsButton = styled.TouchableOpacity`
+  padding: 9px;
+  width: 150px;
+  background-color: ${search};
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  margin-vertical: 20;
+
 `;
 
 export const SubTitle = styled.Text`
@@ -285,6 +316,17 @@ export const StyledButtonSocials = styled.TouchableOpacity`
   border-radius: 5px;
   margin-vertical: 5px;
   height: 45px;
+`;
+
+export const StyledButtonRemove = styled.TouchableOpacity`
+  padding: 7px;
+  width: 50%;
+  background-color: ${search};
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  margin-vertical: 5px;
+  height: 35px;
 `;
 
 export const StyledButtonTable = styled.TouchableOpacity`

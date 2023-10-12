@@ -415,7 +415,7 @@ const Login = ({ navigation }) => {
                 <ExtraView>
                   <ExtraText>{translation.notRegistered[1]}</ExtraText>
                   <TextLink onPress={() => navigation.navigate('Signup')}>
-                    <TextLinkContent>{translation.register[1]}</TextLinkContent>
+                    <TextLinkContent style={{ fontSize: 20 }}>{translation.register[1]}</TextLinkContent>
                   </TextLink>
                 </ExtraView>
               </StyledFormArea>

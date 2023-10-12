@@ -10,7 +10,7 @@ import { BackHandler } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useFormikContext } from 'formik';
 import { SET_USER, selectUser, LOGOUT_USER } from '../../redux/features/auth/authSlice';
-
+import { cooldown } from '../../assets/utills/cooldown';
 import {
     CustomFont,
     Colors,
@@ -30,6 +30,8 @@ import {
     SyledSelectPicker,
     StyledPickerLabel,
     PageTitleSmaller,
+    StyledButtonRemove
+
 } from '../../components/styles';
 
 
@@ -57,7 +59,7 @@ const UserProfile = () => {
         setTimeout(() => {
             setMessage(null);
             setMessageType(null);
-        }, 5000);
+        }, 8000);
     };
 
     const handleUpdateUser = async (credentials, setSubmitting) => {
@@ -110,7 +112,8 @@ const UserProfile = () => {
                 console.log('Update successfully');
                 const userDetails = await response;
                 console.log('ovo je user iz logina =============>', userDetails.data);
-                handleMesage(userDetails.data.message, 'SUCCESS');
+                // handleMesage(userDetails.data.message, 'SUCCESS');
+                handleMesage(translation.userDetailsUpdatedSuccessfully[1], 'SUCCESS');
             }
             // navigation.navigate('Home', { ...response.data });
             // navigation.navigate('Home');
@@ -125,8 +128,42 @@ const UserProfile = () => {
         }
     }
 
-    // console.log("CURENT U PROFILE", currentUser)
-    //ovo je objekat koji saljem na backend,zelim da ovaj ulogovani user u userDetails kolekciji pored ovih podataka upise ove podatke i userID , koji verovatno moze da se izvuce iz tokena ? ili kako god da je najbolje da bih posle na osnovu pretrage ovih parametara mogao da nadjem usera koji ima ove podatke
+    const removePublicDetails = async () => {
+
+        console.log(" RADIII FUKCIJU")
+        try {
+            const token = await AsyncStorage.getItem("@token");
+            if (!token) {
+                handleMesage(translation.notAvailableToken[1]);
+                return;
+            }
+
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            };
+            const url = 'http://192.168.0.13:4000/api/users/remove-user-details';
+
+            const response = await axios.post(url, {}, { headers });
+
+            if (response.status === 204) {
+                handleMesage(translation.allreadyRemovedUserDetails[1]);
+            }
+            if (response.status === 200) {
+                handleMesage(translation.removedUserDetailsSuccess[1], "SUCCESS");
+            }
+
+            return response.data;
+
+        } catch (error) {
+            const message =
+                (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+
+            handleMesage(translation.anErrorOccured[1]);
+        }
+    }
+
+    // const removePublicDetailsWithCooldown = cooldown(removePublicDetails, 5)
 
     return (
         <KeyboardAvoidingWrapper>
@@ -273,10 +310,23 @@ const UserProfile = () => {
                                     </StyledButton>
                                 )}
 
+                                {!isSubmitting && (
+                                    <StyledButtonRemove onPress={removePublicDetails} style={{ marginTop: 20 }}>
+                                        {/* // <StyledButtonRemove disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
+                                        <ButtonText style={{ color: "white" }}>{translation.deleteUserDetails[1]}</ButtonText>
+                                    </StyledButtonRemove>
+                                )}
+
+                                {isSubmitting && (
+                                    <StyledButtonRemove disabled={true} style={{ marginTop: 20 }}>
+                                        <ActivityIndicator size="large" color={primary} />
+                                    </StyledButtonRemove>
+                                )}
+
                                 {/* <MsgBox type={messageType}>{message}</MsgBox> */}
 
-                                <MsgBox type={messageType} style={{ marginBottom: 15 }}>
-                                    <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red' }}>{message}</Text>
+                                <MsgBox type={messageType} style={{ marginBottom: 20, marginTop: 10 }}>
+                                    <Text style={{ color: messageType === 'SUCCESS' ? 'green' : 'red', fontSize: 15, marginTop: 10 }}>{message}</Text>
                                 </MsgBox>
                             </StyledFormArea>
                         )}

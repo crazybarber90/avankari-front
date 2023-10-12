@@ -237,7 +237,7 @@
         "1": "Popuni obavezna polja označena sa *"
     },
     "findAvankariViaTable": {
-        "1": "Find Avankari via table"
+        "1": "Pronadji Avankarija po tablici"
     },
     "findAvankariViaAppearance": {
         "1": "Pronadji Avankarija po izgledu"
@@ -281,5 +281,54 @@
     },
     "iAgreeWithTerms": {
         "1": "Slažem se sa uslovima korišćenja!"
+    },
+    "deleteUserDetails": {
+        "1": "Ukloni svoje detalje"
+    },
+    "removedUserDetailsSuccess": {
+        "1": "Uspešno si uklonio svoje detalje!"
+    },
+    "allreadyRemovedUserDetails": {
+        "1": "Već si uklonio svoje detalje!"
+    },
+    "userDetailsUpdatedSuccessfully": {
+        "1": "Tvoji detalji su uspešno ažurirani"
+    },
+    "termsAndPrivacyHeading": {
+        "1": "Politika privatnosti",
+        "2": "1. Prikupljanje i upotreba informacija",
+        "3": "1.1. Lokacija",
+        "4": "1.2. Lični opis",
+        "5": "1.3. Registracija vozila",
+        "6": "1.4. Drustvene mreže i kontakt informacije",
+        "7": "1.5. Zaštita ličnih podataka",
+        "8": "2. Deljenje informacija sa trećim licima",
+        "9": "3. Bezbednost podataka",
+        "10": "4. Povlačenje saglasnosti i brisanje podataka",
+        "11": "Uslovi korišćenja.",
+        "12": "1. Registracija i pristup aplikaciji",
+        "13": "2. Ponašanje korisnika",
+        "14": "3. Završne odredbe"
+    },
+    "termsAndPrivacyContent": {
+        "3": "Vaša lokacija se prikuplja i koristi kako biste omogućili funkcionalnost aplikacije. Tačne informacije o vašoj lokaciji se ne čuvaju, a unete lokacije (npr. \"Beograd, Splav Rich\") se čuvaju u bazi podataka radi omogućavanja pretrage i pronalaženja drugih korisnika. Imate mogućnost da onemogućite deljenje vaše lokacije u bilo kom trenutku.",
+        "4": "Informacije koje unesete o svom izgledu, boji kose, boji očiju, odeći i obući se čuvaju u bazi podataka kako biste omogućili drugim korisnicima da vas pronađu putem ovih kriterijuma.",
+        "5": "Informacije koje unesete o registraciji vozila, kao što su tablica automobila, čuvaju se radi omogućavanja drugim korisnicima da vas pronađu putem registracije vozila.",
+        "6": "Ako odaberete da podelite linkove ka svojim društvenim mrežama i broj telefona, ove informacije će biti dostupne drugim korisnicima ako ih pronađu na osnovu vaših kriterijuma.",
+        "7": "Korisnici nemaju pravo da koriste tuđe lične podatke, uključujući brojeve telefona, društvene mreže, fotografije i tablice automobila.",
+        "8": "Nećemo deliti vaše lične informacije sa trećim licima bez vaše saglasnosti, osim ako to ne zahtevaju relevantni zakoni ili pravosudne vlasti.",
+        "9": "Vaše lične informacije čuvaju se sigurno i koristimo različite tehničke i organizacione mere kako bismo osigurali da vaši podaci budu zaštićeni od neovlašćenog pristupa.",
+        "10": "Imate pravo da povučete svoju saglasnost za prikupljanje i korišćenje podataka u bilo kom trenutku. Takođe možete zahtevati brisanje svih podataka koje ste uneli u aplikaciju.",
+        "12": "1.1. Registracijom za aplikaciju prihvatate ove uslove korišćenja.",
+        "13": "1.2. Imate pravo da koristite aplikaciju u skladu sa važećim zakonima i ovim uslovima.",
+        "14": "2.1. Nećete koristiti aplikaciju u svrhe koje krše zakone ili prava drugih korisnika.",
+        "141": "2.2. Nećete zloupotrebljavati lične podatke drugih korisnika ili ih deliti bez njihove saglasnosti.",
+        "142": "2.3. Korisnici nemaju pravo da koriste tuđe lične podatke, uključujući brojeve telefona, društvene mreže, fotografije i tablice automobila.",
+        "15": "3.1. Rezervišemo pravo da izmenimo ove uslove korišćenja u bilo kom trenutku. Ažurirane uslove možete pronaći u aplikaciji.",
+        "16": "3.2. Ovi uslovi korišćenja predstavljaju celokupan dogovor između vas i nas u vezi sa korišćenjem aplikacije.",
+        "17": "Molimo vas da pažljivo pročitate i razumete ovu Politiku privatnosti i Uslove korišćenja pre nego što koristite aplikaciju. Ako imate bilo kakvih pitanja ili nedoumica, slobodno nas kontaktirajte."
+    },
+    "iRead": {
+        "1": "Pročitao sam"
     }
 }
