@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, BackHandler, Platform, TouchableOpacity, Image, ActivityIndicator, AppState } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,7 +8,6 @@ import { Formik } from 'formik';
 import { Octicons, Fontisto } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import axios from 'axios';
-
 
 import {
     Colors,
@@ -35,15 +33,11 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker'
-// import { ImageManipulator } from 'expo';
-// import { ImageManipulator } from 'expo-image-manipulator';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as FileSystem from 'expo-file-system';
 import { ScrollView } from 'react-native';
-import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper';
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import bg from "../../assets/img/bg.png"
-
 
 const { brand, darkLight, primary, tertiary, red, search, backgroundColor } = Colors;
 
@@ -70,7 +64,6 @@ const Home = ({ navigation, route }) => {
     const [table, setTable] = useState('');
     const [loader, setLoader] = useState(false);
 
-
     const [userData, setUserData] = useState({
         facebookUrl: '',
         instagramUrl: '',
@@ -78,24 +71,11 @@ const Home = ({ navigation, route }) => {
     });
 
     const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-
-    // SOCIAL NETWORKS==========================
-
     const { name, email, picture, photo } = loggedUser
     const dispatch = useDispatch()
-    // const avatarSource = photo ? { uri: photo } : picture ? { uri: picture } : { uri: 'https://i.ibb.co/4pDNDk1/avatar.png' }
-    // const avatarSource = { uri: photo || picture || 'https://i.ibb.co/4pDNDk1/avatar.png' };
+
     const avatarSource = image ? { uri: image } : { uri: photo || picture || 'https://i.ibb.co/4pDNDk1/avatar.png' };
 
-    // async function clearAsyncStorage() {
-    //     try {
-    //         await AsyncStorage.clear();
-    //         console.log('AsyncStorage cleared');
-    //     } catch (error) {
-    //         console.error('Error clearing AsyncStorage:', error);
-    //     }
-    // }
 
     // FUNCTION THAT DELETE EVERYTHING FROM ASYNCSTORAGE EXEPT SELECTED LANGUAGE
     async function clearAsyncStorageExeptLanguage() {
@@ -120,7 +100,6 @@ const Home = ({ navigation, route }) => {
             })
         )
     }
-
 
     const handleMesage = (message, type = 'FAILED',) => {
         setMessage(message);
@@ -190,7 +169,7 @@ const Home = ({ navigation, route }) => {
                 }
                 setBackPressCount(1);
                 setTimeout(() => setBackPressCount(0), 2000); // Resetovanje broja pritisaka nakon 2 sekunde
-                return true; // Vratite true da biste rekli sistemu da ste obradili pritisak na "back" dugme
+                return true; // Vraca true da bi rekao sistemu da sam obradio pritisak na "back" dugme
             }
             return false;
         });
@@ -207,7 +186,7 @@ const Home = ({ navigation, route }) => {
         })();
     }, []);
 
-    console.log("CURENTTTTTTTT USERRRRRRRRRRRRRRRRRRRRR", currentUser);
+    // console.log("CURENTTTTTTTT USERRRRRRRRRRRRRRRRRRRRR", currentUser);
 
     //=================================== UPLOAD SLIKE
     const pickImage = async () => {
@@ -225,7 +204,6 @@ const Home = ({ navigation, route }) => {
                 //     [{ resize: { width: 800, height: 600 } }], // Postavite željene dimenzije
                 //     { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG } // Postavite kvalitet kompresije
                 // );
-
 
                 // NOV NACIN VECA REZOLUCIJA do 120kb slika
                 const selectedImage = result.assets[0];
@@ -319,7 +297,6 @@ const Home = ({ navigation, route }) => {
                 'Content-Type': 'application/json',
             };
             const url = 'http://192.168.0.13:4000/api/users/update-socials';
-            // return console.log("USERDATAaaaaaaaaaaaaaaaaaaaaaaaaaa", userData)
 
             const response = await axios.post(url, userData, { headers });
 
@@ -345,7 +322,7 @@ const Home = ({ navigation, route }) => {
                 currentUser.instagramUrl = newInstagramUrl;
                 currentUser.phoneNumber = newPhoneNumber;
 
-                // čuvajte ažuriranog korisnika u AsyncStorage-u
+                // čuvanje ažuriranog korisnika u AsyncStorage-u
                 await AsyncStorage.setItem('@user', JSON.stringify(currentUser));
                 //======================== UPDATE ASYNCSTORAGE SA NOVI SOCIALS"
 
@@ -365,13 +342,12 @@ const Home = ({ navigation, route }) => {
             setSubmitting(false);
 
             handleMesage(translation.anErrorOccured[1]);
-
         }
     }
 
 
     const updateTable = async (setSubmitting) => {
-        // return console.log("TABLE ", table)
+        const selectedLanguage = await AsyncStorage.getItem('selectedLanguage');
         setLoader(true);
         if (table === "") {
             setMessageFor('table')
@@ -394,7 +370,6 @@ const Home = ({ navigation, route }) => {
             const url = 'http://192.168.0.13:4000/api/users/update-table';
 
             const response = await axios.post(url, { table: cleanedTable }, { headers });
-            // return console.log("RESPONSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", table)
 
             if (response.status === 200) {
                 console.log('Update successfully', response.data);
@@ -404,8 +379,6 @@ const Home = ({ navigation, route }) => {
                 // Učitavanje trenutnog korisnika iz AsyncStorage-a
                 const currentUserString = await AsyncStorage.getItem('@user');
                 const currentUser = JSON.parse(currentUserString);
-
-                console.log("=========================== current string ", currentUser)
 
                 currentUser.table = newTable;
 
@@ -428,7 +401,8 @@ const Home = ({ navigation, route }) => {
             const message =
                 (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
             setLoader(false);
-            handleMesage(message);
+            setMessageFor('table')
+            handleMesage(selectedLanguage === "srp" ? message.srp : message.eng);
         }
     }
 
@@ -436,7 +410,6 @@ const Home = ({ navigation, route }) => {
         setMessageFor('removeNetworks')
         setLoader(true)
         try {
-            // return console.log("ALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOAAAAAA")
             const token = await AsyncStorage.getItem("@token");
 
             if (!token) {
@@ -458,20 +431,12 @@ const Home = ({ navigation, route }) => {
                 const currentUserString = await AsyncStorage.getItem('@user');
                 const currentUser = JSON.parse(currentUserString);
 
-                console.log("=========================== current string ", currentUser)
-
                 currentUser.table = "";
                 currentUser.facebookUrl = "";
                 currentUser.instagramUrl = "";
                 currentUser.phoneNumber = "";
 
-                // // Učitavanje trenutnog korisnika iz AsyncStorage-a
-                // currentUser.table = table;
-                // currentUser.facebookUrl = facebookUrl;
-                // currentUser.instagramUrl = instagramUrl;
-                // currentUser.phoneNumber = phoneNumber;
-
-                // čuvajte ažuriranog korisnika u AsyncStorage-u
+                // čuvanje ažuriranog korisnika u AsyncStorage-u
                 await AsyncStorage.setItem('@user', JSON.stringify(currentUser));
                 //======================== UPDATE ASYNCSTORAGE SA NOVI SOCIALS"
                 setMessageFor("removeNetworks")
@@ -490,6 +455,7 @@ const Home = ({ navigation, route }) => {
             handleMesage(translation.anErrorOccured[1]);
         }
     }
+
     return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <>

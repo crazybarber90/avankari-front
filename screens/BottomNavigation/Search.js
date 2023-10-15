@@ -62,7 +62,7 @@ const UserProfile = ({ navigation, route }) => {
         }, 5000);
     };
 
-    const handleUpdateUser = async (credentials, setSubmitting) => {
+    const handleSearchUser = async (credentials, setSubmitting) => {
 
         const filterValues = (obj) => {
             const filtered = {};
@@ -111,7 +111,7 @@ const UserProfile = ({ navigation, route }) => {
     }
 
     // SEARCH BY TABLE
-    const updateTable = async () => {
+    const searchByTable = async () => {
         //ovde se salje i response, trebao bi da bude niz usera
         // navigation.navigate('SearchList');
         const cleanedTable = table.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
@@ -182,8 +182,8 @@ const UserProfile = ({ navigation, route }) => {
                                 // setDisabled(true)
                                 setSubmitting(false);
                             } else {
-                                // handleUpdateUser(values, setSubmitting, setFieldValue);
-                                handleUpdateUser(values, setSubmitting);
+                                // handleSearchUser(values, setSubmitting, setFieldValue);
+                                handleSearchUser(values, setSubmitting);
                             }
                         }}
                     >
@@ -200,7 +200,7 @@ const UserProfile = ({ navigation, route }) => {
                                     />
                                 </StyledTextInputWithImage>
 
-                                <StyledButtonTable onPress={() => updateTable()} style={{ marginBottom: 20, backgroundColor: search }}>
+                                <StyledButtonTable onPress={() => searchByTable()} style={{ marginBottom: 20, backgroundColor: search }}>
                                     {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
                                     <ButtonText>{translation.search[1]}</ButtonText>
                                 </StyledButtonTable>
