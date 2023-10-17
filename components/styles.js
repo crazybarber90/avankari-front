@@ -124,6 +124,12 @@ export const PageTitleSmaller = styled.Text`
   text-shadow: 1px 1px 5px ${darkLight};
 `;
 
+export const NormalText = styled.Text`
+  font-size: 18px;
+  text-align: left;
+  margin-bottom: 10px;
+`;
+
 export const TermsHeadings = styled.Text`
   width: 100%;
   font-size: 20px;
@@ -152,7 +158,7 @@ export const TermsButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   border-radius: 8px;
-  margin-vertical: 20;
+  margin-vertical: 20px;
 
 `;
 

@@ -67,13 +67,35 @@ const Login = ({ navigation }) => {
     scopes: ['openid', 'profile', 'email']
   });
 
-  // console.log("CURRENT LANG", currentLang)
-  // const keys = AsyncStorage.getAllKeys();
-  // console.log("KEYYYYSSSS", keys)
 
   const toggleCheckBox = () => {
     setIsChecked(!isChecked);
   };
+
+  // Token chekc for restore app from background
+  // token ? welcome : login
+  useEffect(() => {
+    // Check token existence and navigate accordingly
+    const checkTokenAndNavigate = async () => {
+      const token = await AsyncStorage.getItem('@token');
+      const user = await AsyncStorage.getItem('@user');
+      const parsedUser = JSON.parse(user);
+      if (token) {
+        if (parsedUser) { // Provera postojanja parsedUser
+          if (parsedUser.photo) {
+            // rename name of picture to photo
+            const newUser = { ...parsedUser, picture: parsedUser.photo };
+            delete newUser.picture;
+            navigation.replace('Welcome', newUser);
+          } else if (parsedUser.data) { // Provera postojanja parsedUser.data
+            navigation.replace('Welcome', parsedUser.data);
+          }
+        }
+      }
+    };
+
+    checkTokenAndNavigate();
+  }, [navigation]);
 
 
   // UCITAVANJE ODABRANOG JEZIKA 
@@ -133,16 +155,13 @@ const Login = ({ navigation }) => {
   // Preventing triggering handleSignupWithGoogle 2 times//// first in useEffect and second when response changed from useEffect on line 149
   let isSigningUp = false;
 
+
   const handleSignInWithGoogle = async () => {
     setMessageForGoogle("googleSignin")
     if (response?.type === 'success' && !isSigningUp) {
       isSigningUp = true;
-      // await AsyncStorage.removeItem('@token');
-      // const user = await AsyncStorage.getItem('@user');
-      // const token = await AsyncStorage.getItem('@token');
 
       try {
-        // const idToken = response.authentication.idToken;
         const userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
           headers: {
             Authorization: `Bearer ${response.authentication.accessToken}`,
@@ -180,7 +199,6 @@ const Login = ({ navigation }) => {
     }
   };
 
-
   // // USEEFFECT FOR TRIGGERING HANDLE GOOGLE LOGIN BASED ON RESPONSE
   useEffect(() => {
     // Trigger handleSignInWithGoogle when response changes
@@ -191,23 +209,23 @@ const Login = ({ navigation }) => {
 
 
   // USEEFFECT FOR GETTING TOKEN FROM ASYNC STORAGE AND BACK USER LOGED IN
-  useEffect(() => {
-    // Retrieve the token from AsyncStorage
-    const getToken = async () => {
-      const token = await AsyncStorage.getItem('@token');
-      const user = await AsyncStorage.getItem('@user');
-      if (token) {
-        if (user) {
-          const parsedUser = JSON.parse(user)
-          const data = parsedUser?.data
-          console.log(" useEffect, useEffect, useEffect, useEffect, useEffect, useEffect,  LOGIN ======== >", data)
-          await navigation.navigate('Welcome', data);
-        }
-        // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      }
-    };
-    getToken();
-  }, [navigation]);
+  // useEffect(() => {
+  //   // Retrieve the token from AsyncStorage
+  //   const getToken = async () => {
+  //     const token = await AsyncStorage.getItem('@token');
+  //     const user = await AsyncStorage.getItem('@user');
+  //     if (token) {
+  //       if (user) {
+  //         const parsedUser = JSON.parse(user)
+  //         const data = parsedUser?.data
+  //         console.log(" useEffect, useEffect, useEffect, useEffect, useEffect, useEffect,  LOGIN ======== >", data)
+  //         await navigation.navigate('Welcome', data);
+  //       }
+  //       // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  //     }
+  //   };
+  //   getToken();
+  // }, [navigation]);
 
 
   const handleLogin = async (credentials, setSubmitting) => {
@@ -261,7 +279,6 @@ const Login = ({ navigation }) => {
     }, 5000);
   };
 
-
   return (
     <KeyboardAvoidingWrapper>
       {/* <StyledContainer> */}
@@ -269,7 +286,7 @@ const Login = ({ navigation }) => {
 
         {/* CHANGE LANGUAGES FLAGS */}
         <View style={{ position: "absolute", top: 40, right: -30 }}>
-
+          {/* CHANGE LANGUAGE BUTTONS */}
           {currentLang === "en" && <TouchableOpacity
             style={{ color: primary, width: 100, height: 100, textAlign: "left" }}
             onPress={() => {
@@ -308,15 +325,12 @@ const Login = ({ navigation }) => {
               <Text style={{ color: brand, marginTop: 20, textAlign: "left", fontFamily: CustomFont, fontSize: 12 }}>Eng</Text>
             </ImageBackground>
           </TouchableOpacity>}
-
         </View>
 
         <StatusBar style="dark" />
         <InnerContainer style={{ flex: 1, alignItems: 'center', paddingTop: 20 }}>
           {/* LOGO ON START SCREEN */}
           <PageLogo resizeMode="contain" source={require('./../assets/img/lik2.png')} />
-          {/* <PageTitle>Avankari</PageTitle> */}
-          {/* <PageTitle>Avankari</PageTitle> */}
           <Formik
             initialValues={{ email: '', password: '' }}
             onSubmit={(values, { setSubmitting }) => {
@@ -366,8 +380,6 @@ const Login = ({ navigation }) => {
                 {/* LOGIN BUTTON */}
                 {!isSubmitting && (
                   <StyledButton onPress={handleSubmit}>
-                    {/* // <StyledButton disabled={disable || !(values.email && values.password)} onPress={handleSubmit}> */}
-                    {/* <ButtonText>Uloguj se</ButtonText> */}
                     <ButtonText>{translation.login[1]}</ButtonText>
                   </StyledButton>
                 )}
@@ -377,7 +389,6 @@ const Login = ({ navigation }) => {
                     <ActivityIndicator size="large" color={primary} />
                   </StyledButton>
                 )}
-
 
                 <ExtraView>
                   <TextLink onPress={() => navigation.navigate('ForgotPassword')}>
