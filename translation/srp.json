@@ -330,5 +330,56 @@
     },
     "iRead": {
         "1": "Pročitao sam"
+    },
+    "about": {
+        "1": "Namena aplikacije",
+        "2": "Kako funkcioniše Avankari?",
+        "3": "Aplikacija Avankari je isključivo društvenog karaktera, ali se može itekako iskoristiti i u poslovne svrhe kao i mnoge druge, sve je do tvoje kreativnosti.",
+        "4": "Cilj aplikacije je da spoji ljude,i da ti na bezbedan način omogući da možeš u svakom trenutku biti dostupan drugim ljudima ukoliko to želiš.",
+        "5": "Kao i da u svakom trenutku možeš da postaneš nedostupan.",
+        "6": "A možeš isto tako pronaći druge ljude koji koriste aplikaciju.",
+        "7": "Navešćemo ti neke od funkcionalnosti aplikacije i dati neke primere u kojima bi Avankari mogao da ti bude koristan."
+    },
+    "homeAbout": {
+        "1": "U tabu HOME imas mogćnost postaviš svoju sliku kao i da postavis svoje kontakte vidljivim.",
+        "2": "Postavljanjem ovih podataka vidljivim, svako ko te bude tražio na osnovu nekih parametara, moći će da vidi tvoje društvene mreže ili broj telefona, i stupi sa tobom u kontakt.",
+        "3": "Uz Avankari, bezbednost je prioritet. Tvoji podaci su zaštićeni i samo kada ti želiš,drugi će imati pristup tvojim podacima.",
+        "4": "Postavi tablicu vidljivom jer SEARCH tab ima mogućnost da te drugi korisnici Avankari aplikacije traže i preko tablice.",
+        "5": "Ako npr voziš kombi,i nudiš usluge prevoza, ili bilo koje druge delatnosti, a nemaš reklamu, biće ti od koristi da uvek budeš dostupan preko Avankari aplikacije, neko će videti tablicu, pronaći te i kontaktirati te.",
+        "6": "Da li ti se nekad desi da stojiš na semaforu i vidiš lepu devojku ili momka da prelazi ulicu.",
+        "7": "Gledate se , ali se na tom pogledu sve završava.",
+        "8": "Zamisli da ima mogućnost da vidi tvoju tablicu, nadje te preko Avankari aplikacije i doda te na nekoj od vec ažuriranih društvenih mreža."
+    },
+    "profileAbout": {
+        "1": "U tabu PROFILE imaš mogćnost da postaviš sledeće:",
+        "2": "Tvoj trenutni izgled",
+        "3": "Grad i Mesto su obavezna polja ukoliko želiš da budeš dostupan drugim korisnicima aplikacije.",
+        "4": "Kada unosiš Grad i Mesto, unesi tačno ime Grada ili Mesta ",
+        "5": "Ako si u Zemunu , pišeš u polju Grad : Zemun ",
+        "6": "Ako si u nekom kafiću , pišeš Mesto: tačno ime kafića",
+        "7": "Ostali parametri su opcioni.",
+        "8": "Ali ako uneseš svoj trenutni izlged, olakšaćeš drugima da pronadju baš tebe.",
+        "9": "Na primer :",
+        "10": "Izlaziš u grad, Updejtuješ se.",
+        "11": "Grad: Beograd, Mesto: Stara kafana ",
+        "12": "Svako ko koristi aplikaciju moći će preko ova dva parametra da vidi ko se sve nalazi u Beogradu u Staroj kafani.",
+        "13": "Ako si takodje uneo ostale parametre tipa, Boja kose, Boja očiju, šta si obukao ili obuo, olakšaćeš drugima da te lakše pronadju.",
+        "14": "Situacija je sledeća.",
+        "15": "Sediš u kafiću, diskoteci, kafani, na koncertu, u bioskopu...bilo gde... vidiš devojku , ili devojka vidi tebe, situacija je neprikladna ili nemate hrabrosti da pridjete jedno drugom, tu Avankari Nastupa!",
+        "16": "Ti budi Updejtovan Gde se nalaziš i kako izlgedaš za to veče.",
+        "17": "Verovatnoća je velika da ukoliko nekoj devojci privučeš pažnju, naći će te i videće tvoje društvene mreže.",
+        "18": "Eto mogućnosti da se opet čujete i vidite."
+    },
+    "searchAbout": {
+        "1": "LUPA",
+        "2": "Klikom na LUPU dobijaš mogćnost da ti tražiš druge korisnike aplikacije.",
+        "3": "Postoji polje za unos tablice koje ti omogućava da pronadješ ostale korisnike Avankari Aplikacije preko tablice.",
+        "4": "Prelaziš ulicu, vidiš lepog momka ili devojku za volanom, probaj da ga/je pronadješ preko Avankarija.",
+        "5": "Evo jednog primera kako pretraga radi",
+        "6": "Izašao si u grad , video devojku, nemaš hrabrosti da joj pridješ",
+        "7": "Nadji je preko Avankari aplikacije tako što ćeš klikom na lupu uneti grad i trenutno mesto tačno napisano.",
+        "8": "Npr u polje Grad uneseš Kraljevo, u polje mesto uneses samo ime kafane, kafića, diskoteke",
+        "9": "Takodje možeš preciznije pretražiti osobu, ako uneseš parametre koji se poklapaju sa njenjim trenutnim izgledom kao što je pol, boja kose,boja očiju, šta je obukla.",
+        "10": ""
     }
 }

@@ -237,7 +237,7 @@
         "1": "Fill in the mandatory fields marked with *"
     },
     "findAvankariViaTable": {
-        "1": "Find Avankari via table"
+        "1": "Find Avankari via license plate"
     },
     "findAvankariViaAppearance": {
         "1": "Find Avankari by appearance"
@@ -311,7 +311,7 @@
         "14": "3. Final Provisions"
     },
     "termsAndPrivacyContent": {
-        "3": "Your location is collected and used to enable the functionality of the application. Exact information about your location is not stored, and the entered locations (e.g., 'Belgrade, Splav Rich') are stored in the database to enable search and finding other users. You have the option to disable sharing your location at any time.",
+        "3": "Your location is collected and used to enable the functionality of the application. Exact information about your location is not stored, and the entered locations (e.g., 'Belgrade, Club: Rich') are stored in the database to enable search and finding other users. You have the option to disable sharing your location at any time.",
         "4": "Information you enter about your appearance, hair color, eye color, clothing, and attire is stored in the database to allow other users to find you based on these criteria.",
         "5": "Information you enter about vehicle registration, such as license plates, is stored to enable other users to find you based on vehicle registration.",
         "6": "If you choose to share links to your social networks and phone number, this information will be available to other users if they find you based on your criteria.",
@@ -330,5 +330,55 @@
     },
     "iRead": {
         "1": "I read"
+    },
+    "about": {
+        "1": "Application Purpose",
+        "2": "How Does Avankari Work?",
+        "3": "The Avankari application is exclusively social in nature, but it can be effectively used for business purposes and many others; it all depends on your creativity.",
+        "4": "The goal of the application is to connect people and provide you with a safe way to be available to others at any time if you choose to be.",
+        "5": "It also allows you to become unavailable at any time.",
+        "6": "You can also discover other people using the application.",
+        "7": "We will list some of the application's functionalities and provide examples of how Avankari can be useful to you."
+    },
+    "homeAbout": {
+        "1": "In the HOME tab, you have the option to set your picture and make your contacts visible.",
+        "2": "By making this data visible, anyone searching for you based on certain parameters will be able to see your social networks or phone number and get in touch with you.",
+        "3": "With Avankari, security is a priority. Your data is protected, and only when you want to, others will have access to your data.",
+        "4": "Make your license plate visible because the SEARCH tab allows other Avankari app users to find you through your license plate.",
+        "5": "For instance, if you drive a van and offer transport services or any other activities, and you don't have an advertisement, it will be useful for you to always be available through the Avankari app. Someone will see your license plate, find you, and contact you.",
+        "6": "Do you ever find yourself standing at a traffic light and see a nice girl or guy crossing the street?",
+        "7": "You exchange glances, but that's where it all ends.",
+        "8": "Imagine having the ability to see your license plate, find you through the Avankari app, and add you on one of the already updated social networks."
+    },
+    "profileAbout": {
+        "1": "In the PROFILE tab, you have the ability to set the following:",
+        "2": "Your current appearance",
+        "3": "City and Place are mandatory fields if you want to be accessible to other app users.",
+        "4": "When entering City and Place, enter the exact name of the City or Place.",
+        "5": "For example, if you are in London, you should enter 'City: London' in the City field.",
+        "6": "If you are in a caffé, enter the 'Place' field with the exact name of the caffé.",
+        "7": "Other parameters are optional.",
+        "8": "But if you enter your current appearance, it will make it easier for others to find you.",
+        "9": "For example:",
+        "10": "You're going out in the city, updating your info.",
+        "11": "City: Paris, Place: Eiffel Tower, or Louvre, or Disneyland, or Caffe Paris",
+        "12": "Anyone using the app will be able to see everyone located in Paris at any of those places using these two parameters.",
+        "13": "If you've also entered other parameters like Hair Color, Eye Color, what you're wearing, or have on, it will make it easier for others to find you.",
+        "14": "Here's the situation:",
+        "15": "You're in a café, club, tavern, at a concert, in a cinema... anywhere... you see a girl, or a girl sees you, the situation is awkward, or you don't have the courage to approach each other, this is where Avankari comes in!",
+        "16": "You stay updated on where you are and how you look for that evening.",
+        "17": "There's a high chance that if you catch a girl's attention, she will find you and see your social networks.",
+        "18": "That's an opportunity to reconnect."
+    },
+    "searchAbout": {
+        "1": "SEARCH",
+        "2": "By clicking on the SEARCH icon, you have the ability to search for other users of the application.",
+        "3": "There is a field for entering license plates that allows you to find other Avankari Application users based on license plates.",
+        "4": "You're crossing the street, you see an attractive guy or girl behind the wheel, try to find them using Avankari.",
+        "5": "Here's an example of how the search works:",
+        "6": "You went out in the city, saw a girl, and don't have the courage to approach her.",
+        "7": "Find her using the Avankari application by entering the city and the current Place precisely when clicking on the search icon.",
+        "8": "For instance, in the 'City' field, enter 'Paris,' and in the 'Place' field, enter only the name of the tavern, café, or disco.",
+        "9": "You can also perform a more precise search for a person if you enter parameters matching their current appearance, such as gender, hair color, eye color, and what they are wearing."
     }
 }

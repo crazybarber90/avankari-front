@@ -13,6 +13,7 @@ export const Colors = {
   // ovo je globalna boja
   brand: "#399BA6",
   backgroundColor: "#d9d9d9",
+  // backgroundColor: "#fff",
   // brand: "rgba(4, 145, 145, 0.3)",
   // brand: '#6d28d9',
 
@@ -39,8 +40,8 @@ const { primary, secondary, tertiary, darkLight, brand, green, red, googleButton
 // export const CustomFont = 'Pattaya';
 // export const CustomFont = 'NanumMyeongjo';
 // export const CustomFont = 'Orbitron';
-// export const CustomFont = 'Arimo_normal';
-export const CustomFont = 'Cinzel';
+export const CustomFont = 'Arimo_normal';
+// export const CustomFont = 'Cinzel';
 export const NanumMyeongjo = 'NanumMyeongjo';
 // export const Cinzel = 'Cinzel';
 //==========================================================================

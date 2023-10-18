@@ -28,21 +28,21 @@ const AboutApp = ({ navigation }) => {
             <>
                 <StatusBar style="dark" />
                 <InnerContainer style={{ flex: 1, paddingTop: 20, paddingBottom: 100, paddingHorizontal: 20 }}>
-                    <Text style={{ fontSize: 24, textAlign: "center", padding: 10, marginBottom: 20 }}>Namena aplikacije</Text>
-                    <Text style={{ fontSize: 22, marginBottom: 20, letterSpacing: 1, color: search, }}>Kako funkcioniše Avankari</Text>
+                    <Text style={{ fontSize: 24, textAlign: "center", padding: 10, marginBottom: 20 }}>{translation.about[1]}</Text>
+                    <Text style={{ fontSize: 22, marginBottom: 20, letterSpacing: 1, color: search, }}>{translation.about[2]}</Text>
 
-                    <NormalText style={{}}>Aplikacija Avankari je isključivo društvenog karaktera, ali se može itekako iskoristiti i u poslovne svrhe kao i mnoge druge, sve je do tvoje kreativnosti.
+                    <NormalText style={{}}>{translation.about[3]}
                         {'\n'}
                     </NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Cilj aplikacije je da spoji ljude,i da ti na bezbedan način omogući da možeš u svakom trenutku biti dostupan drugim ljudima ukoliko to želiš.
+                    <NormalText style={{ marginBottom: 10 }}>{translation.about[4]}
                     </NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Kao i da u svakom trenutku možeš da postaneš nedostupan.
+                    <NormalText style={{ marginBottom: 10 }}>{translation.about[5]}
                     </NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>A možeš isto tako pronaći druge ljude koji koriste aplikaciju.
+                    <NormalText style={{ marginBottom: 10 }}>{translation.about[6]}
                         {'\n'}
                     </NormalText>
 
-                    <NormalText style={{ marginBottom: 10, color: brand }}>Navešćemo ti neke od funkcionalnosti aplikacije i dati neke primere u kojima bi Avankari mogao da ti bude koristan.
+                    <NormalText style={{ marginBottom: 10, color: brand }}>{translation.about[7]}
                     </NormalText>
                     <Line />
 
@@ -51,7 +51,7 @@ const AboutApp = ({ navigation }) => {
                     <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
                         <Text style={{ marginLeft: 8, fontSize: 26, color: search }}>HOME </Text>
                     </View>
-                    <NormalText style={{ marginBottom: 10 }}>U tabu "HOME" imas mogćnost postaviš svoju sliku kao i da postavis svoje kontakte vidljivim.
+                    <NormalText style={{ marginBottom: 10 }}>{translation.homeAbout[1]}
                     </NormalText>
                     <View style={{ flexDirection: 'row' }}>
                         <Text>{'\u2022'}</Text>
@@ -63,21 +63,21 @@ const AboutApp = ({ navigation }) => {
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text>{'\u2022'}</Text>
-                        <Text style={{ marginLeft: 8, fontSize: 16, color: search }}>Broj Telefona {'\n'}</Text>
+                        <Text style={{ marginLeft: 8, fontSize: 16, color: search }}>{translation.phoneNumber[1]} {'\n'}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text>{'\u2022'}</Text>
-                        <Text style={{ marginLeft: 8, fontSize: 16, color: search }}>Broj Tablice {'\n'}</Text>
+                        <Text style={{ marginLeft: 8, fontSize: 16, color: search }}>{translation.yourTable[1]} {'\n'}</Text>
                     </View>
-                    <NormalText>Postavljanjem ovih podataka vidljivim, svako ko te bude tražio na osnovu nekih parametara, moći će da vidi tvoje društvene mreže ili broj telefona, i stupi sa tobom u kontakt.
+                    <NormalText>{translation.homeAbout[2]}
                     </NormalText>
-                    <NormalText>Uz Avankari, bezbednost je prioritet. Tvoji podaci su zaštićeni i samo kada ti želiš,drugi će imati pristup tvojim podacima.</NormalText>
-                    <NormalText style={{ color: search, fontWeight: "bold" }}>Postavi tablicu vidljivom jer "SEARCH" tab ima mogućnost da te drugi korisnici Avankari aplikacije traže i preko tablice.
+                    <NormalText>{translation.homeAbout[3]}</NormalText>
+                    <NormalText style={{ color: search, fontWeight: "bold" }}>{translation.homeAbout[4]}
                     </NormalText>
-                    <NormalText style={{ color: search }}> Ako npr voziš kombi,i nudiš usluge prevoza, ili bilo koje druge delatnosti, a nemaš reklamu, biće ti od koristi da uvek budeš dostupan preko Avankari aplikacije, neko će videti tablicu, pronaći te i kontaktirati te.</NormalText>
-                    <NormalText>Da li ti se nekad desi da stojiš na semaforu i vidiš lepu devojku ili momka da prelazi ulicu.</NormalText>
-                    <NormalText> Gledate se , ali se na tom pogledu sve završava.</NormalText>
-                    <NormalText> Zamisli da ima mogućnost da vidi tvoju tablicu, nadje te preko Avankari aplikacije i doda te na nekoj od vec ažuriranih društvenih mreža.</NormalText>
+                    <NormalText style={{ color: search }}>{translation.homeAbout[5]} </NormalText>
+                    <NormalText>{translation.homeAbout[6]}</NormalText>
+                    <NormalText>{translation.homeAbout[7]}</NormalText>
+                    <NormalText>{translation.homeAbout[8]}</NormalText>
 
 
                     <Line />
@@ -87,57 +87,56 @@ const AboutApp = ({ navigation }) => {
                     <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
                         <Text style={{ marginLeft: 8, fontSize: 26, color: search }}>PROFILE </Text>
                     </View>
-                    <NormalText style={{ marginBottom: 10 }}>U tabu "PROFILE" imas mogćnost da postaviš sledeće:
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[1]}
                     </NormalText>
                     <View style={{ flexDirection: 'row' }}>
                         <Text>{'\u2022'}</Text>
-                        <Text style={{ marginLeft: 8, fontSize: 16, color: search }}>Grad {'\n'}</Text>
+                        <Text style={{ marginLeft: 8, fontSize: 16, color: search }}>{translation.city[2]} {'\n'}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text>{'\u2022'}</Text>
-                        <Text style={{ marginLeft: 8, fontSize: 16, color: search }}>Mesto {'\n'}</Text>
+                        <Text style={{ marginLeft: 8, fontSize: 16, color: search }}>{translation.currentPlace[2]} {'\n'}</Text>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
                         <Text>{'\u2022'}</Text>
-                        <Text style={{ marginLeft: 8, fontSize: 16, color: search }}>Tvoj trenutni izgled{'\n'}</Text>
+                        <Text style={{ marginLeft: 8, fontSize: 16, color: search }}>{translation.profileAbout[2]} {'\n'}</Text>
                     </View>
-                    <NormalText style={{ marginBottom: 10 }}>Grad i Mesto su obavezna polja ukoliko želiš da budeš dostupan drugim korisnicima aplikacije. {'\n'}
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[3]} {'\n'}
                     </NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Kada unosiš Grad i Mesto, unesi tačno ime Grada ili Mesta </NormalText>
-                    <NormalText style={{ marginBottom: 10, color: search }}>Ako si u Zemunu , pišeš u polju Grad : Zemun </NormalText>
-                    <NormalText style={{ marginBottom: 10, color: search }}>Ako si u nekom kafiću , pišeš Mesto: tačno ime kafića</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Ostali parametri su opcioni.</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Ali ako uneseš svoj trenutni izlged, olakšaćeš drugima da pronadju baš tebe.
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[4]}</NormalText>
+                    <NormalText style={{ marginBottom: 10, color: search }}>{translation.profileAbout[5]}</NormalText>
+                    <NormalText style={{ marginBottom: 10, color: search }}>{translation.profileAbout[6]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[7]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[8]}
                         {'\n'}</NormalText>
 
-                    <NormalText style={{ marginBottom: 10, color: search }}>Na primer : </NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Izlaziš u grad, Updejtuješ se. </NormalText>
-                    <NormalText style={{ marginBottom: 10, fontWeight: "bold" }}>Grad: Beograd, Mesto: Stara kafana </NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Svako ko koristi aplikaciju moći će preko ova dva parametra da vidi ko se sve nalazi u Beogradu u Staroj kafani.</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Ako si takodje uneo ostale parametre tipa, Boja kose, Boja očiju, šta si obukao ili obuo, olakšaćeš drugima da te lakše pronadju.</NormalText>
+                    <NormalText style={{ marginBottom: 10, color: search }}>{translation.profileAbout[9]} </NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[10]} </NormalText>
+                    <NormalText style={{ marginBottom: 10, fontWeight: "bold" }}>{translation.profileAbout[11]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[12]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[13]}</NormalText>
 
-                    <NormalText style={{ marginBottom: 10, color: search }}>Situacija je sledeća.</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Sediš u kafiću, diskoteci, kafani, na koncertu, u bioskopu...bilo gde... vidiš devojku , ili devojka vidi tebe, situacija je neprikladna ili nemate hrabrosti da pridjete jedno drugom, tu Avankari Nastupa!</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Ti budi Updejtovan Gde se nalaziš i kako izlgedaš za to veče.</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Verovatnoća je velika da ukoliko nekoj devojci privučeš pažnju, naći će te i videće tvoje društvene mreže.</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Eto mogućnosti da se opet čujete i vidite.</NormalText>
+                    <NormalText style={{ marginBottom: 10, color: search }}>{translation.profileAbout[14]}</NormalText>
+                    <NormalText style={{ marginBottom: 10, fontWeight: "bold" }}>{translation.profileAbout[15]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[16]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[17]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.profileAbout[18]}</NormalText>
                     <Line />
 
                     {/* SEARCH */}
 
                     <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                        <Text style={{ marginLeft: 8, fontSize: 26, color: search }}>LUPA </Text>
+                        <Text style={{ marginLeft: 8, fontSize: 26, color: search }}>{translation.searchAbout[1]}</Text>
                     </View>
-                    <NormalText style={{ marginBottom: 10 }}>Klikom na "LUPU" dobijaš mogćnost da ti tražiš druge korisnike aplikacije.
-                    </NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Postoji polje za unos tablice koje ti omogućava da pronadješ ostale korisnike Avankari Aplikacije preko tablice.</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Prelaziš ulicu, vidiš lepog momka ili devojku za volanom, probaj da ga/je pronadješ preko Avankarija.</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.searchAbout[2]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.searchAbout[3]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.searchAbout[4]}</NormalText>
 
-                    <NormalText style={{ marginBottom: 10, color: search }}>Evo jednog primera kako pretraga radi</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Izašao si u grad , video devojku, nemaš hrabrosti da joj pridješ</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Nadji je preko Avankari aplikacije tako što ćeš klikom na lupu uneti grad i trenutno mesto tačno napisano.</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Npr u polje Grad uneseš Kraljevo, u polje mesto uneses samo ime kafane, kafića, diskoteke</NormalText>
-                    <NormalText style={{ marginBottom: 10 }}>Takođe možeš preciznije pretražiti osobu, ako uneseš parametre koji se poklapaju sa njenjim trenutnim izgledom kao što je pol, boja kose,boja očiju, šta je obukla.</NormalText>
+                    <NormalText style={{ marginBottom: 10, color: search }}>{translation.searchAbout[5]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.searchAbout[6]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.searchAbout[7]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.searchAbout[8]}</NormalText>
+                    <NormalText style={{ marginBottom: 10 }}>{translation.searchAbout[9]}</NormalText>
 
 
                 </InnerContainer>
